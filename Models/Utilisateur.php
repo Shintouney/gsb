@@ -65,7 +65,7 @@ class Utilisateur
     public function encrypt($mdp)
     {
         $mdp = password_hash ($mdp, PASSWORD_BCRYPT);
-        $this->encryptedPassword = $mdp;
+        $this->mdp = $mdp;
     }
 
     /**

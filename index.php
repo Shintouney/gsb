@@ -14,7 +14,7 @@ $id 	= isset($_GET['id']) ? $_GET['id'] : null;
 if(/*!isset($_SESSION['logged'] || $_SESSION['logged'] == false || */$page = 'login') {
     $controller = 'UserController';
     $action 	= 'login';
-} else {
+}  else if ($page) {
     $controller = ucfirst($page).'Controller';
 }
 
@@ -23,4 +23,8 @@ require_once $path.$controller.'.php';
 // instanciation du controller
 $controller = new $controller();
 // execution de la méthode
-$id ? $controller->$action($id) : $controller->$action();
+if($page == 'home') {
+    $controller->index();
+} else {
+    $id ? $controller->$action($id) : $controller->$action();
+}
