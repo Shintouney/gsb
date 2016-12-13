@@ -16,26 +16,21 @@ class UserController
         $role = new Role();
         $role->setNom('ROLE_ADMIN');
         $bruno->setRole($role);
-
+		var_dump(empty($_POST));
+		var_dump($_POST);
+		
+		
         if (!empty($_POST)) {
+			die();
             if ($auth->login($bruno, $_POST['mdp'])) {
-                if(isset($_SESSION['redirect'])) {
-                    // on recupere l'url de destination pour rediriger apres login et on l'efface
-                    $redirect = $_SESSION['redirect'];
-                    unset($_SESSION['redirect']);
-                } else {
-                    // sinon on redirige vers la page de profil de l'utilisateur
-                   $redirect = 'index.php?page=utilisateur&action=profil';
-                }
-                $this->redirect($redirect);
-
+                $this->redirect('index.php?page=home');
             }else{
                 $error = 'identifiants invalides';
             }
         }
 
         ob_start();
-        require 'views'.D_S.'Utilisateur'.D_S.'login.php';
+        require 'views'.D_S.'User'.D_S.'login.php';
         $content = ob_get_clean();
         require 'views'.D_S.'Template'.D_S.'no_template.php';
     }
