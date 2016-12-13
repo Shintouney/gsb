@@ -1,10 +1,11 @@
 <?php 
 
 require_once 'Core'.D_S.'Auth.php';
+require_once 'Core'.D_S.'Controller.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
 
-class UserController
+class UserController extends Controller
 {
     public function login()
     {
@@ -16,14 +17,13 @@ class UserController
         $role = new Role();
         $role->setNom('ROLE_ADMIN');
         $bruno->setRole($role);
-		var_dump(empty($_POST));
-		var_dump($_POST);
+
 		
 		
         if (!empty($_POST)) {
-			die();
             if ($auth->login($bruno, $_POST['mdp'])) {
-                $this->redirect('index.php?page=home');
+
+                $this->redirect('?page=home');
             }else{
                 $error = 'identifiants invalides';
             }
@@ -34,10 +34,4 @@ class UserController
         $content = ob_get_clean();
         require 'views'.D_S.'Template'.D_S.'no_template.php';
     }
-
-    private function redirect()
-    {
-
-    }
-
 }
