@@ -26,8 +26,9 @@ class Controller
 
     protected function render($view, $template = 'default')
     {
+        $view = str_replace('/', D_S, $view);
         ob_start();
-        require 'views'.D_S.'User'.D_S.'login.php';
+        require 'views'.D_S.$view;
         $content = ob_get_clean();
         require 'views'.D_S.'Template'.D_S.$template.'.php';
     }
