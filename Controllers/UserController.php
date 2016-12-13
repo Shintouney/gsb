@@ -23,7 +23,7 @@ class UserController extends Controller
         if (!empty($_POST)) {
             if ($auth->login($bruno, $_POST['mdp'])) {
 
-                $this->redirect('');
+                $this->redirect();
             }else{
                 $error = 'identifiants invalides';
             }
