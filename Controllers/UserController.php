@@ -23,15 +23,13 @@ class UserController extends Controller
         if (!empty($_POST)) {
             if ($auth->login($bruno, $_POST['mdp'])) {
 
-                $this->redirect('?page=home');
+                $this->redirect('');
             }else{
                 $error = 'identifiants invalides';
             }
         }
 
         ob_start();
-        require 'views'.D_S.'User'.D_S.'login.php';
-        $content = ob_get_clean();
-        require 'views'.D_S.'Template'.D_S.'no_template.php';
+        $this->render('User/login.php', 'no_template');
     }
 }
