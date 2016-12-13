@@ -16,12 +16,11 @@ class Controller
         die('Page introuvable');
     }
 
-    protected function redirect($url, $statusCode = 303)
+    protected function redirect($url)
     {
         // on cree l'url avecv  nom hote / fichier / requete http
         $url = $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].$url;
         header('Location: ' . $url);
-        die();
     }
 
     protected function render($view, $template = 'default')
