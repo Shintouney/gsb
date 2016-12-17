@@ -153,16 +153,22 @@ class Utilisateur
         return $model;
     }
 
-    public static function findByLogin($login)
+    public static function findBy($filter)
     {
         $db = Database::getInstance();
-        $login = array('login' => $login);
-        $data = $db->findBy($login, 'utilisateur');
+        $data = $db->findBy($filter, 'utilisateur');
 
         $model = new Utilisateur();
         $model->setData($data);
         $role = Role::find($data['role_id']);
         $model->setRole($role);
+
+        return $model;
+    }
+
+    public static function findByLogin($login)
+    {
+        $model = self::findBy(array('login' => $login), 'utilisateur');
 
         return $model;
     }
