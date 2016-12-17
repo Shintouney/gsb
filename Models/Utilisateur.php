@@ -64,7 +64,7 @@ class Utilisateur
      */
     public function encrypt($mdp)
     {
-        $mdp = password_hash ($mdp, PASSWORD_BCRYPT);
+        $mdp       = password_hash ($mdp, PASSWORD_BCRYPT);
         $this->mdp = $mdp;
     }
 
@@ -122,5 +122,18 @@ class Utilisateur
     public function getRole()
     {
         return $this->role;
+    }
+
+    public function setData($data)
+    {
+        if (!is_array($data)) {
+            die("données invalides");
+        }
+
+        foreach ($data as $field => $value) {
+            if (!preg_match( '/_id$/', $field)) {
+                $this->$field = $value;
+            }
+        }
     }
 }

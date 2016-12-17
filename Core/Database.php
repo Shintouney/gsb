@@ -6,62 +6,65 @@
 # ~ L'appetit viens en mangeant
 class Database
 {
-	# database_infos
-	private static $_host='localhost';
-	private static $_user='root';
-	private static $_pass='';
-	private static $_name='gsb';
-	private $_gpdo;
+    // object pdo
+    private $_gpdo;
 
-	# Instance de Database
-	private static $_instance = null;
-	
-	private function __construct()
-	{
-		# Constructeur db - Pattern singleton
-		try
-		{
-			$options =
-			[
-				PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-				PDO::ATTR_ERRMODE 			 => PDO::ERRMODE_EXCEPTION,
-				PDO::ATTR_EMULATE_PREPARES   => false,
-			];
-			$this->_gpdo = new PDO('mysql:host='.$this::$_host.';dbname='.$this::$_name, $this::$_user, $this::$_pass, $options);
-		}
-		catch (PDOException $e)
-		{
-			exit('Erreur : ' . $e->getMessage());
-		}
-	}
+    # Instance de Database
+    private static $_instance = null;
 
-	# Retourne une instance de Database (existante ou nouvelle)
-	public static function getInstance()
-	{
-		if (is_null(self::$_instance))
-			self::$_instance = new Database();
+    private function __construct()
+    {
+        # Constructeur db - Pattern singleton
+        try
+        {
+            $options =
+                [
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+                    PDO::ATTR_ERRMODE 			 => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_EMULATE_PREPARES   => false,
+                ];
+            $params = require 'Core'.D_S.'config.php';
+            $this->_gpdo = new PDO('mysql:host='.$params['host'].';dbname='.$params['db_name'], $params['user'], $params['password']);
 
-		return self::$_instance;
-	}
+        }
+        catch (PDOException $e)
+        {
+            exit('Erreur : ' . $e->getMessage());
+        }
+    }
 
-	public function query($sql, $fields = false, $multiple = false)
-	{
-		try
-		{
-			$statement = $this->_gpdo->prepare($sql);
+    # Retourne une instance de Database (existante ou nouvelle)
+    public static function getInstance()
+    {
+        if (is_null(self::$_instance))
+            self::$_instance = new Database();
 
-			if ($fields)
-			{
-				foreach ($fields as $key => $value)
-				{
-					if (is_int($value))
-						$dataType = PDO::PARAM_INT;
-					elseif (is_bool($value))
-						$dataType = PDO::PARAM_BOOL;
-					elseif (is_null($value))
-						$dataType = PDO::PARAM_NULL;
-					else
-						$dataType = PDO::PARAM_STR;
+        return self::$_instance;
+    }
+
+
+    public function query($sql, $multiple = false)
+    {
+        return $this->prepare($sql, false, $multiple);
+    }
+
+    public function prepare($sql, $fields = false, $multiple = false)
+    {
+        try
+        {
+            $statement = $this->_gpdo->prepare($sql);
+            if ($fields)
+            {
+                foreach ($fields as $key => $value)
+                {
+                    if (is_int($value))
+                        $dataType = PDO::PARAM_INT;
+                    elseif (is_bool($value))
+                        $dataType = PDO::PARAM_BOOL;
+                    elseif (is_null($value))
+                        $dataType = PDO::PARAM_NULL;
+                    else
+                        $dataType = PDO::PARAM_STR;
 
 					$statement->bindValue(':'.$key, $value, $dataType);
 				}
@@ -71,9 +74,9 @@ class Database
 
 			# On traite des objets ici c'est mieux
 			if($multiple)
-				$result = $statement->fetchAll(PDO::FETCH_OBJ);
+				$result = $statement->fetchAll(PDO::FETCH_NAMED);
 			else
-				$result = $statement->fetch(PDO::FETCH_OBJ);
+				$result = $statement->fetch(PDO::FETCH_NAMED);
 
 			$statement->closeCursor();
 			return $result;
@@ -82,5 +85,28 @@ class Database
 		{
 			exit($e->getMessage());
 		}
-	}
+
+    }
+    public function find($id, $table)
+    {
+        $id = array('id' => $id);
+        $sql = 'SELECT * FROM '.$table.' WHERE id = :id';
+
+        return $this->prepare($sql, $id);
+    }
+
+    public function findByLogin($login)
+    {
+        $login = array('login' => $login);
+        $sql = 'SELECT * FROM `utilisateur` WHERE login = :login';
+
+        return $this->prepare($sql, $login);
+    }
+
+    public function all($table)
+    {
+        $sql = 'SELECT * FROM '.$table;
+
+        return $this->query($sql, true);
+    }
 }

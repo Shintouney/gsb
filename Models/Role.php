@@ -50,4 +50,17 @@ class Role
     {
         return $this->nom;
     }
+
+    public function setData($data)
+    {
+        if (!is_array($data)) {
+            die("données invalides");
+        }
+
+        foreach ($data as $field => $value) {
+            if (!preg_match( '/_id$/', $field)) {
+                $this->$field = $value;
+            }
+        }
+    }
 } 

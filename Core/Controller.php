@@ -31,4 +31,15 @@ class Controller
         $content = ob_get_clean();
         require 'views'.D_S.'Template'.D_S.$template.'.php';
     }
+
+    protected function filterAccess($role = 'ROLE_USER', $msg = 'Impossible d\'accéder à cette page!')
+    {
+        $auth = Auth::getInstance();
+
+        if (false === $auth->isGranted($role, $msg)) {
+            $this->forbidden($msg);
+        }
+    }
+
+
 }
