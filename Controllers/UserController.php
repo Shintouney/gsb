@@ -12,18 +12,7 @@ class UserController extends Controller
     {
         if (!empty($_POST)) {
             $auth  = Auth::getInstance();
-            $db = Database::getInstance();
-            $data = $db->findByLogin($_POST['login']);
-            $user = new Utilisateur();
-
-            $user->setData($data);
-            $user->encrypt('1234');
-
-            $role = new Role();
-            $roleData = $db->find($data['role_id'], 'role');
-            $role->setData($roleData);
-            $user->setRole($role);
-            var_dump($user);
+            $user = Utilisateur::findByLogin($_POST['login']);
 
             if ($auth->login($user, $_POST['mdp'])) {
 

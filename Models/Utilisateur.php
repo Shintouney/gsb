@@ -1,5 +1,8 @@
 <?php
 
+require_once 'Core'.D_S.'Database.php';
+require_once 'Role.php';
+
 class Utilisateur
 {
     protected $id;
@@ -135,5 +138,32 @@ class Utilisateur
                 $this->$field = $value;
             }
         }
+    }
+
+    public static function find($id)
+    {
+        $db = Database::getInstance();
+        $data = $db->find($id, 'utilisateur');
+
+        $model = new Utilisateur();
+        $model->setData($data);
+        $role = Role::find($data['role_id']);
+        $model->setRole($role);
+
+        return $model;
+    }
+
+    public static function findByLogin($login)
+    {
+        $db = Database::getInstance();
+        $login = array('login' => $login);
+        $data = $db->findBy($login, 'utilisateur');
+
+        $model = new Utilisateur();
+        $model->setData($data);
+        $role = Role::find($data['role_id']);
+        $model->setRole($role);
+
+        return $model;
     }
 }

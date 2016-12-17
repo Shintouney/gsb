@@ -95,13 +95,25 @@ class Database
         return $this->prepare($sql, $id);
     }
 
-    public function findByLogin($login)
+    public function findBy(array $fields, $table)
+    {
+        $sql = 'SELECT * FROM '.$table.' WHERE ';
+        $where = array_keys($fields);
+        $where = array_map(function ($field) {return $field.' = :'.$field;}, $where);
+        $where = implode( ', ', $where);
+        $sql .= $where;
+
+        return $this->prepare($sql, $fields);
+    }
+
+
+    /*public function findByLogin($login)
     {
         $login = array('login' => $login);
         $sql = 'SELECT * FROM `utilisateur` WHERE login = :login';
 
         return $this->prepare($sql, $login);
-    }
+    }*/
 
     public function all($table)
     {

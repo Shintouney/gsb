@@ -63,4 +63,14 @@ class Role
             }
         }
     }
+
+    public static function find($id)
+    {
+        $db = Database::getInstance();
+        $model = new self();
+        $data = $db->find($id, 'role');
+        $model->setData($data);
+
+        return $model;
+    }
 } 
