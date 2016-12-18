@@ -128,9 +128,10 @@ class Database
         return $this->prepare($sql, $login);
     }*/
 
-    public function all($table)
+    public function all($table, $order = null)
     {
-        $sql = 'SELECT * FROM '.$table;
+        $order = $order ? ' ORDER BY '.$order : '';
+        $sql = 'SELECT * FROM '.$table.$order;
 
         return $this->query($sql, true);
     }

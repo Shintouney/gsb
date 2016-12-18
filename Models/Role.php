@@ -73,4 +73,17 @@ class Role
 
         return $model;
     }
+
+    public static function all()
+    {
+        $db = Database::getInstance();
+        $data = $db->all('role', 'libelle');
+        foreach($data as &$model) {
+            $line = $model;
+            $model = new self();
+            $model->setData($line);
+        }
+
+        return $data;
+    }
 } 

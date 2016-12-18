@@ -29,9 +29,7 @@ class UserController extends Controller
     {
         $auth  = Auth::getInstance();
         $db = Database::getInstance();
-
         $users = $db->all('utilisateur');
-        var_dump($users);
 
         $this->render('User/index.php');
     }
@@ -40,11 +38,11 @@ class UserController extends Controller
     {
         $db = Database::getInstance();
         $user = new Utilisateur();
-
+        $roles = Role::all();
         if (!empty($_POST)) {
 
         }
 
-        $this->render('User/create.php');
+        $this->render('User/create.php', array('roles' => $roles));
     }
 }
