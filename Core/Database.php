@@ -82,5 +82,57 @@ class Database
 		{
 			exit($e->getMessage());
 		}
+<<<<<<< Updated upstream
 	}
+=======
+
+    }
+    public function find($id, $table)
+    {
+        $id = array('id' => $id);
+        $sql = 'SELECT * FROM '.$table.' WHERE id = :id';
+
+        return $this->prepare($sql, $id);
+    }
+
+    public function findBy(array $fields, $table)
+    {
+        $sql = 'SELECT * FROM '.$table.' WHERE ';
+        $where = array_keys($fields);
+        $where = array_map(function ($field) {return $field.' = :'.$field;}, $where);
+        $where = implode( ', ', $where);
+        $sql .= $where;
+
+        return $this->prepare($sql, $fields);
+    }
+
+    public function create($fields, $table)
+    {
+        $sql = 'INSERT INTO '.$table.' SET ';
+
+        $keys = array_keys($fields);
+        $keys = array_map(function ($field) {return $field.' = :'.$field;}, $keys);
+        $keys = implode( ', ', $keys);
+        $sql = $sql.$keys;
+        $fields = array_values($fields);
+
+        return $this->prepare($sql, $fields);
+    }
+
+
+    /*public function findByLogin($login)
+    {
+        $login = array('login' => $login);
+        $sql = 'SELECT * FROM `utilisateur` WHERE login = :login';
+
+        return $this->prepare($sql, $login);
+    }*/
+
+    public function all($table)
+    {
+        $sql = 'SELECT * FROM '.$table;
+
+        return $this->query($sql, true);
+    }
+>>>>>>> Stashed changes
 }

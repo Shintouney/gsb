@@ -29,7 +29,32 @@ class UserController extends Controller
             }
         }
 
-        ob_start();
-        $this->render('User/login.php', 'no_template');
+        $this->render('User/login.php', null, 'no_template');
     }
+<<<<<<< Updated upstream
+=======
+
+    public function index()
+    {
+        $auth  = Auth::getInstance();
+        $db = Database::getInstance();
+
+        $users = $db->all('utilisateur');
+        var_dump($users);
+
+        $this->render('User/index.php');
+    }
+
+    public function create()
+    {
+        $db = Database::getInstance();
+        $user = new Utilisateur();
+
+        if (!empty($_POST)) {
+
+        }
+
+        $this->render('User/create.php');
+    }
+>>>>>>> Stashed changes
 }
