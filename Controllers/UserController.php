@@ -29,9 +29,9 @@ class UserController extends Controller
     {
         $auth  = Auth::getInstance();
         $db = Database::getInstance();
-        $users = $db->all('utilisateur');
+        $users = Utilisateur::all();
 
-        $this->render('User/index.php');
+        $this->render('User/index.php', array('users' => $users));
     }
 
     public function create()
@@ -40,7 +40,34 @@ class UserController extends Controller
         $user = new Utilisateur();
         $roles = Role::all();
         if (!empty($_POST)) {
+            $errors = array();
+            $fields = $_POST;
+            $emptyMsg = ' non renseigne';
 
+            foreach ($fields as $field => $value) {
+                if(empty($value) &&  in_array($field, array('mdp', 'login', 'email', 'role'))) {
+                    $errors[] = $field.$emptyMsg;
+                }
+            }
+
+            if (!empty($fields['mdp'])) {
+                $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
+            }
+            if (!empty($fields['role'])) {
+                $role = Role::findBy(array('nom' => $fields['role']));
+                unset($fields['role']);
+                $fields['role_id'] = $role->getId();
+            }
+            if (empty($errors)) {
+                $db->create($fields, 'utilisateur');
+                $this->redirect('?page=user&action=index');
+            } else {
+                echo '<pre>';
+                foreach ($errors as $error) {
+                    echo $error.BR;
+                }
+                echo '</pre>';
+            }
         }
 
         $this->render('User/create.php', array('roles' => $roles));

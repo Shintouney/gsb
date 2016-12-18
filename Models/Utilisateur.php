@@ -62,13 +62,14 @@ class Utilisateur
         $this->mdp = $mdp;
     }
 
+
+
     /**
      * @param string $mdp
      */
-    public function encrypt($mdp)
+    public static function encrypt($mdp)
     {
-        $mdp       = password_hash ($mdp, PASSWORD_BCRYPT);
-        $this->mdp = $mdp;
+        return password_hash ($mdp, PASSWORD_BCRYPT);
     }
 
     /**
@@ -127,6 +128,7 @@ class Utilisateur
         return $this->role;
     }
 
+    // hydrate un objet utilisateur a partir d'une table de hachage
     public function setData($data)
     {
         if (!is_array($data)) {
@@ -140,6 +142,7 @@ class Utilisateur
         }
     }
 
+    // recupere ligne sql et genere/ retourne un objet a partir de l'id
     public static function find($id)
     {
         $db = Database::getInstance();
@@ -150,9 +153,10 @@ class Utilisateur
         $role = Role::find($data['role_id']);
         $model->setRole($role);
 
-        return $model;
+    return $model;
     }
 
+    // recupere ligne sql et genere/ retourne un objet champs de recherche a specifier
     public static function findBy($filter)
     {
         $db = Database::getInstance();
@@ -166,6 +170,25 @@ class Utilisateur
         return $model;
     }
 
+    // genere tous les utilisateurs a partir de la db
+    public static function all()
+    {
+        $db = Database::getInstance();
+        $list = $db->all('utilisateur');
+
+        foreach ($list as &$model) {
+            $data = $model;
+            $model = new Utilisateur();
+            $model->setData($data);
+
+            $role = Role::find($data['role_id']);
+            $model->setRole($role);
+        }
+
+        return $list;
+    }
+
+    // wrapper pour findBy 'login'
     public static function findByLogin($login)
     {
         $model = self::findBy(array('login' => $login), 'utilisateur');

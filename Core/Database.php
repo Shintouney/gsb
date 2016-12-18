@@ -42,11 +42,13 @@ class Database
         return self::$_instance;
     }
 
+    // wrapper pour requete preparee sans specifier fields = false devrait etre une pdo::query
     public function query($sql, $multiple = false)
     {
         return $this->prepare($sql, false, $multiple);
     }
 
+    // requete preparee
     public function prepare($sql, $fields = false, $multiple = false)
     {
         try
@@ -87,6 +89,7 @@ class Database
 
 	}
 
+    // select where id = valeur specifiee
     public function find($id, $table)
     {
         $id = array('id' => $id);
@@ -95,6 +98,7 @@ class Database
         return $this->prepare($sql, $id);
     }
 
+    // select where avec champs de filtre a specifier, multiple champs possible
     public function findBy(array $fields, $table)
     {
         $sql = 'SELECT * FROM '.$table.' WHERE ';
@@ -106,28 +110,23 @@ class Database
         return $this->prepare($sql, $fields);
     }
 
+    // requete insert
     public function create($fields, $table)
     {
         $sql = 'INSERT INTO '.$table.' SET ';
 
+        // on recupere le nom des champs dans un tableau
         $keys = array_keys($fields);
+        // on modifie les champs pour generer les colonnes de la requete de type nom = :nom
         $keys = array_map(function ($field) {return $field.' = :'.$field;}, $keys);
+        // on cree la chaine de caractere avec le separateur  a partir du tableau keys
         $keys = implode( ', ', $keys);
         $sql = $sql.$keys;
-        $fields = array_values($fields);
 
         return $this->prepare($sql, $fields);
     }
 
-
-    /*public function findByLogin($login)
-    {
-        $login = array('login' => $login);
-        $sql = 'SELECT * FROM `utilisateur` WHERE login = :login';
-
-        return $this->prepare($sql, $login);
-    }*/
-
+    // requete pour recuperer toutes les lignes d'une table
     public function all($table, $order = null)
     {
         $order = $order ? ' ORDER BY '.$order : '';

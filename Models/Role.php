@@ -74,6 +74,16 @@ class Role
         return $model;
     }
 
+    public static function findBy($filter)
+    {
+        $db = Database::getInstance();
+        $data = $db->findBy($filter, 'role');
+        $model = new Role();
+        $model->setData($data);
+
+        return $model;
+    }
+
     public static function all()
     {
         $db = Database::getInstance();
