@@ -1,6 +1,7 @@
 <?php 
 
 require_once 'Core'.D_S.'Auth.php';
+require_once 'Core'.D_S.'Database.php';
 require_once 'Core'.D_S.'Controller.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
@@ -9,19 +10,11 @@ class UserController extends Controller
 {
     public function login()
     {
-        $auth = new Auth();
-
-        $bruno = new Utilisateur();
-        $bruno->setLogin('bruno');
-        $bruno->encrypt('1234');
-        $role = new Role();
-        $role->setNom('ROLE_ADMIN');
-        $bruno->setRole($role);
-
-		
-		
         if (!empty($_POST)) {
-            if ($auth->login($bruno, $_POST['mdp'])) {
+            $auth  = Auth::getInstance();
+            $user = Utilisateur::findByLogin($_POST['login']);
+
+            if ($auth->login($user, $_POST['mdp'])) {
 
                 $this->redirect();
             }else{
@@ -31,8 +24,6 @@ class UserController extends Controller
 
         $this->render('User/login.php', null, 'no_template');
     }
-<<<<<<< Updated upstream
-=======
 
     public function index()
     {
@@ -56,5 +47,4 @@ class UserController extends Controller
 
         $this->render('User/create.php');
     }
->>>>>>> Stashed changes
 }

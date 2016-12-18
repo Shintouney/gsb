@@ -50,4 +50,27 @@ class Role
     {
         return $this->nom;
     }
+
+    public function setData($data)
+    {
+        if (!is_array($data)) {
+            die("données invalides");
+        }
+
+        foreach ($data as $field => $value) {
+            if (!preg_match( '/_id$/', $field)) {
+                $this->$field = $value;
+            }
+        }
+    }
+
+    public static function find($id)
+    {
+        $db = Database::getInstance();
+        $model = new self();
+        $data = $db->find($id, 'role');
+        $model->setData($data);
+
+        return $model;
+    }
 } 

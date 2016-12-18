@@ -1,5 +1,8 @@
 <?php
 
+require_once 'Core'.D_S.'Database.php';
+require_once 'Role.php';
+
 class Utilisateur
 {
     protected $id;
@@ -64,7 +67,7 @@ class Utilisateur
      */
     public function encrypt($mdp)
     {
-        $mdp = password_hash ($mdp, PASSWORD_BCRYPT);
+        $mdp       = password_hash ($mdp, PASSWORD_BCRYPT);
         $this->mdp = $mdp;
     }
 
@@ -122,5 +125,51 @@ class Utilisateur
     public function getRole()
     {
         return $this->role;
+    }
+
+    public function setData($data)
+    {
+        if (!is_array($data)) {
+            die("données invalides");
+        }
+
+        foreach ($data as $field => $value) {
+            if (!preg_match( '/_id$/', $field)) {
+                $this->$field = $value;
+            }
+        }
+    }
+
+    public static function find($id)
+    {
+        $db = Database::getInstance();
+        $data = $db->find($id, 'utilisateur');
+
+        $model = new Utilisateur();
+        $model->setData($data);
+        $role = Role::find($data['role_id']);
+        $model->setRole($role);
+
+        return $model;
+    }
+
+    public static function findBy($filter)
+    {
+        $db = Database::getInstance();
+        $data = $db->findBy($filter, 'utilisateur');
+
+        $model = new Utilisateur();
+        $model->setData($data);
+        $role = Role::find($data['role_id']);
+        $model->setRole($role);
+
+        return $model;
+    }
+
+    public static function findByLogin($login)
+    {
+        $model = self::findBy(array('login' => $login), 'utilisateur');
+
+        return $model;
     }
 }
