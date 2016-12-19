@@ -40,16 +40,8 @@ class UserController extends Controller
         $user = new Utilisateur();
         $roles = Role::all();
         if (!empty($_POST)) {
-            $errors = array();
+            $errors = $this->validateBlank(array('mdp', 'login', 'email', 'role'));
             $fields = $_POST;
-            $emptyMsg = ' non renseigne';
-
-            foreach ($fields as $field => $value) {
-                if(empty($value) &&  in_array($field, array('mdp', 'login', 'email', 'role'))) {
-                    $errors[] = $field.$emptyMsg;
-                }
-            }
-
             if (!empty($fields['mdp'])) {
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
             }
@@ -71,5 +63,61 @@ class UserController extends Controller
         }
 
         $this->render('User/create.php', array('roles' => $roles));
+    }
+
+    private function validateBlank($list)
+    {
+        $errors = array();
+        $fields = $_POST;
+        $emptyMsg = ' non renseigne';
+        foreach ($fields as $field => $value) {
+            if(empty($value) &&  in_array($field, $list)) {
+                $errors[] = $field.$emptyMsg;
+            }
+        }
+
+        return $errors;
+    }
+
+    public function update($id)
+    {
+        $db = Database::getInstance();
+        $user = Utilisateur::find($id);
+        $roles = Role::all();
+        if (!empty($_POST)) {
+            $fields = $_POST;
+            $errors = $this->validateBlank(array('email', 'role'));
+            if (!empty($fields['mdp'])) {
+                $fields['mdp'] = Utilisateur::encrypt($fields['mdp']); // on crypte
+            }else {
+                unset( $fields['mdp']); // mot de passe vide ne reset pas le mot de passe
+            }
+            if (!empty($fields['role'])) {
+                $role = Role::findBy(array('nom' => $fields['role']));
+                unset($fields['role']);
+                $fields['role_id'] = $role->getId();
+            }
+            if (empty($errors)) {
+
+                $db->update($id, 'utilisateur', $fields);
+
+                $this->redirect('?page=user&action=index');
+            } else {
+                echo '<pre>';
+                foreach ($errors as $error) {
+                    echo $error.BR;
+                }
+                echo '</pre>';
+            }
+        }
+
+        $this->render('User/create.php', array('user' => $user, 'roles' => $roles));
+    }
+
+    public function delete($id)
+    {
+        $db = Database::getInstance();
+        $user = Utilisateur::find($id);
+        // TODO
     }
 }

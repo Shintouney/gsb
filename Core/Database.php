@@ -126,6 +126,21 @@ class Database
         return $this->prepare($sql, $fields);
     }
 
+    public function update($id, $table, $fields)
+    {
+        $keys = array_keys($fields);
+        $keys = array_map(function ($field) {return $field.' = :'.$field;}, $keys);
+        $keys = implode( ', ', $keys);
+        $fields['id'] = $id;
+
+        $sql = 'UPDATE '.$table.' SET '.$keys.'
+        WHERE id = :id';
+        var_dump($sql);
+        var_dump($fields);
+
+        return $this->prepare($sql, $fields);
+    }
+
     // requete pour recuperer toutes les lignes d'une table
     public function all($table, $order = null)
     {
