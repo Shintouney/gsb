@@ -24,7 +24,7 @@ class Database
                     PDO::ATTR_EMULATE_PREPARES   => false,
                 ];
             $params = require 'Core'.D_S.'config.php';
-            $this->_gpdo = new PDO('mysql:host='.$params['host'].';dbname='.$params['db_name'], $params['user'], $params['password']);
+            $this->_gpdo = new PDO('mysql:host='.$params['host'].';dbname='.$params['db_name'], $params['user'], $params['password'], $options);
 
         }
         catch (PDOException $e)
