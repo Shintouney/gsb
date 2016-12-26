@@ -27,7 +27,7 @@ class Database
 				PDO::ATTR_ERRMODE 			 => PDO::ERRMODE_EXCEPTION,
 				PDO::ATTR_EMULATE_PREPARES   => false,
 			];
-			$this->_gpdo = new PDO('mysql:host='.$this::$_host.';dbname='.$this::$_name, $this::$_user, $this::$_pass, $options);
+			$this->_gpdo = new PDO('mysql:host='.$this->_host.';dbname='.$this->_name, $this->_user, $this->_pass, $options);
 		}
 		catch (PDOException $e)
 		{
