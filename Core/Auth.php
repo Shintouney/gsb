@@ -24,6 +24,7 @@ class Auth
 
     public function authenticate($user, $id = null)
     {
+        session_regenerate_id();
         $_SESSION['auth'] = $id ? : $user->getId();
         $_SESSION['role'] = false === $user->getRole() ? 'ROLE_USER' : $user->getRole();
 
@@ -42,8 +43,8 @@ class Auth
 
     public function logout()
     {
-        unset($_SESSION['auth']);
-        unset($_SESSION['role']);
+        session_destroy();
+        header('Location: ' . $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].'?page=login');
     }
 
     public function isGranted($role = 'ROLE_USER')

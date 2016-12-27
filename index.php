@@ -10,8 +10,9 @@ $page 	= isset($_GET['page']) ? $_GET['page'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 $id 	= isset($_GET['id']) ? $_GET['id'] : null;
 
+
 // conditions pour rediriger vers login sinon on lance les actions standards sinon homepage
-if ($page != 'login' && (!isset($_SESSION['logged']) || $_SESSION['logged'] == false)) {
+if ($action != 'password' && $page != 'login' && (!isset($_SESSION['logged']) || $_SESSION['logged'] == false)) {
     $controller = 'HomeController';
     $action 	= 'toLogin';
 }  else if ($page === 'login') {
@@ -23,6 +24,7 @@ if ($page != 'login' && (!isset($_SESSION['logged']) || $_SESSION['logged'] == f
     $controller = 'HomeController';
     $action 	= 'index';
 }
+
 // inclusion du fichier avec require
 require_once $path.$controller.'.php';
 // instanciation du controller

@@ -2,6 +2,7 @@
 
 require_once 'Core'.D_S.'Auth.php';
 require_once 'Core'.D_S.'Database.php';
+require_once 'Core'.D_S.'Mailer.php';
 require_once 'Core'.D_S.'Controller.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
@@ -52,6 +53,10 @@ class UserController extends Controller
             }
             if (empty($errors)) {
                 $db->create($fields, 'utilisateur');
+                $subject = "Votre compte a été créé";
+                $body =  '<b>This is HTML message.</b><h1>This is headline.</h1>';
+                $mail = new Mailer($fields['email'], $subject, $body);
+                $mail->send();
                 $this->redirect('?page=user&action=index');
             } else {
                 echo '<pre>';
@@ -114,10 +119,18 @@ class UserController extends Controller
         $this->render('User/create.php', array('user' => $user, 'roles' => $roles));
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $db = Database::getInstance();
-        $user = Utilisateur::find($id);
-        // TODO
+        if (!empty($_POST)) {
+            $db = Database::getInstance();
+            $db->delete($_POST['id'], 'utilisateur');
+            $this->redirect('?page=user&action=index');
+        }
+    }
+
+    public function password($password)
+    {
+
+        echo '<pre>'. Utilisateur::encrypt($password) . '</pre>'.BR;
     }
 }

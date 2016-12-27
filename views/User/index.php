@@ -11,7 +11,10 @@
     <td><?=$user->getNom()?></td>
     <td><?=$user->getPrenom(); ?> </td>
     <td><a href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
-    <td><a href="?page=user&action=delete&id=<?=$user->getId();?>">supprimer</a></td>
+    <td><form action="?page=user&action=delete" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="<?=$user->getId()?>">
+            <button class="btn btn-danger" type="submit">Supprimer</button>
+        </form></td>
 </tr>
 
 <?php endforeach; ?>

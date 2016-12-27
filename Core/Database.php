@@ -149,4 +149,10 @@ class Database
 
         return $this->query($sql, true);
     }
+
+    public function delete($id, $table)
+    {
+        return $this->prepare('DELETE FROM '.$table.' WHERE id = :id',
+            array('id' => $id));
+    }
 }
