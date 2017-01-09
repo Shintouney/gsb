@@ -4,6 +4,7 @@ session_start();
 define('D_S', DIRECTORY_SEPARATOR);
 define('Corp', 'Corp'.D_S);
 define('BR', '<br/>');
+require_once 'vendor/autoload.php';
 
 $path 	= 'Controllers'.D_S;
 $page 	= isset($_GET['page']) ? $_GET['page'] : null;

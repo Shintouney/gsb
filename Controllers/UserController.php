@@ -52,10 +52,11 @@ class UserController extends Controller
                 $fields['role_id'] = $role->getId();
             }
             if (empty($errors)) {
-                $db->create($fields, 'utilisateur');
+               // $db->create($fields, 'utilisateur');
                 $subject = "Votre compte a été créé";
                 $body =  '<b>This is HTML message.</b><h1>This is headline.</h1>';
-                $mail = new Mailer($fields['email'], $subject, $body);
+                $to = array($fields['email'] => $fields['prenom'].' '.$fields['nom']);
+                $mail = new Mailer($to, $subject, $body);
                 $mail->send();
                 $this->redirect('?page=user&action=index');
             } else {

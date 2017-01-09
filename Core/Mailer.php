@@ -2,48 +2,30 @@
 
 class Mailer
 {
-    private $to;
-    private $from;
-    private $cc;
-    private $mime = "1.0";
-    private $contentType = "text/html";
-    private $subject;
-    private $body;
+    private $message;
 
-
-    public function __construct($to, $subject, $body, $from = 'no-reply@gsb.fr', $cc = null)
+    // $from = 'no-reply@gsb.fr'
+    public function __construct($to, $subject, $body, $from = "team.gsble@gmail.com", $options = array())
     {
-        $this->to = $to;
-        $this->from = $from;
-        $this->cc = $cc;
-        $this->subject = $subject;
-        $this->body = $body;
-        $this->subject = $subject;
-    }
-
-    private function getHeader()
-    {
-        $header = 'From:'.$this->from.' \r\n';
-        if ($this->cc) {
-            $header .= "Cc:'.$this->cc.' \r\n";
+        $this->message = Swift_Message::newInstance();
+        $this->message->setTo($to);
+        $this->message->setFrom($from);
+        $this->message->setSubject($subject);
+        $this->message->setBody($body);
+        if(isset($options['cc'])) {
+            $this->message->setCc($options['cc']);
         }
-
-        $header .= "MIME-Version: '.$this->mime.'\r\n";
-        $header .= "Content-type: '.$this->contentType.'\r\n";
-
-        return $header;
+        if(isset($options['bcc'])) {
+            $this->message->setBcc($options['bcc']);
+        }
     }
 
     public function send()
     {
-        ini_set('sendmail_from', 'bruno.avinint@gmail.com');
-        $retval = mail ($this->to,$this->subject,$this->body,$this->getHeader());
-        if( $retval == true ) {
-            echo "Message sent successfully...";
-            die();
-        }else {
-            echo "Message could not be sent...";
-            die();
-        }
+        $transport = Swift_SmtpTransport::newInstance("smtp.gmail.com", 465, 'ssl');
+        $transport->setUsername("team.gsble@gmail.com");
+        $transport->setPassword("riveton42");
+        $mailer  = Swift_Mailer::newInstance($transport);
+        $mailer->send($this->message);
     }
 } 
