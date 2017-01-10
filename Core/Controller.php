@@ -42,5 +42,13 @@ class Controller
         }
     }
 
+    /* rendu dans une variable */
+    protected function renderView($view, $parameters)
+    {
+        ob_start();
+        extract($parameters);
+        require $view;
 
+        return ob_get_clean();
+    }
 }
