@@ -6,11 +6,11 @@
 # ~ L'appetit viens en mangeant
 class Database
 {
-    // object pdo
-    private $_gpdo;
-
     # Instance de Database
     private static $_instance = null;
+
+    // object pdo
+    private $_gpdo;
 
     private function __construct()
     {
@@ -67,27 +67,25 @@ class Database
                     else
                         $dataType = PDO::PARAM_STR;
 
-					$statement->bindValue(':'.$key, $value, $dataType);
-				}
-			}
+                    $statement->bindValue(':'.$key, $value, $dataType);
+                }
+            }
+            $statement->execute();
+            # On traite des objets ici c'est mieux
+            if($multiple)
+                $result = $statement->fetchAll(PDO::FETCH_NAMED);
+            else
+                $result = $statement->fetch(PDO::FETCH_NAMED);
 
-			$statement->execute();
+            $statement->closeCursor();
+            return $result;
+        }
+        catch (Exception $e)
+        {
+            exit($e->getMessage());
+        }
 
-			# On traite des objets ici c'est mieux
-			if($multiple)
-				$result = $statement->fetchAll(PDO::FETCH_NAMED);
-			else
-				$result = $statement->fetch(PDO::FETCH_NAMED);
-
-			$statement->closeCursor();
-			return $result;
-		}
-		catch (Exception $e)
-		{
-			exit($e->getMessage());
-		}
-
-	}
+    }
 
     // select where id = valeur specifiee
     public function find($id, $table)
