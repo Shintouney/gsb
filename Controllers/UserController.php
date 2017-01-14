@@ -9,6 +9,7 @@ require_once 'Models'.D_S.'Role.php';
 
 class UserController extends Controller
 {
+    // action login
     public function login()
     {
         if (!empty($_POST)) {
@@ -26,20 +27,19 @@ class UserController extends Controller
         $this->render('User/login.php', null, 'no_template');
     }
 
+    // action index
     public function index()
     {
-        $auth  = Auth::getInstance();
-        $db = Database::getInstance();
         $users = Utilisateur::all();
 
         $this->render('User/index.php', array('users' => $users));
     }
 
+    // action create
     public function create()
     {
         $db = Database::getInstance();
         $mdp  = '';
-        $user = new Utilisateur();
         $roles = Role::all();
         if (!empty($_POST)) {
             $fields = $_POST;
@@ -68,6 +68,7 @@ class UserController extends Controller
         $this->render('User/create.php', array('roles' => $roles));
     }
 
+    // action update
     public function update($id)
     {
         $db = Database::getInstance();
@@ -118,26 +119,12 @@ class UserController extends Controller
     public function sendAccountCreationMail($to, $params)
     {
         $subject = "Votre compte a été créé";
-        $body    = $this->renderView('views'.D_S.'emails'.D_S.'createUser.php', $params);
+        $body    = $this->renderView('views'.D_S.'emails'.D_S.'create_user.php', $params);
         $mail    = new Mailer($to, $subject, $body);
         $mail->send();
     }
 
-    private function validateBlank($list)
-    {
-        $errors = array();
-        $fields = $_POST;
-        $emptyMsg = ' non renseigné';
-        foreach ($fields as $field => $value) {
-            if(empty($value) &&  in_array($field, $list)) {
-                $errors[] = $field.$emptyMsg;
-            }
-        }
-
-        return $errors;
-    }
-
-
+    // action delete
     public function delete()
     {
         if (!empty($_POST)) {
@@ -147,9 +134,10 @@ class UserController extends Controller
         }
     }
 
-    public function password($password)
+    // action logout
+    public function logout()
     {
-
-        echo '<pre>'. Utilisateur::encrypt($password) . '</pre>'.BR;
+        $auth = Auth::getInstance();
+        $auth->logout();
     }
 }

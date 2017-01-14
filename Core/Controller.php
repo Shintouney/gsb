@@ -51,4 +51,27 @@ class Controller
 
         return ob_get_clean();
     }
+
+    // validation de formulaire retourne un message d'erreur pour chaque champ danss liste qui est vide
+    protected function validateBlank($list)
+    {
+        $errors = array();
+        $fields = $_POST;
+        $emptyMsg = ' non renseigné';
+        foreach ($fields as $field => $value) {
+            if(empty($value) &&  in_array($field, $list)) {
+                $errors[] = $field.$emptyMsg;
+            }
+        }
+
+        return $errors;
+    }
+
+    protected function url($link)
+    {
+        $protocol = $_SERVER['REQUEST_SCHEME']; //http
+        $server = $_SERVER['SERVER_NAME']; // localhost / gsb.fr etc
+
+        return  $protocol.'://'.$server.'/gsb/index.php'.$link;
+    }
 }

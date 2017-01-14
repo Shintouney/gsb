@@ -84,7 +84,6 @@ class Database
         {
             exit($e->getMessage());
         }
-
     }
 
     // select where id = valeur specifiee
@@ -133,8 +132,6 @@ class Database
 
         $sql = 'UPDATE '.$table.' SET '.$keys.'
         WHERE id = :id';
-        var_dump($sql);
-        var_dump($fields);
 
         return $this->prepare($sql, $fields);
     }

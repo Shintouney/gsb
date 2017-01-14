@@ -53,13 +53,11 @@ class Role
 
     public function setData($data)
     {
-        if (!is_array($data)) {
-            die("données invalides");
-        }
-
-        foreach ($data as $field => $value) {
-            if (!preg_match( '/_id$/', $field)) {
-                $this->$field = $value;
+        if (is_array($data)) {
+            foreach ($data as $field => $value) {
+                if (!preg_match( '/_id$/', $field)) {
+                    $this->$field = $value;
+                }
             }
         }
     }
@@ -67,8 +65,12 @@ class Role
     public static function find($id)
     {
         $db = Database::getInstance();
-        $model = new self();
         $data = $db->find($id, 'role');
+        if (!$data) {
+            return null;
+        }
+        $model = new self();
+
         $model->setData($data);
 
         return $model;
@@ -78,6 +80,9 @@ class Role
     {
         $db = Database::getInstance();
         $data = $db->findBy($filter, 'role');
+        if (!$data) {
+            return null;
+        }
         $model = new Role();
         $model->setData($data);
 

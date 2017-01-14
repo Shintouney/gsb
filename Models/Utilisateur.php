@@ -11,6 +11,7 @@ class Utilisateur
     protected $prenom;
     protected $email;
     protected $mdp;
+    protected $token;
     protected $role;
 
     /**
@@ -62,8 +63,6 @@ class Utilisateur
         $this->mdp = $mdp;
     }
 
-
-
     /**
      * @param string $mdp
      */
@@ -113,6 +112,31 @@ class Utilisateur
     }
 
     /**
+     * @return string
+     */
+    public function getNomComplet()
+    {
+        return implode(' ', array_filter(array($this->prenom, $this->nom)));
+    }
+
+    /**
+    * @return string
+    */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken()
+    {
+        $token = hash('sha256', uniqid(mt_rand(), true), true);
+        $this->token =rtrim(strtr(base64_encode($token), '+/', '-_'), '=');
+    }
+
+    /**
      * @param Role $role
      */
     public function setRole(Role $role)
@@ -131,13 +155,11 @@ class Utilisateur
     // hydrate un objet utilisateur a partir d'une table de hachage
     public function setData($data)
     {
-        if (!is_array($data)) {
-            die("données invalides");
-        }
-
-        foreach ($data as $field => $value) {
-            if (!preg_match( '/_id$/', $field)) {
-                $this->$field = $value;
+        if (is_array($data)) {
+            foreach ($data as $field => $value) {
+                if (!preg_match( '/_id$/', $field)) {
+                    $this->$field = $value;
+                }
             }
         }
     }
@@ -147,7 +169,9 @@ class Utilisateur
     {
         $db = Database::getInstance();
         $data = $db->find($id, 'utilisateur');
-
+        if (!$data) {
+            return null;
+        }
         $model = new Utilisateur();
         $model->setData($data);
         $role = Role::find($data['role_id']);
@@ -161,7 +185,9 @@ class Utilisateur
     {
         $db = Database::getInstance();
         $data = $db->findBy($filter, 'utilisateur');
-
+        if (!$data) {
+            return null;
+        }
         $model = new Utilisateur();
         $model->setData($data);
         $role = Role::find($data['role_id']);
@@ -191,8 +217,21 @@ class Utilisateur
     // wrapper pour findBy 'login'
     public static function findByLogin($login)
     {
-        $model = self::findBy(array('login' => $login), 'utilisateur');
+        return self::findBy(array('login' => $login), 'utilisateur');
+    }
 
-        return $model;
+    // wrapper pour findBy 'email'
+    public static function findByEmail($email)
+    {
+        return self::findBy(array('email' => $email), 'utilisateur');
+    }
+
+    public static function findByLoginOrEmail($username)
+    {
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            return static::findByEmail($username);
+        }
+
+        return static::findByLogin($username);
     }
 }
