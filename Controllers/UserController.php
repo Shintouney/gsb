@@ -140,4 +140,12 @@ class UserController extends Controller
         $auth = Auth::getInstance();
         $auth->logout();
     }
+
+    public function batchImport()
+    {
+        if (!empty($_POST)) {
+
+        }
+        $this->render('User/import.php');
+    }
 }
