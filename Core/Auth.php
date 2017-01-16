@@ -51,6 +51,4 @@ class Auth
     {
         return ($this->logged() && $_SESSION['role'] === $role);
     }
-
-
 }
