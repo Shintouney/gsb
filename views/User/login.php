@@ -7,8 +7,8 @@
 		<br>
 		<div class="login">
 			<form action="" method="post">
-			<input placeholder="username" type="text" name="login" id="login"/>
-			<input placeholder="password" type="password" name ="mdp" id="mdp"/>
+			<input placeholder="username" type="text" name="login" id="login" required/>
+			<input placeholder="password" type="password" name ="mdp" id="mdp" required/>
 			<input type="submit" value="connexion"/>
 			</form>
 		</div>
