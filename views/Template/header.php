@@ -10,8 +10,22 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/backoffice/style.css"/>
-    
 
+    <style>
+
+        ::-webkit-input-placeholder {
+            color: black;
+        }
+        :-moz-placeholder { /* Firefox 18- */
+            color: black;
+        }
+        ::-moz-placeholder {  /* Firefox 19+ */
+            color: black;
+        }
+        :-ms-input-placeholder {
+            color: black;
+        }
+    </style>
     <!-- Optional theme -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
 

@@ -23,12 +23,55 @@ class Controller
         header('Location: ' . $url);
     }
 
-    protected function render($view, $template = 'default')
+    protected function render($view, $vars = array(), $template = 'default')
     {
         $view = str_replace('/', D_S, $view);
         ob_start();
+        extract($vars);
         require 'views'.D_S.$view;
         $content = ob_get_clean();
         require 'views'.D_S.'Template'.D_S.$template.'.php';
+    }
+
+    protected function filterAccess($role = 'ROLE_USER', $msg = 'Impossible d\'accéder à cette page!')
+    {
+        $auth = Auth::getInstance();
+
+        if (false === $auth->isGranted($role, $msg)) {
+            $this->forbidden($msg);
+        }
+    }
+
+    /* rendu dans une variable */
+    protected function renderView($view, $parameters)
+    {
+        ob_start();
+        extract($parameters);
+        require $view;
+
+        return ob_get_clean();
+    }
+
+    // validation de formulaire retourne un message d'erreur pour chaque champ danss liste qui est vide
+    protected function validateBlank($list)
+    {
+        $errors = array();
+        $fields = $_POST;
+        $emptyMsg = ' non renseigné';
+        foreach ($fields as $field => $value) {
+            if(empty($value) &&  in_array($field, $list)) {
+                $errors[] = $field.$emptyMsg;
+            }
+        }
+
+        return $errors;
+    }
+
+    protected function url($link)
+    {
+        $protocol = $_SERVER['REQUEST_SCHEME']; //http
+        $server = $_SERVER['SERVER_NAME']; // localhost / gsb.fr etc
+
+        return  $protocol.'://'.$server.'/gsb/index.php'.$link;
     }
 }
