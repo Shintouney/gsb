@@ -13,9 +13,8 @@ class UserController extends Controller
     public function login()
     {
         if (!empty($_POST)) {
-			
             $auth  = Auth::getInstance();
-            $user = isset($_POST['login']) ? Utilisateur::findByLogin($_POST['login']) : null;
+            $user = Utilisateur::findByLogin($_POST['login']);
 
             if ($user && $auth->login($user, $_POST['mdp'])) {
 
@@ -25,7 +24,7 @@ class UserController extends Controller
             }
         }
 
-        $this->render('User/login.php','no_template');
+        $this->render('User/login.php', null, 'no_template');
     }
 
     // action index
@@ -33,7 +32,19 @@ class UserController extends Controller
     {
         $users = Utilisateur::all();
 
-        $this->render('User/index.php', 'admin', array('users' => $users));
+        $this->render('User/index.php', array('users' => $users));
+    }
+	
+	 // action display
+    public function display($id)
+    {
+		if($_SESSION['auth'] == $id || $_SESSION['role'] === 'ROLE_ADMIN') {
+			$user = Utilisateur::find($id);
+			$this->render('User/display.php', 'default', array('user' => $user));
+		} else {
+			$this->forbidden();
+		}
+        
     }
 
     // action create
@@ -66,7 +77,7 @@ class UserController extends Controller
             }
         }
 
-        $this->render('User/create.php', 'admin',  array('roles' => $roles));
+        $this->render('User/create.php', array('roles' => $roles));
     }
 
     // action update
@@ -93,7 +104,7 @@ class UserController extends Controller
             }
         }
 
-        $this->render('User/create.php', 'admin', array('user' => $user, 'roles' => $roles));
+        $this->render('User/create.php', array('user' => $user, 'roles' => $roles));
     }
 
     public function handleRole($fields)
@@ -147,6 +158,6 @@ class UserController extends Controller
         if (!empty($_POST)) {
 
         }
-        $this->render('User/import.php', null, 'admin');
+        $this->render('User/import.php');
     }
 }
