@@ -38,9 +38,13 @@ class UserController extends Controller
 	 // action display
     public function display($id)
     {
-        $user = Utilisateur::find($id);
-
-        $this->render('User/display.php', 'default', array('user' => $user));
+		if($_SESSION['auth'] == $id || $_SESSION['role'] === 'ROLE_ADMIN') {
+			$user = Utilisateur::find($id);
+			$this->render('User/display.php', 'default', array('user' => $user));
+		} else {
+			$this->forbidden();
+		}
+        
     }
 
     // action create

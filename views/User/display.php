@@ -16,19 +16,23 @@
 		<td><?=$user->getEmail(); ?> </td>
 	</tr>
 	<tr>
-		<th>Adresse :</th>
-		<td><?=$user->getEmail(); ?> </td>
-	</tr>
-	<tr>
-		<th>Commune :</th>
-		<td><?=$user->getEmail(); ?> </td>
+		<th>Rôle:</th>
+		<td><?=$user->getRole()->getLibelle(); ?></td>
 	</tr>
 	<tr>
 		<th>Téléphone :</th>
 		<td><?=$user->getEmail(); ?> </td>
 	</tr>
 	<tr>
+		<th>Adresse :</th>
+		<td> 14 rue du Chalot </td>
+	</tr>
+	<tr>
+		<th>Commune :</th>
+		<td>Pont-Salomon </td>
+	</tr>
+	<tr>
 		<th>Date d'embauche :</th>
-		<td><?=date('now'); ?> </td>
+		<td><?=date('D. M Y'); ?> </td>
 	</tr>
 </table>
