@@ -23,7 +23,7 @@ class Controller
         header('Location: ' . $url);
     }
 
-    protected function render($view, $vars = array(), $template = 'default')
+    protected function render($view, $template = 'default', $vars = array())
     {
         $view = str_replace('/', D_S, $view);
         ob_start();

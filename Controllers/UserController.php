@@ -13,8 +13,9 @@ class UserController extends Controller
     public function login()
     {
         if (!empty($_POST)) {
+			
             $auth  = Auth::getInstance();
-            $user = Utilisateur::findByLogin($_POST['login']);
+            $user = isset($_POST['login']) ? Utilisateur::findByLogin($_POST['login']) : null;
 
             if ($user && $auth->login($user, $_POST['mdp'])) {
 
@@ -24,7 +25,7 @@ class UserController extends Controller
             }
         }
 
-        $this->render('User/login.php', null, 'no_template');
+        $this->render('User/login.php','no_template');
     }
 
     // action index
@@ -32,7 +33,7 @@ class UserController extends Controller
     {
         $users = Utilisateur::all();
 
-        $this->render('User/index.php', array('users' => $users));
+        $this->render('User/index.php', 'admin', array('users' => $users));
     }
 
     // action create
@@ -65,7 +66,7 @@ class UserController extends Controller
             }
         }
 
-        $this->render('User/create.php', array('roles' => $roles));
+        $this->render('User/create.php', 'admin',  array('roles' => $roles));
     }
 
     // action update
@@ -92,7 +93,7 @@ class UserController extends Controller
             }
         }
 
-        $this->render('User/create.php', array('user' => $user, 'roles' => $roles));
+        $this->render('User/create.php', 'admin', array('user' => $user, 'roles' => $roles));
     }
 
     public function handleRole($fields)
@@ -146,6 +147,6 @@ class UserController extends Controller
         if (!empty($_POST)) {
 
         }
-        $this->render('User/import.php');
+        $this->render('User/import.php', null, 'admin');
     }
 }
