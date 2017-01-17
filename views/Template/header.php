@@ -8,8 +8,9 @@
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="stylesheet" href="css/backoffice/style.css"/>
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <?php if ($template === "no_template") {?><link rel="stylesheet" href="css/login.css"><?php }else { ?> <link rel="stylesheet" href="css/style.css"> <?php } ?>
+    
 
     <!-- Optional theme -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->

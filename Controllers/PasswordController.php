@@ -21,8 +21,8 @@ class PasswordController extends Controller
         $mail->send();
     }
 
-    // action request reset
-    public function requestReset()
+    // action recover password
+    public function recover()
     {
         if (!empty($_POST)) {
             $db       = Database::getInstance();
