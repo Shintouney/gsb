@@ -34,6 +34,14 @@ class UserController extends Controller
 
         $this->render('User/index.php', array('users' => $users));
     }
+	
+	 // action display
+    public function display($id)
+    {
+        $user = Utilisateur::find($id);
+
+        $this->render('User/display.php', 'default', array('user' => $user));
+    }
 
     // action create
     public function create()
