@@ -95,16 +95,23 @@ class Database
         return $this->prepare($sql, $id);
     }
 
-    // select where avec champs de filtre a specifier, multiple champs possible
-    public function findBy(array $fields, $table)
+    // select where avec champs de filtre a specifier, multiple champs possible renvoit un seul modele
+    public function findOneBy(array $filters, $table)
     {
-        $sql = 'SELECT * FROM '.$table.' WHERE ';
-        $where = array_keys($fields);
-        $where = array_map(function ($field) {return $field.' = :'.$field;}, $where);
-        $where = implode( ', ', $where);
-        $sql .= $where;
+        $sql = 'SELECT * FROM '.$table;
+        $sql .= $this->addWhere($filters);
 
-        return $this->prepare($sql, $fields);
+        return $this->prepare($sql, $filters);
+    }
+
+    // select where avec champs de filtre a specifier, multiple champs possible peut renvoit un tableau de modeles
+    public function findBy(array $filters, $table, $order = null)
+    {
+        $sql = 'SELECT * FROM '.$table;
+        $order = $order ? ' ORDER BY '.$order : '';
+        $sql .= $this->addWhere($filters).$order;
+
+        return $this->prepare($sql, $filters, true);
     }
 
     // requete insert
@@ -129,9 +136,7 @@ class Database
         $keys = array_map(function ($field) {return $field.' = :'.$field;}, $keys);
         $keys = implode( ', ', $keys);
         $fields['id'] = $id;
-
-        $sql = 'UPDATE '.$table.' SET '.$keys.'
-        WHERE id = :id';
+        $sql = 'UPDATE '.$table.' SET '.$keys.' WHERE id = :id';
 
         return $this->prepare($sql, $fields);
     }
@@ -143,6 +148,29 @@ class Database
         $sql = 'SELECT * FROM '.$table.$order;
 
         return $this->query($sql, true);
+    }
+
+    public function pluck($fields, $table, $filters = null, $order = null)
+    {
+        $value = isset($fields['value']) ? $fields['value'].' AS value' : '';
+        $label = isset($fields['label']) ? $fields['label'].' AS label' : '';
+        $fields = empty($value) ? implode(', ', $fields) : $value.', '.$label;
+
+        $order = $order ? ' ORDER BY '.$order : '';
+        $sql = 'SELECT '.$fields.' FROM '.$table.$order;
+        $where = $filters ? $this->addWhere($filters) : '';
+        $sql .= $where.$order;
+
+        return $this->prepare($sql, $filters, true);
+    }
+
+    // add SQL where clause
+    public function addWhere($filters)
+    {
+        $where = array_keys($filters);
+        $where = array_map(function ($filter) {return $filter.' = :'.$filter;}, $where);
+
+        return ' WHERE '.implode( ', ', $where);
     }
 
     public function delete($id, $table)

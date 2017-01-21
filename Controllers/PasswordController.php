@@ -27,7 +27,7 @@ class PasswordController extends Controller
         if (!empty($_POST)) {
             $db       = Database::getInstance();
             $username = htmlspecialchars($_POST['username'], ENT_QUOTES);
-            $user     = Utilisateur::findByLoginOrEmail($username);
+            $user     = Utilisateur::findOneByLoginOrEmail($username);
 
             if (null === $user) {
                 $this->render('Password/request_reset.php', array(

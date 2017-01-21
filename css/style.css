@@ -1,7 +1,15 @@
 /* alt template */
-
-body{
-    margin-bottom: 60px;
+html, body{
+    height: 100%;
+    margin: 0;
+}
+#wrapper{
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -50px;
+    /* Pad bottom by footer height */
+    padding: 0 0 50px;
 }
 .navbar {
     margin-bottom: 0;
@@ -32,11 +40,9 @@ footer{
     height:50px;
     background-color:#2B7A91;
     color: ghostwhite;
-    position: absolute;
-    bottom: 0;
+
     width: 100%;
-    height: 60px;
-    padding: 20px;
+    padding: 15px;
     /*margin: 0 auto ;*/
 }
 div.footer-text{
@@ -44,6 +50,13 @@ div.footer-text{
     left: 40%;
     width: 200px;
 }
-table{
+table, form{
     margin: 20px;
+}
+[type="submit"]{
+    margin-top: 14px;
+}
+form.inline-form, .inline-form [type="submit"]{
+    margin-top: 0;
+    display:inline;
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <?php include 'header.php'; ?>
 <body>
     <!-- Fixed navbar -->

@@ -30,7 +30,14 @@ class Controller
         extract($vars);
         require 'views'.D_S.$view;
         $content = ob_get_clean();
-        require 'views'.D_S.'Template'.D_S.$template.'.php';
+        require 'views'.D_S.'Template'.D_S.'base.php';
+    }
+
+    protected function partial($view, $vars)
+    {
+        $view = str_replace('/', D_S, $view);
+        extract($vars);
+        require 'views'.D_S.$view;
     }
 
     protected function filterAccess($role = 'ROLE_USER', $msg = 'Impossible d\'accéder à cette page!')

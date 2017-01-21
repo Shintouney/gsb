@@ -1,20 +1,74 @@
-<form action="" method="post">
-    <label for="nom">Nom :</label>
-    <div><input type="text" name="nom" <?= isset($user)? ' value="'.$user->getNom().'"' :'';?>/></div>
-    <label for="nom">Prénom :</label>
-    <div><input type="text" name="prenom" <?= isset($user)? ' value="'.$user->getPrenom().'"' :'';?>/></div>
-    <label for="nom">Login :</label>
-    <div><input type="text" name="login" <?= isset($user)? ' value="'.$user->getLogin().'"' :'';?>/></div>
-    <label for="nom">Mot de passe :</label>
-    <div><input type="password" name="mdp" /></div>
-    <label for="nom">Email :</label>
-    <div><input type="email" name="email" p<?= isset($user)? ' value="'.$user->getEmail().'"' :'';?>/></div>
-    <label for="nom">Rôle :</label>
-    <div><select name="role" id="">
-        <option value=""> </option>
-        <?php foreach ($roles as $role): ?>
-        <option value="<?=$role->getNom(); ?>" <?= $role->getNom()== 'ROLE_USER'? ' selected': '' ?>><?=$role->getLibelle(); ?></option>
-        <?php endforeach; ?>
-    </select></div>
-    <input type="submit" value="<?= isset($user) ? "Modifier" : "Créer"; ?>"/>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="nom">Nom :</label>
+                    <input class="form-control" type="text" id="nom"
+                           name="nom" <?= isset($user) ? ' value="' . $user->getNom() . '"' : ''; ?>/></div>
+                <div class="form-group">
+                    <label for="prenom">Prénom :</label>
+                    <input class="form-control" type="text" id="prenom"
+                           name="prenom" <?= isset($user) ? ' value="' . $user->getPrenom() . '"' : ''; ?>/></div>
+                <div class="form-group">
+                    <label for="login">Login :</label>
+                    <input class="form-control" type="text" id="login"
+                           name="login" <?= isset($user) ? ' value="' . $user->getLogin() . '"' : ''; ?>/></div>
+                <div class="form-group">
+                    <label for="mdp">Mot de passe :</label>
+                    <input class="form-control" type="password" id="mdp" name="mdp"/></div>
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input class="form-control" type="email" id="email"
+                           name="email" <?= isset($user) ? ' value="' . $user->getEmail() . '"' : ''; ?>/></div>
+                <div class="form-group">
+                    <label for="role">Rôle :</label>
+                    <select input class="form-control" name="role" id="role">
+                        <option value=""></option>
+                        <?php foreach ($roles as $role): ?>
+                            <option value="<?= $role->getNom(); ?>" <?= $role->getNom(
+                            ) == 'ROLE_USER' ? ' selected' : '' ?>><?= $role->getLibelle(); ?></option>
+                        <?php endforeach; ?>
+                    </select></div>
+
+                <div class="form-group input-append date"
+                     id="dp3" <?= isset($user) ? ' data-date="' . $user->getDateEmbauche() . '"' : ''; ?>
+                     ddata-date-format="yyyy-mm-dd">
+                    <label for="date_embauche">Date d'embauche :</label>
+
+                    <input class="form-control span2 datepicker" id="date_embauche" name="date_embauche" size="16"
+                           type="text" <?= isset($user) ? ' value="' . $user->getDateEmbauche() . '"' : ''; ?>/>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="codepostal">Code postal :</label>
+                    <input class="form-control" type="text" id="code_postal"
+                           name="code_postal" <?= isset($user) ? ' value="' . $user->getCommune()->getCodePostal(
+                        ) . '"' : ''; ?>/></div>
+                <div class="form-group">
+                    <label for="commune">Commune :</label>
+                    <?= isset($communes) ? "" : "<span>choisir un code postal...</span>"; ?>
+                    <select class="form-control" <?= isset($communes) ? '' : ' style="visibility:hidden"' ?>
+                            id="commune" name="commune">
+                        <?php if (isset($communes)):
+                            foreach ($communes as $commune): ?>
+                                <option <?php echo $user->getCommune()->getId(
+                                ) == $commune['value'] ? ' selected' : ''; ?>
+                                    value="<?= $commune['value']; ?>"><?= $commune{'label'}; ?></option>
+                            <?php endforeach; endif; ?>
+                    </select>
+                </div>
+                <?php /*
+    <input  type="text" id="date_embauche" name="date_embauche" <?= isset($user)? ' value="'.$user->getDateEmbauche().'"' :'';?>/></div> */
+                ?>
+
+
+
+
+
+                <input type="submit" value="<?= isset($user) ? "Modifier" : "Créer"; ?>"/>
+            </form>
+        </div>
+    </div>
+</div>

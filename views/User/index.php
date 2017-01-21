@@ -12,9 +12,9 @@
                         <td><?=$user->getNom()?></td>
                         <td><?=$user->getPrenom(); ?> </td>
                         <td><a href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
-                        <td><form action="?page=user&action=delete" method="post" style="display:inline;">
+                        <td><form action="?page=user&action=delete" method="post" class="inline-form" style="">
                                 <input type="hidden" name="id" value="<?=$user->getId()?>">
-                                <button type="submit">Supprimer</button>
+                                <button class="confirm-delete" type="submit">Supprimer</button>
                             </form></td>
                     </tr>
                 <?php endforeach; ?>
