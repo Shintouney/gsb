@@ -28,7 +28,7 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
-                <li><a href="?page=user&action=logout">logout</a></li>
+                <li><a href="?page=login&action=logout">logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
     </div>

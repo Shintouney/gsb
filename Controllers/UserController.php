@@ -9,23 +9,6 @@ require_once 'Models'.D_S.'Role.php';
 
 class UserController extends Controller
 {
-    // action login
-    public function login()
-    {
-        if (!empty($_POST)) {
-            $auth  = Auth::getInstance();
-            $user = Utilisateur::findByLogin($_POST['login']);
-
-            if ($auth->login($user, $_POST['mdp'])) {
-
-                $this->redirect();
-            }else{
-                $error = 'identifiants invalides';
-            }
-        }
-
-        $this->render('User/login.php', null, 'no_template');
-    }
 
     // action index
     public function index()
@@ -134,18 +117,32 @@ class UserController extends Controller
         }
     }
 
-    // action logout
-    public function logout()
-    {
-        $auth = Auth::getInstance();
-        $auth->logout();
-    }
-
+    // action batch import: importe des utilisateurs a partir de fichiers excel
     public function batchImport()
     {
-        if (!empty($_POST)) {
+        if (!empty($_FILES)) {
+            $file = $_FILES['file']['tmp_name'];
+            $file_handle = fopen($file, "r");
+            $header = fgetcsv($file_handle, 1024, ';');
+            $this->import($header);
+            while (!feof($file_handle) ) {
+                $row  = fgetcsv($file_handle, 1024, ';');
+                var_dump(array_combine($header, $row));
+                $data = array_combine($header, $row);
+                $this->import($data);
+            }
 
+            die();
+            fclose($file_handle);
         }
         $this->render('User/import.php');
+    }
+
+    // conversion des données du fichier excel et insertion en base
+    private function import($fields)
+    {
+        $db = Database::getInstance();
+        $fields['email'] = $fields['login'].'@gsb.fr';
+        $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
     }
 }
