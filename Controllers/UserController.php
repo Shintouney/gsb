@@ -101,7 +101,6 @@ class UserController extends Controller
     public function convertDate($fields)
     {
         $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
-        var_dump($date);
         $fields['date_embauche'] = $date->format('Y-m-d');
 
         return $fields;
@@ -181,8 +180,9 @@ class UserController extends Controller
                 $data = array_combine($header, $row); // creation tableau associatif
                 $this->import($data);
             }
-
             fclose($file_handle);
+
+            $this->redirect('?page=user&action=index');
         }
         $this->render('User/import.php');
     }
@@ -200,6 +200,6 @@ class UserController extends Controller
         $fields = $this->handleRole($fields, 'libelle');
         $fields = $this->convertDate($fields);
         $db->create($fields, 'utilisateur');
-        $this->redirect('?page=user&action=index');
+
     }
 }

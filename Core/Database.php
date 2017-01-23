@@ -126,7 +126,6 @@ class Database
         $keys = implode( ', ', $keys);
         $sql = $sql.$keys;
 
-        var_dump($sql);
         return $this->prepare($sql, $fields);
     }
 
