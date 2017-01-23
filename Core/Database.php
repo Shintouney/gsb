@@ -50,11 +50,10 @@ class Database
 
     // requete preparee
     public function prepare($sql, $fields = false, $multiple = false)
-    {var_dump($fields);
+    {
         try
         {
             $statement = $this->_gpdo->prepare($sql);
-            var_dump($statement);
             if ($fields)
             {
                 foreach ($fields as $key => $value)
@@ -71,7 +70,6 @@ class Database
                     $statement->bindValue(':'.$key, $value, $dataType);
                 }
             }
-            var_dump($statement);
             $statement->execute();
             if($multiple)
                 $result = $statement->fetchAll(PDO::FETCH_NAMED);
