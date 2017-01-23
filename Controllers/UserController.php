@@ -11,22 +11,6 @@ require_once 'Models'.D_S.'Commune.php';
 
 class UserController extends Controller
 {
-    // action login
-    public function login()
-    {
-        if (!empty($_POST)) {
-            $auth  = Auth::getInstance();
-            $user = Utilisateur::findOneByLogin($_POST['login']);
-            if ($user && $auth->login($user, $_POST['mdp'])) {
-                $this->redirect();
-            }else{
-                $error = 'identifiants invalides';
-            }
-        }
-
-        $this->render('User/login.php', 'no_template', null);
-    }
-
     // action index
     public function index()
     {
@@ -125,10 +109,9 @@ class UserController extends Controller
     {
         if (!empty($fields['role'])) {
             $role = Role::findOneBy(array('nom' => $fields['role']));
-            var_dump($role);
             unset($fields['role']);
             $fields['role_id'] = $role->getId();
-            var_dump($role->getId());
+
         }
 
         return $fields;
@@ -164,7 +147,7 @@ class UserController extends Controller
         $mail->send();
     }
 
-    // action delete
+    // action delete utilisateur
     public function delete()
     {
         if (!empty($_POST)) {
@@ -174,25 +157,46 @@ class UserController extends Controller
         }
     }
 
-    // action logout
-    public function logout()
+    // affiche les communes correspondantes au code postal (AJAX)
+    public function displayCommuneByCodePostal($code)
     {
-        $auth = Auth::getInstance();
-        $auth->logout();
+        $communes = Commune::options($code);
+        $this->partial('Template/options.php',  array('choices' => $communes));
     }
 
+    // action batch import: importe des utilisateurs a partir de fichiers excel
     public function batchImport()
     {
-        if (!empty($_POST)) {
+        if (!empty($_FILES)) {
+            $file = $_FILES['file']['tmp_name'];
+            $file_handle = fopen($file, "r");
+            $header = fgetcsv($file_handle, 1024, ';');
+            while (!feof($file_handle) ) {
+                $row  = fgetcsv($file_handle, 1024, ';');
+                $data = array_combine($header, $row); // creation tableau associatif
+                $this->import($data);
+                var_dump($data);
+            }
 
+            fclose($file_handle);
         }
         $this->render('User/import.php');
     }
 
-    public function displayCommuneByCodePostal($code)
+    // conversion des données du fichier excel et insertion en base
+    private function import($fields)
     {
-        $communes = Commune::options($code);
-
-        $this->partial('Template/options.php',  array('choices' => $communes));
+        $db = Database::getInstance();
+        $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';
+        $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
+        $fields['commune_id'] = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
+        /*$commune = Commune::findOneBy(array(
+            'code_postal' => $fields['cp'],
+            'nom'    => $fields['commune']
+        ));*/
+        unset($fields['cp']);
+        unset($fields['commune']);
+        $db->create($fields, 'utilisateur');
+        $this->redirect('?page=user&action=index');
     }
 }

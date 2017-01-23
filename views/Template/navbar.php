@@ -17,7 +17,7 @@
                 <li <?php if ($template === "admin" ) { ?> class="active"<?php } ?>>
                     <a href="?page=user&action=index">Administration</a>
                 </li>
-                <li><a href="?page=user&action=logout">logout</a></li>
+                <li><a href="?page=login&action=logout">logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->
     </div>

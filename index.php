@@ -10,22 +10,16 @@ require_once 'vendor/autoload.php'; // for plugins (mailer etc.)
 
 
 $path 	= 'Controllers'.D_S;
-$page 	= isset($_GET['page']) 	 ? $_GET['page']     : null;
+$page 	= isset($_GET['page']) 	 ? $_GET['page']     : 'home';
 $action = isset($_GET['action']) ? $_GET['action'] 	 : 'index';
 $id 	= isset($_GET['id'])	 ? $_GET['id']       : null;
 
 // conditions pour rediriger vers login sinon on lance les actions standards sinon homepage
 if ($page != 'password' && $page != 'login' && notLogged()) {
     $controller = 'HomeController';
-    $action 	= 'toLogin';
-}  else if ($page === 'login') {
-    $controller = 'UserController';
-    $action 	= 'login';
-}  else if ($page) {
-    $controller = ucfirst($page).'Controller';
+    $action     = 'toLogin';
 } else {
-    $controller = 'HomeController';
-    $action 	= 'index';
+    $controller = ucfirst($page).'Controller';
 }
 
 // inclusion du fichier avec require

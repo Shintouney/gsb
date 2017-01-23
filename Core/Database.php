@@ -161,7 +161,12 @@ class Database
         $where = $filters ? $this->addWhere($filters) : '';
         $sql .= $where.$order;
 
-        return $this->prepare($sql, $filters, true);
+        $results =  $this->prepare($sql, $filters, true);
+        if (!$results) {
+            return false;
+        }
+
+        return count($results) > 1 ? $results : $results[0];
     }
 
     // add SQL where clause
@@ -170,7 +175,7 @@ class Database
         $where = array_keys($filters);
         $where = array_map(function ($filter) {return $filter.' = :'.$filter;}, $where);
 
-        return ' WHERE '.implode( ', ', $where);
+        return ' WHERE '.implode( ' AND ', $where);
     }
 
     public function delete($id, $table)

@@ -98,6 +98,20 @@ class Commune
         return $model;
     }
 
+    // recupere ligne sql et genere/ retourne un objet champs de recherche a specifier
+    public static function findOneBy($filter)
+    {
+        $db = Database::getInstance();
+        $data = $db->findOneBy($filter, 'commune');
+        if (!$data) {
+            return null;
+        }
+        $model = new Commune();
+        $model->setData($data);
+
+        return $model;
+    }
+
     public static function all()
     {
         $db = Database::getInstance();
@@ -110,6 +124,15 @@ class Commune
 
         return $list;
     }
+
+    public static function findIdFromData($cp, $commune)
+    {
+        $db = Database::getInstance();
+        $row = $db->pluck(array('id'), 'commune', array('code_postal' => $cp, 'nom' => $commune));
+
+        return $row ? array_shift($row) : '';
+    }
+
     public static function options($code)
     {
         $db = Database::getInstance();

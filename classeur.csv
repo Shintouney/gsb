@@ -1,0 +1,4 @@
+login; prenom; nom; role;
+bruno; Bruno; Avinint; ROLE_ADMIN
+haitem; Haitem; Zeghouani; ROLE_ADMIN
+tom; Thomas; Duport; ROLE_ADMIN
