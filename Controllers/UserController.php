@@ -178,8 +178,6 @@ class UserController extends Controller
 
             while (!feof($file_handle) ) {
                 $row  = fgetcsv($file_handle, 1024, ';');
-                var_dump($header);
-                var_dump($row);
                 $data = array_combine($header, $row); // creation tableau associatif
                 $this->import($data);
             }
@@ -192,7 +190,6 @@ class UserController extends Controller
     // conversion des données du fichier excel et insertion en base
     private function import($fields)
     {
-        var_dump($fields);
         $db = Database::getInstance();
         $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';
         $fields['role'] = $fields['role'] ? : 'visiteur';
@@ -200,7 +197,6 @@ class UserController extends Controller
         $fields['commune_id'] = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
         unset($fields['cp']);
         unset($fields['commune']);
-        var_dump($fields);
         $fields = $this->handleRole($fields, 'libelle');
         $fields = $this->convertDate($fields);
         $db->create($fields, 'utilisateur');
