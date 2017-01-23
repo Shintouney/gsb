@@ -16,7 +16,7 @@
                         <td><?=$user->getPrenom(); ?> </td>
                         <td><?=$user->getNom()?></td>
                         <td><?=$user->getRole()->getLibelle()?></td>
-                        <td><?=  $user->getCommune()->getNom()?></td>
+                        <td><?=$user->getCommune()->getNom()?> (<?=$user->getCommune()->getCodePostal()?>)</td>
                         <td><a href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
                         <td><form action="?page=user&action=delete" method="post" class="inline-form" style="">
                                 <input type="hidden" name="id" value="<?=$user->getId()?>">
