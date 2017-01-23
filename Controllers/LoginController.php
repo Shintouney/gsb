@@ -11,7 +11,7 @@ class LoginController extends Controller
     {
         if (!empty($_POST)) {
             $auth  = Auth::getInstance();
-            $user = Utilisateur::findByLogin($_POST['login']);
+            $user = Utilisateur::findOneByLogin($_POST['login']);
 
             if ($auth->login($user, $_POST['mdp'])) {
                 $this->redirect();
@@ -21,7 +21,7 @@ class LoginController extends Controller
         }
 
 
-        $this->render('User/login.php', null, 'no_template');
+        $this->render('User/login.php', 'no_template', null);
     }
 
 

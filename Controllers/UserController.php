@@ -19,7 +19,7 @@ class UserController extends Controller
         $this->render('User/index.php', 'admin', array('users' => $users));
     }
 
-    // action display
+    // action display utilisateur affichage version admin
     public function display($id)
     {
         if($_SESSION['auth'] == $id || $_SESSION['role'] === 'ROLE_ADMIN') {
@@ -30,7 +30,7 @@ class UserController extends Controller
         }
     }
 
-    // action create
+    // action create utilisateur
     public function create()
     {
         $db = Database::getInstance();
@@ -45,7 +45,7 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
-            $fields = $this->handleDate($fields);;
+            $fields = $this->convertDate($fields);;
             if (empty($errors)) {
                 $db->create($fields, 'utilisateur');
                 $nom_complet = $fields['prenom'].' '.$fields['nom'];
@@ -65,7 +65,7 @@ class UserController extends Controller
         $this->render('User/create.php', 'admin', array('roles' => $roles));
     }
 
-    // action update
+    // action update utilisateur
     public function update($id)
     {
         $db = Database::getInstance();
@@ -82,7 +82,7 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
-            $fields = $this->handleDate($fields);
+            $fields = $this->convertDate($fields);
 
             if (empty($errors)) {
                 $db->update($id, 'utilisateur', $fields);
@@ -97,18 +97,21 @@ class UserController extends Controller
         $this->render('User/create.php', 'admin', array('user' => $user, 'roles' => $roles, 'communes' => $communes));
     }
 
-    public function handleDate($fields)
+    // conversion date au format yyyy-mm-dd pour db
+    public function convertDate($fields)
     {
         $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
+        var_dump($date);
         $fields['date_embauche'] = $date->format('Y-m-d');
 
         return $fields;
     }
 
-    public function handleRole($fields)
+    // récupération de l'id du role à partir de nom & clean-up // possibilité à partir du libelle
+    public function handleRole($fields, $col = 'nom')
     {
         if (!empty($fields['role'])) {
-            $role = Role::findOneBy(array('nom' => $fields['role']));
+            $role = Role::findOneBy(array($col => $fields['role']));
             unset($fields['role']);
             $fields['role_id'] = $role->getId();
 
@@ -117,6 +120,7 @@ class UserController extends Controller
         return $fields;
     }
 
+    // récupération de l'id & clean up code postal et commune
     public function handleCommune($fields)
     {
         if (!empty($fields['commune'])) {
@@ -157,7 +161,7 @@ class UserController extends Controller
         }
     }
 
-    // affiche les communes correspondantes au code postal (AJAX)
+    // affiche les communes correspondant au code postal (AJAX)
     public function displayCommuneByCodePostal($code)
     {
         $communes = Commune::options($code);
@@ -171,11 +175,13 @@ class UserController extends Controller
             $file = $_FILES['file']['tmp_name'];
             $file_handle = fopen($file, "r");
             $header = fgetcsv($file_handle, 1024, ';');
+
             while (!feof($file_handle) ) {
                 $row  = fgetcsv($file_handle, 1024, ';');
+                var_dump($header);
+                var_dump($row);
                 $data = array_combine($header, $row); // creation tableau associatif
                 $this->import($data);
-                var_dump($data);
             }
 
             fclose($file_handle);
@@ -186,16 +192,17 @@ class UserController extends Controller
     // conversion des données du fichier excel et insertion en base
     private function import($fields)
     {
+        var_dump($fields);
         $db = Database::getInstance();
         $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';
+        $fields['role'] = $fields['role'] ? : 'visiteur';
         $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
         $fields['commune_id'] = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
-        /*$commune = Commune::findOneBy(array(
-            'code_postal' => $fields['cp'],
-            'nom'    => $fields['commune']
-        ));*/
         unset($fields['cp']);
         unset($fields['commune']);
+        var_dump($fields);
+        $fields = $this->handleRole($fields, 'libelle');
+        $fields = $this->convertDate($fields);
         $db->create($fields, 'utilisateur');
         $this->redirect('?page=user&action=index');
     }
