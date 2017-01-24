@@ -26,7 +26,16 @@ include ('connexiondb.php');
 	<div class='FormAdmin'>
 	
 		<form method="POST" action='action_modifier_ticket.php'>
-		
+<?php //===  =========================
+/*
+ * echapper les caractères potentiellement dangereux est une bonne habitude
+ * perso je me suis pas emmerdé je me suis dit que les admins allaient pas s'amuser à injecter du javascript
+ * pareil pour des techs c'est pas comme si le site était ouvert à tous mais bon, bonne habitude à ne pas perdre
+ * pour rappel htmlspecialchar avant d'afficher une variable sur la page et htmlentities avant d'entrer une variable en base de données
+ * même si prepare devrait normalement regler cela.
+ */
+?>
+
 			<label>Etat :</label>					<input type='text' name='ModifEtat' value=<?php echo htmlspecialchars($prechargement['etat']);?> /><br/>
 			
 			
@@ -69,7 +78,8 @@ include ('connexiondb.php');
 			<label>Niveau d'urgence :</label>		<input type='text' name='ModifUrgence' value=<?php echo $prechargement['niveau_urgence'];?> /><br/>
 			
 			<label>Niveau de complexité :</label>	<input type='text' name='ModifComplexite' value=<?php echo $prechargement['niveau_complexite'];?> /><br/>
-			
+
+ <?php//== si tu as le temps fais toi une méthode qui convertit les minutes en heures et minutes pour te la péter =============== ?>
 			<label>Durée (en minutes) :</label>		<input type='text' name='ModifDuree' value=<?php echo $prechargement['duree'];?> /><br/>
 			
 			<label>Nombre d'appels :</label>	<input type='text' name='ModifNbAppels' value=<?php echo $prechargement['nb_appels'];?> /><br/>
@@ -83,3 +93,4 @@ include ('connexiondb.php');
 	
 </body>
 </html>
+<?php // =================== fin du tour =============== je crois avoir fait le tour de l'essentiel et beaucoup donné de conseils hors projet == bye bye  =====?>

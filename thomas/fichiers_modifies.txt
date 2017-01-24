@@ -9,3 +9,11 @@ liste : 24/01/2017
 ====================
 a voir ce qui me reste à faire. je ne vais pas annoter tous les fichiers. je commence et ensuite pour le reste tu appliqueras la même recette ou tu regarderas
 dans mon code comment j'ai fait.
+
+formulaire_nouveau_ticket.php => Controller : TicketController / methode : new + vue => ticket/new.php
+action_nouveau_ticket.php     => pareil -  la vue + redirection
+action_modifier_ticket.php    => Controller : TicketControllrt / methode : update + redirection
+modifier_ticket.php           => pareil - la redirection + la vue ticket/update.php ( ou incident/edit.php t'as compris tu fais ce que tu veux)
+attribuer_tickets            rappelle moi de créer la méthode utilisateur::findByRole('nom_du_role')
+
+==== the end =====
