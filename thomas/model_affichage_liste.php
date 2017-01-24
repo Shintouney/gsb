@@ -1,5 +1,7 @@
 <?php 
-
+//================ mon conseil est d'appeler toutes les clés primaires id  ça te simplifiera la vie==================================//
+// ===================je te rappelle que technicien et un role d'utilisateur il n'y aura pas de table technicien ================
+// ========= y a t-il des champs spéciaux dont les techniciens auraient besoin? === il faudra me le dire =============
 $req = $bdd->query('
 	SELECT i.`id` AS `id_incident`, i.`etat`, i.`materiel_id`, i.`objet_incident`, i.`date_signalement`, 
 	i.`date_intervention`,i.`salle_id`,i.`technicien_id`, i.`demandeur_id`, i.niveau_urgence, 
@@ -23,3 +25,5 @@ $req = $bdd->query('
 	JOIN `technicien` t
 	ON i.`technicien_id` = t.`id_technicien`
 	');
+
+// au fait good job sur la jointure multiple ;)   =======================================================

@@ -1,0 +1,11 @@
+liste des fichiers modifiés : 23/01/2017
+==========================================
+index.php                      => juste le h1 a mettre and ticket/index.php + grosses explications de ma part à lire pour commencer la migration
+affichage_liste_tickets.php    => Controller  : TicketController  / methode : index                      + vue => ticket/index.php + grosse lecture
+model_affichage_liste.php      => Model       : Ticket            / methode : all
+affichage_ticket.php           => Controller  : TicketController  / methode : show (view, display, etc.) + vue => ticket/show.php
+
+liste : 24/01/2017
+====================
+a voir ce qui me reste à faire. je ne vais pas annoter tous les fichiers. je commence et ensuite pour le reste tu appliqueras la même recette ou tu regarderas
+dans mon code comment j'ai fait.
