@@ -1,0 +1,9 @@
+
+[type="submit"]{
+    margin-top: 60px;
+}
+form.inline-form, .inline-form [type="submit"]{
+    margin-top: 0;
+    display:inline;
+}
+

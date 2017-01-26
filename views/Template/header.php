@@ -7,9 +7,17 @@
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="stylesheet" href="css/backoffice/style.css"/>
+
+    <?php if ($template === "login") {?><link rel="stylesheet" href="css/login/style.css"><?php
+    }else { ?>
+
+    <link rel="stylesheet" href="css/app/main.css" />
+    <link rel="stylesheet" href="datepicker/css/jquery.datepick.css">
+    <link rel="stylesheet" href="datepicker/css/fix.css">
+    <link rel="stylesheet" href="css/<?= isset($template)? $template : 'default' ?>/style.css">
+    <?php } ?>
+    
+
     <!-- Optional theme -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
 

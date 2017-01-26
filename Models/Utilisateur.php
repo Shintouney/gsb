@@ -2,17 +2,22 @@
 
 require_once 'Core'.D_S.'Database.php';
 require_once 'Role.php';
+require_once 'Commune.php';
 
 class Utilisateur
 {
     protected $id;
     protected $login;
-    protected $nom;
-    protected $prenom;
     protected $email;
     protected $mdp;
-    protected $token;
     protected $role;
+    protected $token;
+    protected $nom;
+    protected $prenom;
+    protected $telephone;
+    protected $adresse;
+    protected $commune;
+    protected $dateEmbauche;
 
     /**
      * @return string
@@ -79,6 +84,40 @@ class Utilisateur
         return $this->mdp;
     }
 
+
+    /**
+    * @return string
+    */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken()
+    {
+        $token = hash('sha256', uniqid(mt_rand(), true), true);
+        $this->token =rtrim(strtr(base64_encode($token), '+/', '-_'), '=');
+    }
+
+    /**
+     * @param Role $role
+     */
+    public function setRole(Role $role)
+    {
+        $this->role = $role;
+    }
+
+    /**
+     * @return Role
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
     /**
      * @param string $nom
      */
@@ -120,47 +159,123 @@ class Utilisateur
     }
 
     /**
-    * @return string
-    */
-    public function getToken()
+     * @param string $adresse
+     */
+    public function setAdresse($adresse)
     {
-        return $this->token;
+        $this->adresse = $adresse;
     }
 
     /**
-     * @param string $token
+     * @return string
      */
-    public function setToken()
+    public function getAdresse()
     {
-        $token = hash('sha256', uniqid(mt_rand(), true), true);
-        $this->token =rtrim(strtr(base64_encode($token), '+/', '-_'), '=');
+        return $this->adresse;
     }
 
     /**
-     * @param Role $role
+     * @param mixed $commune
      */
-    public function setRole(Role $role)
+    public function setCommune(Commune $commune)
     {
-        $this->role = $role;
+        $this->commune = $commune;
     }
 
     /**
-     * @return Role
+     * @return Commune
      */
-    public function getRole()
+    public function getCommune()
     {
-        return $this->role;
+        return $this->commune;
     }
 
-    // hydrate un objet utilisateur a partir d'une table de hachage
+    /**
+     * @param date $dateEmbauche
+     */
+    public function setDateEmbauche($dateEmbauche)
+    {
+        $this->dateEmbauche = $dateEmbauche;
+    }
+
+    /**
+     * @return date
+     */
+    public function getDateEmbauche()
+    {
+        $date = new DateTime($this->dateEmbauche);
+        return $date->format('d/m/Y');
+    }
+
+    /**
+     * @param string $telephone
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    // ----------------------------------------------------------------------------------------------
+
+    // hydrate un objet a partir d'une table de hachage
     public function setData($data)
     {
         if (is_array($data)) {
             foreach ($data as $field => $value) {
                 if (!preg_match( '/_id$/', $field)) {
+                    $field = $this->camelize($field);
                     $this->$field = $value;
                 }
             }
+        }
+    }
+
+    // transforme camelCase en snake_case
+    public function decamelize($string)
+    {
+        $string = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $string));
+
+        return $string;
+    }
+
+    // transforme snake_case et kebab-case en camelCase
+    public function camelize($string, $upper = false)
+    {
+        $delimiter = strpos($string, '_')? '_' : (strpos($string, '-')? '-' : null);
+        if($delimiter) {
+            $string = explode('_', $string);
+            $string = array_map('ucfirst', $string);
+            $string[0] = $upper === false ? lcfirst($string[0]) : $string[0];
+            $string = implode($string);
+        }
+
+        return $string;
+    }
+
+    /*--------------------------Active record methods-----------------------------------*/
+
+
+    private function initRole($data)
+    {
+        $roleId = isset($data['role_id']) && $data['role_id'] ? $data['role_id'] : 1;
+        $role = Role::find($roleId);
+        $this->role = $role;
+    }
+
+    private function initCommune($data)
+    {
+        if (isset($data['commune_id']) && $data['commune_id']) {
+            $communeId = $data['commune_id'] ;
+            $commune = Commune::find($communeId);
+            $this->setCommune($commune);
         }
     }
 
@@ -174,24 +289,24 @@ class Utilisateur
         }
         $model = new Utilisateur();
         $model->setData($data);
-        $role = Role::find($data['role_id']);
-        $model->setRole($role);
+        $model->initRole($data);
+        $model->initCommune($data);
 
     return $model;
     }
 
     // recupere ligne sql et genere/ retourne un objet champs de recherche a specifier
-    public static function findBy($filter)
+    public static function findOneBy($filter)
     {
         $db = Database::getInstance();
-        $data = $db->findBy($filter, 'utilisateur');
+        $data = $db->findOneBy($filter, 'utilisateur');
         if (!$data) {
             return null;
         }
         $model = new Utilisateur();
         $model->setData($data);
-        $role = Role::find($data['role_id']);
-        $model->setRole($role);
+        $model->initRole($data);
+        $model->initCommune($data);
 
         return $model;
     }
@@ -206,32 +321,31 @@ class Utilisateur
             $data = $model;
             $model = new Utilisateur();
             $model->setData($data);
-
-            $role = Role::find($data['role_id']);
-            $model->setRole($role);
+            $model->initRole($data);
+            $model->initCommune($data);
         }
 
         return $list;
     }
 
     // wrapper pour findBy 'login'
-    public static function findByLogin($login)
+    public static function findOneByLogin($login)
     {
-        return self::findBy(array('login' => $login), 'utilisateur');
+        return self::findOneBy(array('login' => $login), 'utilisateur');
     }
 
     // wrapper pour findBy 'email'
-    public static function findByEmail($email)
+    public static function findOneByEmail($email)
     {
-        return self::findBy(array('email' => $email), 'utilisateur');
+        return self::findOneBy(array('email' => $email), 'utilisateur');
     }
 
-    public static function findByLoginOrEmail($username)
+    public static function findOneByLoginOrEmail($username)
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
-            return static::findByEmail($username);
+            return static::findOneByEmail($username);
         }
 
-        return static::findByLogin($username);
+        return static::findOneByLogin($username);
     }
 }

@@ -22,23 +22,19 @@ class Auth
         return password_verify($password, $user->getMdp()) ? $this->authenticate($user) :  false;
     }
 
-    public function authenticate($user, $id = null)
+    public function authenticate($user)
     {
         session_regenerate_id();
-        $_SESSION['auth'] = $id ? : $user->getId();
-        $_SESSION['role'] = false === $user->getRole() ? 'ROLE_USER' : $user->getRole();
+        //$_SESSION['auth'] = $id ? : $user->getId();
+        //$_SESSION['role'] = false === $user->getRole() ? 'ROLE_USER' : $user->getRole();
+        $_SESSION['user'] = serialize($user);
 
         return $_SESSION['logged'] = true;
     }
 
     public function isLogged()
     {
-        return isset($_SESSION['logged']);
-    }
-
-    public function logged()
-    {
-        return $_SESSION['logged'];
+        return isset($_SESSION['logged']) && $_SESSION['logged'];
     }
 
     public function logout()
@@ -47,8 +43,21 @@ class Auth
         header('Location: ' . $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].'?page=login');
     }
 
-    public function isGranted($role = 'ROLE_USER')
+    public function isGranted($role = 'ROLE_USER', $strict = false)
     {
-        return ($this->logged() && $_SESSION['role'] === $role);
+        $user        = $this->getUser();
+        $currentRole = $user->getRole()->getNom();
+        $isGranted   = $strict ? $currentRole === $role : $currentRole === $role || $currentRole === 'ROLE_ADMIN';
+
+        return ($this->isLogged() && $isGranted);
     }
+
+   public function getUser()
+   {
+       if (isset($_SESSION['user'])) {
+           return unserialize($_SESSION['user']);
+       }
+
+       return false;
+   }
 }

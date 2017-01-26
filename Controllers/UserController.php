@@ -4,43 +4,39 @@ require_once 'Core'.D_S.'Auth.php';
 require_once 'Core'.D_S.'Database.php';
 require_once 'Core'.D_S.'Mailer.php';
 require_once 'Core'.D_S.'Controller.php';
+require_once 'Core'.D_S.'Date.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
+require_once 'Models'.D_S.'Commune.php';
 
 class UserController extends Controller
 {
-    // action login
-    public function login()
-    {
-        if (!empty($_POST)) {
-            $auth  = Auth::getInstance();
-            $user = Utilisateur::findByLogin($_POST['login']);
-
-            if ($auth->login($user, $_POST['mdp'])) {
-
-                $this->redirect();
-            }else{
-                $error = 'identifiants invalides';
-            }
-        }
-
-        $this->render('User/login.php', null, 'no_template');
-    }
-
     // action index
     public function index()
     {
         $users = Utilisateur::all();
 
-        $this->render('User/index.php', array('users' => $users));
+        $this->render('User/index.php', array('template' => 'admin', 'users' => $users));
     }
 
-    // action create
+    // action display utilisateur affichage version admin
+    public function display($id)
+    {
+        if($_SESSION['auth'] == $id || $_SESSION['role'] === 'ROLE_ADMIN') {
+            $user = Utilisateur::find($id);
+            $this->render('User/display.php', array('template' => 'dashboard', 'user' => $user));
+        } else {
+            $this->forbidden();
+        }
+    }
+
+    // action create utilisateur
     public function create()
     {
         $db = Database::getInstance();
         $mdp  = '';
         $roles = Role::all();
+        $errors = array();
         if (!empty($_POST)) {
             $fields = $_POST;
             $errors = $this->validateBlank(array('mdp', 'login', 'email', 'role'));
@@ -49,8 +45,10 @@ class UserController extends Controller
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
             }
             $fields = $this->handleRole($fields);
+            $fields = $this->handleCommune($fields);
+            $fields = $this->convertDate($fields);;
             if (empty($errors)) {
-                $db->create($fields, 'utilisateur');
+                $db->create('utilisateur', $fields);
                 $nom_complet = $fields['prenom'].' '.$fields['nom'];
                 $to          = array($fields['email'] => $nom_complet);
                 $params      = array(
@@ -60,20 +58,19 @@ class UserController extends Controller
                 );
                 $this->sendAccountCreationMail($to, $params);
                 $this->redirect('?page=user&action=index');
-            } else {
-               $this->displayErrors($errors);
             }
         }
 
-        $this->render('User/create.php', array('roles' => $roles));
+        $this->render('User/create.php', array('template' => 'admin', 'errors' => $errors, 'roles' => $roles));
     }
 
-    // action update
+    // action update utilisateur
     public function update($id)
     {
         $db = Database::getInstance();
         $user = Utilisateur::find($id);
         $roles = Role::all();
+
         if (!empty($_POST)) {
             $fields = $_POST;
             $errors = $this->validateBlank(array('email', 'role'));
@@ -83,6 +80,9 @@ class UserController extends Controller
                 unset($fields['mdp']); // mot de passe vide ne reset pas le mot de passe
             }
             $fields = $this->handleRole($fields);
+            $fields = $this->handleCommune($fields);
+            $fields = $this->convertDate($fields);
+
             if (empty($errors)) {
                 $db->update($id, 'utilisateur', $fields);
 
@@ -91,17 +91,42 @@ class UserController extends Controller
                 $this->displayErrors($errors);
             }
         }
+        $communes = $user->getCommune() ? Commune::options($user->getCommune()->getCodePostal()) : null;
 
-        $this->render('User/create.php', array('user' => $user, 'roles' => $roles));
+        $this->render('User/create.php', array('template' => 'admin', 'user' => $user, 'roles' => $roles, 'communes' => $communes));
     }
 
-    public function handleRole($fields)
+    // conversion date au format yyyy-mm-dd pour db
+    public function convertDate($fields)
+    {
+        $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
+        $fields['date_embauche'] = $date->format('Y-m-d');
+
+        return $fields;
+    }
+
+    // récupération de l'id du role à partir de nom & clean-up // possibilité à partir du libelle
+    public function handleRole($fields, $col = 'nom')
     {
         if (!empty($fields['role'])) {
-            $role = Role::findBy(array('nom' => $fields['role']));
+            $role = Role::findOneBy(array($col => $fields['role']));
             unset($fields['role']);
             $fields['role_id'] = $role->getId();
+
         }
+
+        return $fields;
+    }
+
+    // récupération de l'id & clean up code postal et commune
+    public function handleCommune($fields)
+    {
+        if (!empty($fields['commune'])) {
+            $fields['commune_id'] = $fields['commune'];
+            unset($fields['commune']);
+
+        }
+        unset($fields['code_postal']);
 
         return $fields;
     }
@@ -124,7 +149,7 @@ class UserController extends Controller
         $mail->send();
     }
 
-    // action delete
+    // action delete utilisateur
     public function delete()
     {
         if (!empty($_POST)) {
@@ -134,18 +159,45 @@ class UserController extends Controller
         }
     }
 
-    // action logout
-    public function logout()
+    // affiche les communes correspondant au code postal (AJAX)
+    public function displayCommuneByCodePostal($code)
     {
-        $auth = Auth::getInstance();
-        $auth->logout();
+        $communes = Commune::options($code);
+        $this->partial('Template/options.php',  array('choices' => $communes));
     }
 
+    // action batch import: importe des utilisateurs a partir de fichiers excel
     public function batchImport()
     {
-        if (!empty($_POST)) {
+        if (!empty($_FILES)) {
+            $file = $_FILES['file']['tmp_name'];
+            $file_handle = fopen($file, "r");
+            $header = fgetcsv($file_handle, 1024, ';');
+            while (!feof($file_handle) ) {
+                $row  = fgetcsv($file_handle, 1024, ';');
+                $data = array_combine($header, $row); // creation tableau associatif
+                $this->import($data);
+            }
+            fclose($file_handle);
 
+            $this->redirect('?page=user&action=index');
         }
         $this->render('User/import.php');
+    }
+
+    // conversion des données du fichier excel et insertion en base
+    private function import($fields)
+    {
+        $db = Database::getInstance();
+        $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';
+        $fields['role'] = $fields['role'] ? : 'visiteur';
+        $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
+        $fields['commune_id'] = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
+        unset($fields['cp']);
+        unset($fields['commune']);
+        $fields = $this->handleRole($fields, 'libelle');
+        $fields = $this->convertDate($fields);
+        $db->create($fields, 'utilisateur');
+
     }
 }
