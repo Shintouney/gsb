@@ -7,10 +7,15 @@
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/datepicker.css">
-    <?php if ($template === "no_template") {?><link rel="stylesheet" href="css/login.css"><?php }else { ?> <link rel="stylesheet" href="css/style.css"> <?php } ?>
+
+    <?php if ($template === "login") {?><link rel="stylesheet" href="css/login/style.css"><?php
+    }else { ?>
+
+    <link rel="stylesheet" href="css/app/main.css" />
+    <link rel="stylesheet" href="datepicker/css/jquery.datepick.css">
+    <link rel="stylesheet" href="datepicker/css/fix.css">
+    <link rel="stylesheet" href="css/<?= isset($template)? $template : 'default' ?>/style.css">
+    <?php } ?>
     
 
     <!-- Optional theme -->

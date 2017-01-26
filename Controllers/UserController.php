@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         $users = Utilisateur::all();
 
-        $this->render('User/index.php', 'admin', array('users' => $users));
+        $this->render('User/index.php', array('template' => 'admin', 'users' => $users));
     }
 
     // action display utilisateur affichage version admin
@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         if($_SESSION['auth'] == $id || $_SESSION['role'] === 'ROLE_ADMIN') {
             $user = Utilisateur::find($id);
-            $this->render('User/display.php', 'dashboard', array('user' => $user));
+            $this->render('User/display.php', array('template' => 'dashboard', 'user' => $user));
         } else {
             $this->forbidden();
         }
@@ -36,6 +36,7 @@ class UserController extends Controller
         $db = Database::getInstance();
         $mdp  = '';
         $roles = Role::all();
+        $errors = array();
         if (!empty($_POST)) {
             $fields = $_POST;
             $errors = $this->validateBlank(array('mdp', 'login', 'email', 'role'));
@@ -47,7 +48,7 @@ class UserController extends Controller
             $fields = $this->handleCommune($fields);
             $fields = $this->convertDate($fields);;
             if (empty($errors)) {
-                $db->create($fields, 'utilisateur');
+                $db->create('utilisateur', $fields);
                 $nom_complet = $fields['prenom'].' '.$fields['nom'];
                 $to          = array($fields['email'] => $nom_complet);
                 $params      = array(
@@ -57,12 +58,10 @@ class UserController extends Controller
                 );
                 $this->sendAccountCreationMail($to, $params);
                 $this->redirect('?page=user&action=index');
-            } else {
-               $this->displayErrors($errors);
             }
         }
 
-        $this->render('User/create.php', 'admin', array('roles' => $roles));
+        $this->render('User/create.php', array('template' => 'admin', 'errors' => $errors, 'roles' => $roles));
     }
 
     // action update utilisateur
@@ -94,7 +93,7 @@ class UserController extends Controller
         }
         $communes = $user->getCommune() ? Commune::options($user->getCommune()->getCodePostal()) : null;
 
-        $this->render('User/create.php', 'admin', array('user' => $user, 'roles' => $roles, 'communes' => $communes));
+        $this->render('User/create.php', array('template' => 'admin', 'user' => $user, 'roles' => $roles, 'communes' => $communes));
     }
 
     // conversion date au format yyyy-mm-dd pour db
@@ -174,7 +173,6 @@ class UserController extends Controller
             $file = $_FILES['file']['tmp_name'];
             $file_handle = fopen($file, "r");
             $header = fgetcsv($file_handle, 1024, ';');
-
             while (!feof($file_handle) ) {
                 $row  = fgetcsv($file_handle, 1024, ';');
                 $data = array_combine($header, $row); // creation tableau associatif

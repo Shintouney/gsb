@@ -7,7 +7,8 @@ body{
 	overflow-x: hidden;
     overflow-y: hidden;
 	background: #fff;
-    color: #000;
+
+	color: #fff;
 	font-family: Arial;
 	font-size: 12px;
 }
@@ -20,7 +21,7 @@ body{
 	bottom: -40px;
 	width: auto;
 	height: auto;
-	background-image: url(../img/background.jpg);
+	background-image: url(../../img/app/background.jpg);
 	background-size: cover;
 	-webkit-filter: blur(5px);
 	z-index: 0;
@@ -54,8 +55,23 @@ body{
 	font-weight: 200;
 }
 
+.exo p{
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 35px;
+	font-weight: 200;
+}
+
 .header div span{
 	color: #5379fa !important;
+}
+
+h2{
+	color: #990000 !important;
+	font-family: 'Exo', sans-serif;
+}
+p{
+	font-family: 'Exo', sans-serif;
 }
 
 .login{

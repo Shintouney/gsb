@@ -33,7 +33,8 @@ $(function(){
         }
     }
     /* date picker calendrier */
-    $('.datepicker').datepicker();
+    var defaultDate = $('#date_embauche').val();
+    $('.datepicker').datepick({dateFormat: 'dd/mm/yyyy', alignment: 'topRight', defaultDate: defaultDate});
 
 
     /* confirm suppression */

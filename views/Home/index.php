@@ -1,11 +1,15 @@
-<div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-3">
-            </div>
-            <div class="col-lg-9">
-                <img src="img/pharmacist-jobs.jpg" alt=""/>
-            </div>
-        </div>
+<!-- Banner -->
+<section id="banner">
+    <div class="content">
+        <header>
+            <h1>Bienvenue sur gsb</h1>
+            <p>Vous êtes connecté avec l'utilisateur: <strong><?=$login;?></strong></p>
+        </header>
+        <ul class="actions">
+            <li><a href="?page=frais" class="button big">Saisir fiche de frais</a></li>
+        </ul>
     </div>
-</div>
+	<span class="image object">
+		<img src="img/app/pic12.jpg" alt="" />
+	</span>
+</section>

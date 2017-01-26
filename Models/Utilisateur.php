@@ -3,6 +3,7 @@
 require_once 'Core'.D_S.'Database.php';
 require_once 'Role.php';
 require_once 'Commune.php';
+
 class Utilisateur
 {
     protected $id;

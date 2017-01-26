@@ -114,7 +114,7 @@ class Database
     }
 
     // requete insert
-    public function create($fields, $table)
+    public function create($table, $fields)
     {
         $sql = 'INSERT INTO '.$table.' SET ';
 

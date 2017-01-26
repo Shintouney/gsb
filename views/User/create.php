@@ -22,7 +22,11 @@
                     <input class="form-control" type="email" id="email"
                            name="email" <?= isset($user) ? ' value="' . $user->getEmail() . '"' : ''; ?>/></div>
                 <div class="form-group">
-                    <label for="role">Rôle :</label>
+                    <label for="telephone">Tel :</label>
+                    <input class="form-control" type="text" id="telephone"
+                           name="telephone" <?= isset($user) ? ' value="' . $user->getTelephone() . '"' : ''; ?>/></div>
+                <div class="form-group">
+                    <label for="role">Fonction :</label>
                     <select input class="form-control" name="role" id="role">
                         <option value=""></option>
                         <?php foreach ($roles as $role): ?>
@@ -31,9 +35,7 @@
                         <?php endforeach; ?>
                     </select></div>
 
-                <div class="form-group input-append date"
-                     id="dp3" <?= isset($user) ? ' data-date="' . $user->getDateEmbauche() . '"' : ''; ?>
-                     ddata-date-format="yyyy-mm-dd">
+                <div>
                     <label for="date_embauche">Date d'embauche :</label>
 
                     <input class="form-control span2 datepicker" id="date_embauche" name="date_embauche" size="16"
