@@ -12,4 +12,5 @@
 			<input type="submit" value="connexion"/>
 			</form>
             <?= isset($_SESSION['login_error']) ?  '<h2>Une erreur c\'est produite  </h2><p>'.$_SESSION['login_error'].'</p>' : '';  ?>
+            <?php unset($_SESSION['login_error'])?>
 		</div>
