@@ -12,9 +12,9 @@
     }else { ?>
 
     <link rel="stylesheet" href="css/app/main.css" />
-    <link rel="stylesheet" href="datepicker/css/jquery.datepick.css">
-    <link rel="stylesheet" href="datepicker/css/fix.css">
-    <link rel="stylesheet" href="css/<?= isset($template)? $template : 'default' ?>/style.css">
+    <link rel="stylesheet" href="js/datepicker/css/jquery.datepick.css">
+    <link rel="stylesheet" href="js/datepicker/css/fix.css">
+    <link rel="stylesheet" href="css/<?= isset($template) && file_exists('css/'.$template.'/style.css') ? $template : 'default' ?>/style.css">
     <?php } ?>
     
 

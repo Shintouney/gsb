@@ -34,7 +34,7 @@ $(function(){
     }
     /* date picker calendrier */
     var defaultDate = $('#date_embauche').val();
-    $('.datepicker').datepick({dateFormat: 'dd/mm/yyyy', alignment: 'topRight', defaultDate: defaultDate});
+    $('.datepicker').datepick({dateFormat: 'dd/mm/yyyy', alignment: 'top', defaultDate: defaultDate});
 
 
     /* confirm suppression */

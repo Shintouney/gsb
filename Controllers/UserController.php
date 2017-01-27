@@ -60,8 +60,12 @@ class UserController extends Controller
                 $this->redirect('?page=user&action=index');
             }
         }
-
-        $this->render('User/create.php', array('template' => 'admin', 'errors' => $errors, 'roles' => $roles));
+        $this->render('User/create.php', array(
+                'template' => 'admin',
+                'pageName' => 'Créer utilisateur',
+                'roles' => $roles,
+                'errors' => $errors,
+            ));
     }
 
     // action update utilisateur
@@ -93,7 +97,13 @@ class UserController extends Controller
         }
         $communes = $user->getCommune() ? Commune::options($user->getCommune()->getCodePostal()) : null;
 
-        $this->render('User/create.php', array('template' => 'admin', 'user' => $user, 'roles' => $roles, 'communes' => $communes));
+        $this->render('User/create.php', array(
+                'template' => 'admin',
+                'pageName' => 'modifier utilisateur',
+                'user' => $user,
+                'roles' => $roles,
+                'communes' => $communes,
+            ));
     }
 
     // conversion date au format yyyy-mm-dd pour db
