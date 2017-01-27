@@ -24,6 +24,7 @@ class Auth
 
     public function authenticate($user)
     {
+        $_SESSION = array();
         session_regenerate_id();
         //$_SESSION['auth'] = $id ? : $user->getId();
         //$_SESSION['role'] = false === $user->getRole() ? 'ROLE_USER' : $user->getRole();
