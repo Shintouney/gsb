@@ -20,7 +20,7 @@
                         <td><a href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
                         <td><form action="?page=user&action=delete" method="post" class="inline-form" style="">
                                 <input type="hidden" name="id" value="<?=$user->getId()?>">
-                                <button class="confirm-delete" type="submit">Supprimer</button>
+                                <button class="delete" type="submit">Supprimer</button>
                             </form></td>
                     </tr>
                 <?php endforeach; ?>

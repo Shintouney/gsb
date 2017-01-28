@@ -2,27 +2,66 @@
     <form action="" method="post">
         <div class="row">
                 <div class="6u">
+                    <?php  $form = isset($_SESSION['form']) ? $_SESSION['form'] : array();
+
+                    if(isset($_SESSION['form'])) {
+                        if(isset($_SESSION['form']['commune'])) {
+                            $_SESSION['ajax_selected'] = $_SESSION['form']['commune'];
+                        }
+                        unset($_SESSION['form']);
+                    }  ?>
+                    <?php  $errors = isset($_SESSION['form_errors']) ? $_SESSION['form_errors'] : array();
+                    if(isset($_SESSION['form_errors'])) unset($_SESSION['form_errors']);
+                    ?>
+                    
                     <fieldset class="align-fieldset fieldset-auto-width">
-                        <legend> <span class='icon fa-pencil-square-o'>identifiants</span> </legend>
+                        <legend> <span class='icon fa-pencil-square-o'>identifiants</span></legend>
                         <div>
                             <label for="login">Login :</label>
-                            <input class="form-control" type="text" id="login"
-                                   name="login" <?= isset($user) ? ' value="' . $user->getLogin() . '"' : ''; ?>/></div>
-                        <div class="form-group">
+                            <input type="text" id="login"
+                                   name="login"
+                                <?= isset($user)  ? ' value="' . $user->getLogin() . '"' :
+                                (isset($form['login']) ?' value="' . $form['login'] . '"' : ''); ?>/>
+                            <?php  $field = 'login'; if (isset($errors[$field])) {$fieldErrors = $errors[$field];  include "views/Template/form_errors.php";}
+                            ?>
+                        </div>
+                        <div>
                             <label for="mdp">Mot de passe :</label>
-                            <input class="form-control" type="password" id="mdp" name="mdp"/></div>
-                        <div class="form-group">
+                            <input type="password" id="mdp" name="mdp"/>
+                            <?php $field = 'mdp'; if (isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
+                        </div>
+                        <div>
+                            <label for="mdp_conf">Mot de passe (confirmation) :</label>
+                            <input type="password" id="mdp_conf" name="mdp_conf"/></div>
+                        <?php $field = 'mdp_conf'; if (isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
+                        <div>
                             <label for="email">Email :</label>
-                            <input class="form-control" type="email" id="email"
-                                   name="email" <?= isset($user) ? ' value="' . $user->getEmail() . '"' : ''; ?>/></div>
-                        <div class="form-group">
+                            <input type="email" id="email"
+                                   name="email"
+                                <?= isset($user) ? ' value="' . $user->getEmail() .'"' :
+                                    (isset($form['email']) ? ' value="' .$form['email']. '"' : ''); ?>/>
+                            <?php $field = 'email';  if(isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
+                        </div>
+                        <div>
                             <label for="role">Fonction :</label>
-                            <select input class="form-control" name="role" id="role">
+                            <select name="role" id="role">
                                 <?php foreach ($roles as $role): ?>
-                                    <option value="<?= $role->getNom(); ?>" <?= $role->getNom(
-                                    ) == 'ROLE_VISITEUR' ? ' selected' : '' ?>><?= $role->getLibelle(); ?></option>
+                                    <option value="<?= $role->getNom(); ?>"
+                                        <?php if(isset($user) &&  $role->getNom() === $user->getRole()->getNom())
+                                            {$selected = $role->getNom();}
+                                             else if (isset($form['role']) &&   $role->getNom() === $form['role'])
+                                             {$selected = $role->getNom();}
+                                        if (isset($selected) && $selected === $role->getNom()) {echo 'selected';}
+                                        else if (!isset($selected) && $role->getNom() === 'ROLE_VISITEUR') {echo  ' selected';}
+
+
+                                        ?>>
+                                        <?= $role->getLibelle(); ?></option>
                                 <?php endforeach; ?>
                             </select>
+                            <?php $field = 'role';
+                            if(isset($errors[$field])) {$fieldErrors = $errors[$field];
+                                include "views/Template/form_errors.php";} ?>
                         </div>
                     </fieldset>
                 </div>
@@ -32,36 +71,48 @@
                         <legend><span class='icon fa-pencil-square-o'>données personnelles</span></legend>
                         <div>
                             <label for="nom">Nom :</label>
-                            <input class="form-control" type="text" id="nom"
-                                   name="nom" <?= isset($user) ? ' value="' . $user->getNom() . '"' : ''; ?>/></div>
+                            <input type="text" id="nom"
+                                   name="nom"
+                                <?= isset($user) ? ' value="' . $user->getNom() . '"' :
+                                    (isset($form['nom'])? ' value="' .$form['nom']. '"' :''); ?>/>
+                        </div>
                         <div>
                             <label for="prenom">Prénom :</label>
-                            <input class="form-control" type="text" id="prenom"
-                                   name="prenom" <?= isset($user) ? ' value="' . $user->getPrenom() . '"' : ''; ?>/></div>
-                        <div class="form-group">
+                            <input type="text" id="prenom"
+                                   name="prenom"
+                                <?= isset($user) ? ' value="' . $user->getPrenom() . '"' :
+                                    (isset($form['prenom'])? ' value="' .$form['prenom']. '"' : ''); ?>/>
+                        </div>
+                        <div>
                             <label for="telephone">Tel :</label>
-                            <input class="form-control" type="text" id="telephone"
-                                   name="telephone" <?= isset($user) ? ' value="' . $user->getTelephone() . '"' : ''; ?>/></div>
+                            <input type="text" id="telephone"
+                                   name="telephone"
+                                <?= isset($user) ? ' value="' . $user->getTelephone() . '"' :
+                                    (isset($form['telephone'])? ' value="' .$form['telephone']. '"' : ''); ?>/>
+                        </div>
                         <div>
                             <label for="date_embauche">Date d'embauche :</label>
-
-                            <input class="form-control span2 datepicker" id="date_embauche" name="date_embauche" size="16"
-                                   type="text" <?= isset($user) ? ' value="' . $user->getDateEmbauche() . '"' : ''; ?>/>
+                            <input class="span2 datepicker" id="date_embauche" name="date_embauche" size="16"
+                                   type="text" <?= isset($user) ? ' value="' . $user->getDateEmbauche() . '"' :
+                                (isset($form['date_embauche'])? ' value="' .$form['date_embauche']. '"' : ''); ?>/>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label for="codepostal">Code postal :</label>
-                            <input class="form-control" type="text" id="code_postal"
-                                   name="code_postal" <?= isset($user) ? ' value="' . $user->getCommune()->getCodePostal(
-                                ) . '"' : ''; ?>/></div>
-                        <div class="form-group">
+                            <input type="text" id="code_postal"
+                                   name="code_postal" <?= isset($user) ? ' value="' . $user->getCommune()->getCodePostal() . '"' :
+                                (isset($form['code_postal'])? ' value="' .$form['code_postal']. '"' : ''); ?>/>
+                        </div>
+                        <div>
                             <label for="commune">Commune :</label>
-                            <?= isset($communes) ? "" : "<span>choisir un code postal...</span>"; ?>
-                            <select class="form-control" <?= isset($communes) ? '' : ' style="visibility:hidden"' ?>
+                            <?= isset($communes)|| isset($form['commune']) ? "" : "<span>choisir un code postal...</span>"; ?>
+                            <select <?= isset($communes)|| isset($form['commune']) ? '' : ' style="visibility:hidden"' ?>
                                     id="commune" name="commune">
                                 <?php if (isset($communes)):
                                     foreach ($communes as $commune): ?>
-                                        <option <?php echo $user->getCommune()->getId(
-                                        ) == $commune['value'] ? ' selected' : ''; ?>
+                                        <option <?php
+                                        if(isset($user) && $user->getCommune()->getId() === $commune['value']) {echo ' selected';}
+                                         else if(isset($form['commune']) && $form['commune'] === $commune['value']) {echo ' selected';}
+                                          ?>
                                             value="<?= $commune['value']; ?>"><?= $commune{'label'}; ?></option>
                                     <?php endforeach; endif; ?>
                             </select>
@@ -69,10 +120,9 @@
                     </fieldset>
                 </div>
         </div>
+        <hr/>
         <div class="row">
-            <div class="6u">
-                <input type="submit" value="<?= isset($user) ? "Modifier" : "Créer"; ?>"/>
-            </div>
+            <input class="12u special" type="submit" value="<?= isset($user) ? "Modifier utilisateur" : "Créer utilisateur"; ?>"/>
         </div>
     </form>
 </div>

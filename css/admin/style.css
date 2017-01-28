@@ -1,5 +1,7 @@
 fieldset label{
-
     text-transform: uppercase;
 }
 
+ul.errors{
+    text-align: left;
+}

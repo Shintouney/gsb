@@ -90,10 +90,11 @@ class Controller
     {
         $errors = array();
         $fields = $_POST;
-        $emptyMsg = ' non renseigné';
+        $emptyMsg = 'champ obligatoire';
         foreach ($fields as $field => $value) {
             if(empty($value) &&  in_array($field, $list)) {
-                $errors[] = $field.$emptyMsg;
+                $errors[$field] = array();
+                $errors[$field][] = $emptyMsg;
             }
         }
 
