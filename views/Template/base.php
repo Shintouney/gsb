@@ -10,7 +10,6 @@
                 <?php if ($template !== "login") include 'top.php';?>
 
                 <?= $content; ?>
-                ?>
             </div>
         </div>
         <?php if ($template !== "login") include 'menu.php';?>
