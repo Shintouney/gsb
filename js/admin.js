@@ -3,6 +3,8 @@ $(function(){
     var $target = $('#commune');
     var value = $trigger.val();
 
+    generate_communes_selector(value, $target);
+
     $trigger.change(function(){
         generate_communes_selector($(this).val(), $target);
     });
@@ -39,7 +41,7 @@ $(function(){
 
     /* confirm suppression */
     var msg = 'Voulez-vous supprimer cette utilisateur?';
-    $('.confirm-delete').on('click',{msg : msg}, function(e){
+    $('.delete').on('click',{msg : msg}, function(e){
         var answer=confirm(msg);
         if(!answer){
             e.preventDefault();

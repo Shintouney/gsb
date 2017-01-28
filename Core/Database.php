@@ -165,7 +165,7 @@ class Database
             return false;
         }
 
-        return count($results) > 1 ? $results : $results[0];
+        return $results;
     }
 
     // add SQL where clause

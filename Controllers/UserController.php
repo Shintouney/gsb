@@ -39,15 +39,18 @@ class UserController extends Controller
         $errors = array();
         if (!empty($_POST)) {
             $fields = $_POST;
-            $errors = $this->validateBlank(array('mdp', 'login', 'email', 'role'));
+            $errors = array_merge_recursive($errors, $this->validateBlank(array('mdp', 'mdp_conf','login', 'email', 'role')));
+            $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
+            unset($fields['mdp_conf']);
             if (!empty($fields['mdp'])) {
                 $mdp = $fields['mdp'];
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
-            $fields = $this->convertDate($fields);;
+            $fields = $this->convertDate($fields);
             if (empty($errors)) {
+                if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
                 $db->create('utilisateur', $fields);
                 $nom_complet = $fields['prenom'].' '.$fields['nom'];
                 $to          = array($fields['email'] => $nom_complet);
@@ -59,12 +62,16 @@ class UserController extends Controller
                 $this->sendAccountCreationMail($to, $params);
                 $this->redirect('?page=user&action=index');
             }
+            $_SESSION['form'] = $_POST;
+            $_SESSION['form_errors'] = $errors;
+            $this->redirect('?page=user&action=create');
+
         }
         $this->render('User/create.php', array(
                 'template' => 'admin',
                 'pageName' => 'Créer utilisateur',
                 'roles' => $roles,
-                'errors' => $errors,
+
             ));
     }
 
@@ -109,8 +116,10 @@ class UserController extends Controller
     // conversion date au format yyyy-mm-dd pour db
     public function convertDate($fields)
     {
-        $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
-        $fields['date_embauche'] = $date->format('Y-m-d');
+        if(!empty($fields['date_embauche'])) {
+            $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
+            $fields['date_embauche'] = $date->format('Y-m-d');
+        }
 
         return $fields;
     }
@@ -139,6 +148,22 @@ class UserController extends Controller
         unset($fields['code_postal']);
 
         return $fields;
+    }
+
+    // validation de formulaire retourne un message d'erreur pour chaque champ danss liste qui est vide
+    protected function validatePasswordConfirmation()
+    {
+        $errors = array();
+        $fields = $_POST;
+        if (isset($fields['mdp']) && isset($fields['mdp_conf'])) {
+
+            if ($fields['mdp'] !== $fields['mdp_conf']) {
+                $errors = array('mdp' => array());
+                $errors['mdp'][] = 'Le mot de passe doit être identique dans le champ de confirmation';
+            }
+        }
+
+        return $errors;
     }
 
     public function displayErrors($errors)
