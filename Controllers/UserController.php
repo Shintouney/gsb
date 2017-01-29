@@ -22,12 +22,20 @@ class UserController extends Controller
     // action display utilisateur affichage version admin
     public function display($id)
     {
-        if($_SESSION['auth'] == $id || $_SESSION['role'] === 'ROLE_ADMIN') {
+        $auth = Auth::getInstance();
+        if ($auth->isGranted('ROLE_ADMIN')) {
             $user = Utilisateur::find($id);
-            $this->render('User/display.php', array('template' => 'dashboard', 'user' => $user));
+            $this->render('User/display.php', array('pageName' => 'Page utilisateur', 'template' => 'admin', 'user' => $user));
         } else {
             $this->forbidden();
         }
+    }
+
+    // action
+    public function profile()
+    {
+        $user = $this->getUser();
+        $this->render('User/display.php', array('pageName' => 'Mon profil', 'template' => 'dashboard', 'user' => $user));
     }
 
     // action create utilisateur
@@ -81,10 +89,12 @@ class UserController extends Controller
         $db = Database::getInstance();
         $user = Utilisateur::find($id);
         $roles = Role::all();
-
+        $errors = array();
         if (!empty($_POST)) {
             $fields = $_POST;
-            $errors = $this->validateBlank(array('email', 'role'));
+            $errors = array_merge_recursive($errors,$this->validateBlank(array('email', 'role')));
+            $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
+            unset($fields['mdp_conf']);
             if (!empty($fields['mdp'])) {
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']); // on crypte
             }else {
@@ -92,16 +102,22 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
+            var_dump($fields['date_embauche']);
             $fields = $this->convertDate($fields);
+            var_dump($fields['date_embauche']);
 
             if (empty($errors)) {
+                if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
                 $db->update($id, 'utilisateur', $fields);
 
                 $this->redirect('?page=user&action=index');
-            } else {
-                $this->displayErrors($errors);
             }
+            $_SESSION['form'] = $_POST;
+            $_SESSION['form_errors'] = $errors;
+            $this->redirect('?page=user&action=update&id='.$id);
         }
+
+
         $communes = $user->getCommune() ? Commune::options($user->getCommune()->getCodePostal()) : null;
 
         $this->render('User/create.php', array(
@@ -201,8 +217,8 @@ class UserController extends Controller
         $this->partial('Template/options.php',  array('choices' => $communes));
     }
 
-    // action batch import: importe des utilisateurs a partir de fichiers excel
-    public function batchImport()
+    // action import: importe des utilisateurs a partir de fichiers excel
+    public function import()
     {
         if (!empty($_FILES)) {
             $file = $_FILES['file']['tmp_name'];
@@ -211,17 +227,17 @@ class UserController extends Controller
             while (!feof($file_handle) ) {
                 $row  = fgetcsv($file_handle, 1024, ';');
                 $data = array_combine($header, $row); // creation tableau associatif
-                $this->import($data);
+                $this->saveImport($data);
             }
             fclose($file_handle);
 
             $this->redirect('?page=user&action=index');
         }
-        $this->render('User/import.php');
+        $this->render('User/import.php', array('template' => 'admin'));
     }
 
     // conversion des données du fichier excel et insertion en base
-    private function import($fields)
+    private function saveImport($fields)
     {
         $db = Database::getInstance();
         $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';

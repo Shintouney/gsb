@@ -17,11 +17,14 @@
                         <td><?=$user->getNom()?></td>
                         <td><?=$user->getRole()->getLibelle()?></td>
                         <td><?=$user->getCommune()->getNom()?> (<?=$user->getCommune()->getCodePostal()?>)</td>
+                        <td><a class="special" href="?page=user&action=display&id=<?=$user->getId();?>">voir</a></td>
                         <td><a class="special" href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
-                        <td><form action="?page=user&action=delete" method="post" class="inline-form" style="">
+                        <td>
+                            <form action="?page=user&action=delete" method="post" class="inline-form" style="">
                                 <input type="hidden" name="id" value="<?=$user->getId()?>">
                                 <button class="delete" type="submit">Supprimer</button>
-                            </form></td>
+                            </form>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </table>
@@ -31,7 +34,7 @@
         <div class="12u">
             <ul class="actions">
                 <li><a class="special" href="?page=user&action=create">nouvel utilisateur</a></li>
-                <li><a class="special" href="?page=user&action=batchImport">importer liste utilisateurs</a></li>
+                <li><a class="special" href="?page=user&action=import">importer liste utilisateurs</a></li>
             </ul>
         </div>
     </div>
