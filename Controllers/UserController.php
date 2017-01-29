@@ -49,6 +49,7 @@ class UserController extends Controller
             $fields = $_POST;
             $errors = array_merge_recursive($errors, $this->validateBlank(array('mdp', 'mdp_conf','login', 'email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
+            $errors = array_merge_recursive($errors, $this->validateUniques(array('login', 'email')));
             unset($fields['mdp_conf']);
             if (!empty($fields['mdp'])) {
                 $mdp = $fields['mdp'];
@@ -57,6 +58,7 @@ class UserController extends Controller
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
             $fields = $this->convertDate($fields);
+
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
                 $db->create('utilisateur', $fields);
@@ -94,6 +96,7 @@ class UserController extends Controller
             $fields = $_POST;
             $errors = array_merge_recursive($errors,$this->validateBlank(array('email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
+            $errors = array_merge_recursive($errors, $this->validateUniques(array('login', 'email'), $user));
             unset($fields['mdp_conf']);
             if (!empty($fields['mdp'])) {
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']); // on crypte
@@ -102,9 +105,7 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
-            var_dump($fields['date_embauche']);
             $fields = $this->convertDate($fields);
-            var_dump($fields['date_embauche']);
 
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;

@@ -106,4 +106,32 @@ class Controller
     {
         return   $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'].$link;
     }
+
+    // transforme un snakecase en phrase avec espaces
+    protected function humanize($string)
+    {
+        return ucfirst(str_replace('_', ' ', $string));
+    }
+
+
+    public function validateUniques($list, $user = null)
+    {
+        $fields = $_POST;
+        $errors = array();
+        foreach ($list as $field) {
+            $method = 'findOneBy'.ucfirst($field);
+            $userExists = Utilisateur::$method($fields[$field]);
+            if($userExists && !$user || $userExists != $user) {
+                $errors[$field] = array();
+                $errors[$field][] = $this->humanize($field). " déja utilisé : veuillez en choisir un autre";
+            };
+        }
+
+        /*var_dump($loginExists && !$user || $loginExists != $user);
+        $emailExists = Utilisateur::findOneByEmail($fields['email']);
+        var_dump($emailExists && !$user || $emailExists != $user);*/
+
+        return $errors;
+    }
+
 }
