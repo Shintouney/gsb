@@ -201,10 +201,10 @@ class Utilisateur
     /**
      * @return date
      */
-    public function getDateEmbauche()
+    public function getDateEmbauche($format = 'd/m/Y')
     {
         $date = new DateTime($this->dateEmbauche);
-        return $date->format('d/m/Y');
+        return $date->format($format);
     }
 
     /**
@@ -221,6 +221,11 @@ class Utilisateur
     public function getTelephone()
     {
         return $this->telephone;
+    }
+
+    public function isAdmin()
+    {
+        return $this->getRole()->getNom() === 'ROLE_ADMIN';
     }
 
     // ----------------------------------------------------------------------------------------------

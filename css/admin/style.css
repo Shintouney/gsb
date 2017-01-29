@@ -20,8 +20,20 @@ a.special{
     white-space: nowrap;
     letter-spacing: 0.075em;
     display:inline-block;
-
 }
 a.special:hover{
-    background-color: #f67878
+    background-color: #f67878;
+    color: #fff!important;
+}
+a.special:active {
+    color: #fff!important;
+}
+legend{
+    padding: 0 10px;
+}
+fieldset{
+    padding-bottom: 20px;
+}
+table#users th{
+    text-transform: uppercase;
 }

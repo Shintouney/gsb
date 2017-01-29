@@ -30,7 +30,7 @@ class PasswordController extends Controller
             $user     = Utilisateur::findOneByLoginOrEmail($username);
 
             if (null === $user) {
-                $this->render('Password/request_reset.php', array(
+                $this->render('Password/recover.php', array(
                         'invalid_id' => $username
                     ));
             }
@@ -38,16 +38,16 @@ class PasswordController extends Controller
             $this->sendResettingEmail($user);
             $db->update($user->getId(), 'utilisateur', array('token' => $user->getToken()));
 
-            $this->render('Password/request_sent.php');
+            $this->render('Password/request_sent.php', array('template' => 'login'));
         }
 
-        $this->render('Password/request_reset.php');
+        $this->render('Password/recover.php', array('template' => 'login'));
     }
 
     public function reset($token)
     {
         $db   = Database::getInstance();
-        $user = Utilisateur::findBy(array('token' => $token));
+        $user = Utilisateur::findOneBy(array('token' => $token));
         if (null === $user) {
             die( "erreur, le token n'est pas valide");
         }
@@ -72,7 +72,7 @@ class PasswordController extends Controller
                 $this->displayErrors($errors);
             }
         }
-        $this->render('Password/reset.php');
+        $this->render('Password/reset.php', array('template' => 'login'));
     }
 
     // action encrypt

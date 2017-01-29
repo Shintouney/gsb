@@ -1,16 +1,14 @@
-<h1>Changer de mot de passe</h1>
-
-<form action="" method="post">
-    <div>
-        <label for="mdp">Mot de passe :</label>
-        <input type="password" name="mdp" id="mdp"/>
-    </div>
-    <br/>
-    <div>
-        <label for="mdp_conf">Confirmation :</label>
-        <input type="password" name="mdp_confirmation" id="mdp_conf"/>
-    </div>
-    <div>
-        <input type="submit" value="envoyer" />
-    </div>
-</form>
+<div class="body"></div>
+<div class="grad"></div>
+<div class="main">
+    <form action="" method="post">
+        <div>
+            <label>Changer de mot de passe</label>
+            <input placeholder="Mot de passe" type="password" name="mdp" id="mdp"/>
+            <input placeholder="confirmation" type="password" name="mdp_confirmation" id="mdp_conf"/>
+        </div>
+        <div class="align-center">
+            <input type="submit" value="envoyer" />
+        </div>
+    </form>
+</div>
