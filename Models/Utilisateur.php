@@ -225,7 +225,17 @@ class Utilisateur
 
     public function isAdmin()
     {
-        return $this->getRole()->getNom() === 'ROLE_ADMIN';
+        return $this->is('ROLE_ADMIN');
+    }
+
+    public function isVisiteur()
+    {
+        return $this->is ('ROLE_VISITEUR');
+    }
+
+    public function is($role)
+    {
+        return $this->getRole()->getNom() === $role;
     }
 
     // ----------------------------------------------------------------------------------------------
