@@ -31,14 +31,15 @@ class PasswordController extends Controller
 
             if (null === $user) {
                 $this->render('Password/recover.php', array(
-                        'invalid_id' => $username
+                        'invalid_id' => $username,
+                        'template' => 'login',
                     ));
             }
-            $user->setToken();
+            $user->setToken(Utilisateur::generateToken());
             $this->sendResettingEmail($user);
             $db->update($user->getId(), 'utilisateur', array('token' => $user->getToken()));
-
             $this->render('Password/request_sent.php', array('template' => 'login'));
+            exit();
         }
 
         $this->render('Password/recover.php', array('template' => 'login'));
@@ -48,11 +49,10 @@ class PasswordController extends Controller
     {
         $db   = Database::getInstance();
         $user = Utilisateur::findOneBy(array('token' => $token));
+
         if (null === $user) {
             die( "erreur, le token n'est pas valide");
         }
-        $auth = Auth::getInstance(); // on authentifie l'utilisateur si le token est valide
-        $auth->authenticate($user);
 
         if (!empty($_POST)) {
             $fields = $_POST;
@@ -65,7 +65,10 @@ class PasswordController extends Controller
                 unset($fields['mdp_confirmation']);
             }
             if (empty($errors)) {
+               $fields['token'] = '';
                 $db->update($user->getId(), 'utilisateur', $fields);
+                $auth = Auth::getInstance(); // on authentifie l'utilisateur si le token est valide
+                $auth->authenticate($user);
 
                 $this->redirect('?page=user&action=index');
             } else {

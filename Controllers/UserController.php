@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         $users = Utilisateur::all();
 
-        $this->render('User/index.php', array('template' => 'admin', 'users' => $users));
+        $this->render('User/index.php', array('pageName' => 'Liste utilisateurs','template' => 'admin', 'users' => $users));
     }
 
     // action display utilisateur affichage version admin
@@ -123,7 +123,7 @@ class UserController extends Controller
 
         $this->render('User/create.php', array(
                 'template' => 'admin',
-                'pageName' => 'modifier utilisateur',
+                'pageName' => 'Modifier utilisateur',
                 'user' => $user,
                 'roles' => $roles,
                 'communes' => $communes,
@@ -168,7 +168,7 @@ class UserController extends Controller
     }
 
     // validation de formulaire retourne un message d'erreur pour chaque champ danss liste qui est vide
-    protected function validatePasswordConfirmation()
+    private function validatePasswordConfirmation()
     {
         $errors = array();
         $fields = $_POST;

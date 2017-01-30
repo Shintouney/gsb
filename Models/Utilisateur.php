@@ -1,10 +1,11 @@
 <?php
 
 require_once 'Core'.D_S.'Database.php';
+require_once 'Core'.D_S.'Model.php';
 require_once 'Role.php';
 require_once 'Commune.php';
 
-class Utilisateur
+class Utilisateur extends Model
 {
     protected $id;
     protected $login;
@@ -96,10 +97,21 @@ class Utilisateur
     /**
      * @param string $token
      */
-    public function setToken()
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public static function generateToken()
     {
         $token = hash('sha256', uniqid(mt_rand(), true), true);
-        $this->token =rtrim(strtr(base64_encode($token), '+/', '-_'), '=');
+
+        return rtrim(strtr(base64_encode($token), '+/', '-_'), '=');
+    }
+
+    public function removeToken()
+    {
+        $this->token = null;
     }
 
     /**
@@ -249,40 +261,7 @@ class Utilisateur
 
     // ----------------------------------------------------------------------------------------------
 
-    // hydrate un objet a partir d'une table de hachage
-    public function setData($data)
-    {
-        if (is_array($data)) {
-            foreach ($data as $field => $value) {
-                if (!preg_match( '/_id$/', $field)) {
-                    $field = $this->camelize($field);
-                    $this->$field = $value;
-                }
-            }
-        }
-    }
 
-    // transforme camelCase en snake_case
-    public function decamelize($string)
-    {
-        $string = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $string));
-
-        return $string;
-    }
-
-    // transforme snake_case et kebab-case en camelCase
-    public function camelize($string, $upper = false)
-    {
-        $delimiter = strpos($string, '_')? '_' : (strpos($string, '-')? '-' : null);
-        if($delimiter) {
-            $string = explode('_', $string);
-            $string = array_map('ucfirst', $string);
-            $string[0] = $upper === false ? lcfirst($string[0]) : $string[0];
-            $string = implode($string);
-        }
-
-        return $string;
-    }
 
     /*--------------------------Active record methods-----------------------------------*/
 
