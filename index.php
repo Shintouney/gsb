@@ -6,7 +6,7 @@ define('Corp', 'Corp'.D_S);
 define('BR', '<br/>');
 define('ROOT', dirname(__DIR__));
 
-require_once 'vendor/autoload.php'; // for plugins (mailer etc.)
+//require_once 'vendor/autoload.php'; // for plugins (mailer etc.)
 
 $path 	= 'Controllers'.D_S;
 $page 	= isset($_GET['page']) 	 ? $_GET['page']     : 'home';
