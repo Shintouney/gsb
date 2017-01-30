@@ -40,7 +40,7 @@
             <ul>
                 <li><a class="icon fa-home" href="index.php"> Accueil</a></li>
                 <li><a class="icon fa-user" href="index.php?page=user&action=profile"> Voir mon profil</a></li>
-                <li><a class="icon fa-key" href="index.php?page=user&action=mesfiches"> Changer de mot de passe</a></li>
+                <li><a class="icon fa-key" href="index.php?page=password&action=change"> Changer de mot de passe</a></li>
             </ul>
         </nav>
 

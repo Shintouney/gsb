@@ -33,8 +33,8 @@
                         <?php $field = 'mdp'; if (isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
                     </div>
                     <div>
-                        <label for="mdp_conf">Mot de passe (confirmation) :</label>
-                        <input type="password" id="mdp_conf" name="mdp_conf"<?= isset($user)? "": " required" ?>/></div>
+                        <label for="mdp_confirmation">Mot de passe (confirmation) :</label>
+                        <input type="password" id="mdp_confirmation" name="mdp_confirmation"<?= isset($user)? "": " required" ?>/></div>
                     <?php $field = 'mdp_conf'; if (isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
                     <div>
                         <label for="email">Email :</label>

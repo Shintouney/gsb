@@ -47,10 +47,10 @@ class UserController extends Controller
         $errors = array();
         if (!empty($_POST)) {
             $fields = $_POST;
-            $errors = array_merge_recursive($errors, $this->validateBlank(array('mdp', 'mdp_conf','login', 'email', 'role')));
+            $errors = array_merge_recursive($errors, $this->validateBlank(array('mdp', 'mdp_confirmation', 'login', 'email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
             $errors = array_merge_recursive($errors, $this->validateUniques(array('login', 'email')));
-            unset($fields['mdp_conf']);
+            unset($fields['mdp_confirmation']);
             if (!empty($fields['mdp'])) {
                 $mdp = $fields['mdp'];
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
@@ -97,7 +97,7 @@ class UserController extends Controller
             $errors = array_merge_recursive($errors,$this->validateBlank(array('email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
             $errors = array_merge_recursive($errors, $this->validateUniques(array('login', 'email'), $user));
-            unset($fields['mdp_conf']);
+            unset($fields['mdp_confirmation']);
             if (!empty($fields['mdp'])) {
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']); // on crypte
             }else {
@@ -142,7 +142,7 @@ class UserController extends Controller
     }
 
     // récupération de l'id du role à partir de nom & clean-up // possibilité à partir du libelle
-    public function handleRole($fields, $col = 'nom')
+    private function handleRole($fields, $col = 'nom')
     {
         if (!empty($fields['role'])) {
             $role = Role::findOneBy(array($col => $fields['role']));
@@ -155,7 +155,7 @@ class UserController extends Controller
     }
 
     // récupération de l'id & clean up code postal et commune
-    public function handleCommune($fields)
+    private function handleCommune($fields)
     {
         if (!empty($fields['commune'])) {
             $fields['commune_id'] = $fields['commune'];
@@ -167,23 +167,7 @@ class UserController extends Controller
         return $fields;
     }
 
-    // validation de formulaire retourne un message d'erreur pour chaque champ danss liste qui est vide
-    private function validatePasswordConfirmation()
-    {
-        $errors = array();
-        $fields = $_POST;
-        if (isset($fields['mdp']) && isset($fields['mdp_conf'])) {
-
-            if ($fields['mdp'] !== $fields['mdp_conf']) {
-                $errors = array('mdp' => array());
-                $errors['mdp'][] = 'Le mot de passe doit être identique dans le champ de confirmation';
-            }
-        }
-
-        return $errors;
-    }
-
-    public function displayErrors($errors)
+    private function displayErrors($errors)
     {
         echo '<pre>';
         foreach ($errors as $error) {
@@ -193,7 +177,7 @@ class UserController extends Controller
     }
 
     /* send email function */
-    public function sendAccountCreationMail($to, $params)
+    private function sendAccountCreationMail($to, $params)
     {
         $subject = "Votre compte a été créé";
         $body    = $this->renderView('views'.D_S.'emails'.D_S.'create_user.php', $params);

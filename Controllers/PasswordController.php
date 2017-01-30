@@ -49,34 +49,68 @@ class PasswordController extends Controller
     {
         $db   = Database::getInstance();
         $user = Utilisateur::findOneBy(array('token' => $token));
+        $errors = array();
+
 
         if (null === $user) {
-
             $this->redirect('?page=password&action=invalidLink');
         }
 
         if (!empty($_POST)) {
             $fields = $_POST;
-            $errors = $this->validateBlank(array('email', 'role'));
-            if (!empty($fields['mdp']) && $fields['mdp'] === $fields['mdp_confirmation']) {
+            $errors = array_merge_recursive($errors,$this->validateBlank(array('mdp', 'mdp_confirmation')));
+            if (!empty($fields['mdp'])) {
+                $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']); // on crypte
                 unset($fields['mdp_confirmation']);
-            }else {
-                unset($fields['mdp']); // mot de passe vide ne reset pas le mot de passe
+            } else {
+                unset($fields['mdp']); // mot de passe non valide ne reset pas le mot de passe
                 unset($fields['mdp_confirmation']);
             }
+
             if (empty($errors)) {
-               $fields['token'] = '';
+                $fields['token'] = '';
                 $db->update($user->getId(), 'utilisateur', $fields);
                 $auth = Auth::getInstance(); // on authentifie l'utilisateur si le token est valide
                 $auth->authenticate($user);
 
-                $this->redirect('?page=user&action=index');
+                $this->redirect();
             } else {
-                $this->displayErrors($errors);
+                $_SESSION['form_errors'] = $errors;
+                $this->redirect('?page=password&action=reset&id='.$token);
             }
         }
         $this->render('Password/reset.php', array('template' => 'login'));
+    }
+
+    public function change()
+    {
+        $db   = Database::getInstance();
+        $user = $this->getUser();
+        $errors = array();
+
+        if (!empty($_POST)) {
+            $fields = $_POST;
+            $errors = array_merge_recursive($errors,$this->validateBlank(array('mdp', 'mdp_confirmation')));
+            if (!empty($fields['mdp'])) {
+                $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
+                $fields['mdp'] = Utilisateur::encrypt($fields['mdp']); // on crypte
+                unset($fields['mdp_confirmation']);
+            } else {
+                unset($fields['mdp']); // mot de passe non valide ne reset pas le mot de passe
+                unset($fields['mdp_confirmation']);
+            }
+
+            if (empty($errors)) {
+                $db->update($user->getId(), 'utilisateur', $fields);
+
+                $this->redirect('?page=password&action=change');
+            } else {
+                $_SESSION['form_errors'] = $errors;
+                $this->redirect('?page=password&action=change');
+            }
+        }
+        $this->render('Password/reset.php');
     }
 
     public function invalidLink()

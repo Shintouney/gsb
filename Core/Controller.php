@@ -114,7 +114,7 @@ class Controller
     }
 
 
-    public function validateUniques($list, $user = null)
+    protected function validateUniques($list, $user = null)
     {
         $fields = $_POST;
         $errors = array();
@@ -134,4 +134,19 @@ class Controller
         return $errors;
     }
 
+    // validation de formulaire retourne un message d'erreur pour chaque champ danss liste qui est vide
+    protected function validatePasswordConfirmation()
+    {
+        $errors = array();
+        $fields = $_POST;
+        if (isset($fields['mdp']) && isset($fields['mdp_confirmation'])) {
+
+            if ($fields['mdp'] !== $fields['mdp_confirmation']) {
+                $errors = array('mdp' => array());
+                $errors['mdp'][] = 'Le mot de passe doit être identique dans le champ de confirmation';
+            }
+        }
+
+        return $errors;
+    }
 }

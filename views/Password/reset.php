@@ -1,6 +1,13 @@
+<?php if($template === 'login') { ?>
 <div class="body"></div>
 <div class="grad"></div>
 <div class="main">
+<?php } else {?>
+<div class="box">
+        <div class="row">
+            <div class="6u">
+           <?php } ?>
+
     <form action="" method="post">
         <div>
             <label>Changer de mot de passe</label>
@@ -11,4 +18,20 @@
             <input type="submit" value="envoyer" />
         </div>
     </form>
-</div>
+    <?php if(isset($_SESSION['form_errors'])) {?>
+        <h2>Une erreur s'est produite</h2>
+    <?php
+        foreach($_SESSION['form_errors']['mdp'] as $error){
+            echo  '<p>'.$error.' (mot de passe)</p>';
+        }
+        foreach($_SESSION['form_errors']['mdp_confirmation'] as $error){
+            echo  '<p>'.$error.' (confirmation)</p>';
+        }
+    }
+    ?>
+    <?php unset($_SESSION['form_errors'])?>
+<?php if($template !== 'login') { ?>
+    </div>
+    </div>
+    </div>
+<?php }?>
