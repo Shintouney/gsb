@@ -51,7 +51,8 @@ class PasswordController extends Controller
         $user = Utilisateur::findOneBy(array('token' => $token));
 
         if (null === $user) {
-            die( "erreur, le token n'est pas valide");
+
+            $this->redirect('?page=password&action=invalidLink');
         }
 
         if (!empty($_POST)) {
@@ -76,6 +77,11 @@ class PasswordController extends Controller
             }
         }
         $this->render('Password/reset.php', array('template' => 'login'));
+    }
+
+    public function invalidLink()
+    {
+        $this->render('Password/invalid_link.php', array('template' => 'login'));
     }
 
     // action encrypt
