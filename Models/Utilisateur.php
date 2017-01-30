@@ -235,6 +235,15 @@ class Utilisateur
 
     public function is($role)
     {
+        if (is_array($role)) {
+            foreach ($role as $currentRole) {
+                if ($this->getRole()->getNom() === $currentRole) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         return $this->getRole()->getNom() === $role;
     }
 
