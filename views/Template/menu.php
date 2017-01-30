@@ -8,7 +8,7 @@
             </header>
             <ul>
                 <li><a href="index.php">Accueil</a></li>
-                <li><a href="index.php?page=frais">Saisie fiche de frais</a></li>
+                <li><a href="index.php?page=frais&action=fraism">Saisie fiche de frais</a></li>
                 <li><a href="index.php?page=frais&action=mesfiches">Mes fiches de frais</a></li>
             </ul>
             <br/>
