@@ -70,7 +70,14 @@ class Database
                     $statement->bindValue(':'.$key, $value, $dataType);
                 }
             }
-            $statement->execute();
+            $success = $statement->execute();
+            if (
+                strpos($statement, 'UPDATE') === 0 ||
+                strpos($statement, 'INSERT') === 0 ||
+                strpos($statement, 'DELETE') === 0
+            ) {
+                return $success;
+            }
             if($multiple)
                 $result = $statement->fetchAll(PDO::FETCH_NAMED);
             else
