@@ -1,3 +1,20 @@
+<?php 
+$menu_frais = array(
+	'Accueil' 				=> 'index.php',
+	'Saisie fiche de frais' => 'index.php?page=frais',
+	'Mes fiches de frais'   => 'index.php?page=frais&action=mesfiches',
+);
+$menu_incidents = array(
+	'Lien 1' => 'index.php',
+	'Lien 2' => 'index.php',
+)
+$menu_admin = array(
+
+)
+
+
+?>
+
 <!-- Sidebar -->
 <div id="sidebar">
 	<div class="inner">
