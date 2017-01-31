@@ -1,19 +1,25 @@
 <?php 
 $menu_frais = array(
-	'Accueil' 				=> 'index.php',
-	'Saisie fiche de frais' => 'index.php?page=frais',
-	'Mes fiches de frais'   => 'index.php?page=frais&action=mesfiches',
+	array('text' => 'Accueil',               'url' => 'index.php'),
+	array('text' => 'Saisie fiche de frais', 'url' => 'index.php?page=frais'),
+	array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches'),
 );
 $menu_incidents = array(
 	'Lien 1' => 'index.php',
 	'Lien 2' => 'index.php',
-)
+);
 $menu_admin = array(
+    array('text' => 'Index des utilisateurs', 'url' => '?page=user&action=index',  'icon' => 'group'),
+	array('text' => 'Créer utilisateur',      'url' => '?page=user&action=create', 'icon' => 'user'),
+	array('text' => 'Importer utilisateurs',  'url' => '?page=user&action=import', 'icon' => 'file-text'));
 
+$menu_dashboard = array(
+    array('text' => 'Accueil',                 'url' => 'index.php'),
+    array('text' => 'Voir mon profil',         'url' => "?page=user&action=profile"),
+    array('text' => 'Changer de mot de passe', 'url' => "?page=password&action=change"),
 )
-
-
 ?>
+
 
 <!-- Sidebar -->
 <div id="sidebar">
