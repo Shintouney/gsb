@@ -1,6 +1,6 @@
 <?php
 
-if ($this->getUser()->is('ROLE_VISITEUR') || $this->getUser()->is('ROLE_RESPONSABLE'))
+if ($this->getUser()->is(array('ROLE_VISITEUR', 'ROLE_RESPONSABLE', 'ROLE_ADMIN')))
 		{
 			?>
 			<p><a href='formulaire_nouveau_ticket.php'> Nouveau ticket d'incident </a></p>
@@ -20,7 +20,7 @@ if ($this->getUser()->is('ROLE_VISITEUR') || $this->getUser()->is('ROLE_RESPONSA
 		<td>Salle</td>
 
 		<?php //champs supplémentaires pour responsables + techniciens
-		if ($this->getUser()->is('ROLE_TECHNICIEN') || $this->getUser()->is('ROLE_RESPONSABLE') )
+		if ($this->getUser()->is(array('ROLE_TECHNICIEN', 'ROLE_RESPONSABLE', 'ROLE_ADMIN')))
 		{
 		?>
 			<td>Technicien</td>
@@ -61,7 +61,7 @@ if ($this->getUser()->is('ROLE_VISITEUR') || $this->getUser()->is('ROLE_RESPONSA
 				</td>
 			
 			<?php 
-			if ($this->getUser()->is('ROLE_TECHNICIEN') || $this->getUser()->is('ROLE_RESPONSABLE'))
+			if ($this->getUser()->is(array('ROLE_TECHNICIEN', 'ROLE_RESPONSABLE', 'ROLE_ADMIN')))
 			{
 				?>
 				<td><?php echo $ligne_ticket['technicien'] . ' ' . $ligne_ticket['prenom'];?></td>
