@@ -31,6 +31,12 @@ class FraisController extends Controller
 
     public function index()
     {
+      if (!empty($_POST['moism'])) {
+        $year = date('Y', strtotime($_POST['moism']));
+        $month = date('m', strtotime($_POST['moism']));
+        self::$date = $this->returnDateInfol($month, $year);
+      }else
+        self::$date = $this->returnDateInfo();
     	if (self::$frais->estPremierFraisMois(self::$user->getId(), self::$date['mois']))
     		self::$frais->creeNouvellesLignesFrais(self::$user->getId(), self::$date['mois']);
        	$this->render('Frais/saisie_fiche.php', array('pageName'  => 'Saisie fiche de frais',
@@ -40,6 +46,21 @@ class FraisController extends Controller
                                                       'fraishf'   => self::$lesFraisHorsForfait,
                                                       'lesFrais'  => self::$lesFraisForfait));
     }
+
+    public function fraism()
+    {
+        $numdate = $this->couperDate($this->moisSelect(self::$lesMois));
+        $this->render('Frais/month.php', array('pageName'          => 'Mes fiches frais',
+                                                      'moisASelectionner' => $this->moisSelect(self::$lesMois),
+                                                      'lesMois'           => self::$lesMois,
+                                                      'fraishf'           => self::$lesFraisHorsForfait,
+                                                      'lesFrais'          => self::$lesFraisForfait,
+                                                      'infoFiche'         => self::$lesInfosFicheFrais,
+                                                      'dateModif'         => self::$frais->dateAnglaisVersFrancais(self::$lesInfosFicheFrais['dateModif'], false),
+                                                      'numDate'           => $numdate,
+                                                      'txtMois'           => $this->retournerMoisLettre($numdate['mois'])));
+    }
+
 
     public function mesfiches()
     {
@@ -117,6 +138,16 @@ class FraisController extends Controller
                 return (true);
         }
         return false;
+    }
+
+    private function returnDateInfol($month, $year)
+    {
+        $mois     = $this->getMois(date("d/".$month."/".$year.""));
+        $numDate  = $this->couperDate($mois);
+        return (array('mois'     => $mois,
+                      'numDate'  => $numDate,
+                      'numAnnee' => substr($mois,0,4),
+                      'numMois'  => $this->retournerMoisLettre($numDate['mois'])));
     }
 
     private function returnDateInfo()

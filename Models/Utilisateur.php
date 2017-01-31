@@ -237,7 +237,7 @@ class Utilisateur extends Model
 
     public function isAdmin()
     {
-        return $this->is('ROLE_ADMIN');
+        return $this->getRole()->getNom() === 'ROLE_ADMIN';
     }
 
     public function isVisiteur()

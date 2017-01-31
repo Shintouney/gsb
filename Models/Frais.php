@@ -57,13 +57,13 @@ class Frais
         if($laDerniereFiche['idEtat']=='CR'){
             $this->majEtatFicheFrais($idUtilisateur, $dernierMois,'CL');
         }
-        $req = "INSERT INTO ficheFrais(idUtilisateur,mois,nbJustificatifs,montantValide,dateModif,idEtat) 
+        $req = "INSERT INTO fichefrais(idUtilisateur,mois,nbJustificatifs,montantValide,dateModif,idEtat) 
         VALUES('$idUtilisateur','$mois',0,0,now(),'CR')";
         Frais::$db->query($req);
         $lesIdFrais = $this->getLesIdFrais();
         foreach($lesIdFrais as $uneLigneIdFrais){
                 $unIdFrais = $uneLigneIdFrais['idfrais'];
-                $req = "INSERT INTO ligneFraisForfait(idUtilisateur,mois,idFraisForfait,quantite) 
+                $req = "INSERT INTO lignefraisforfait(idUtilisateur,mois,idFraisForfait,quantite) 
                 VALUES('$idUtilisateur','$mois','$unIdFrais',0)";
                 Frais::$db->query($req);
         }
@@ -78,7 +78,7 @@ class Frais
     * @return string $laLigne le mois sous la forme aaaamm
     */  
     public function dernierMoisSaisi($idUtilisateur){
-        $req = "SELECT MAX(mois) AS dernierMois FROM ficheFrais WHERE ficheFrais.idutilisateur = '$idUtilisateur'";
+        $req = "SELECT MAX(mois) AS dernierMois FROM fichefrais WHERE fichefrais.idutilisateur = '$idUtilisateur'";
         $res = Frais::$db->query($req);
         return $res['dernierMois'];
     }
@@ -90,9 +90,9 @@ class Frais
     * @return array un tableau avec des champs de jointure entre une fiche de frais et la ligne d'état 
     */  
     public function getLesInfosFicheFrais($idUtilisateur, $mois){
-        $req = "SELECT ficheFrais.idEtat AS idEtat, ficheFrais.dateModif AS dateModif, ficheFrais.nbJustificatifs AS nbJustificatifs, 
-                ficheFrais.montantValide AS montantValide, etat.libelle AS libEtat FROM  ficheFrais INNER JOIN etat ON ficheFrais.idEtat = etat.id 
-                WHERE ficheFrais.idUtilisateur ='$idUtilisateur' AND ficheFrais.mois = '$mois'";
+        $req = "SELECT fichefrais.idEtat AS idEtat, fichefrais.dateModif AS dateModif, fichefrais.nbJustificatifs AS nbJustificatifs, 
+                fichefrais.montantValide AS montantValide, etat.libelle AS libEtat FROM  fichefrais INNER JOIN etat ON fichefrais.idEtat = etat.id 
+                WHERE fichefrais.idUtilisateur ='$idUtilisateur' AND fichefrais.mois = '$mois'";
         $res = Frais::$db->query($req);
         return $res;
     }
@@ -106,8 +106,8 @@ class Frais
     * 
     */
     public function majEtatFicheFrais($idUtilisateur, $mois, $etat){
-        $req = "UPDATE ficheFrais SET idEtat = '$etat', dateModif = now() 
-        WHERE ficheFrais.idUtilisateur ='$idUtilisateur' AND ficheFrais.mois = '$mois'";
+        $req = "UPDATE fichefrais SET idEtat = '$etat', dateModif = now() 
+        WHERE fichefrais.idUtilisateur ='$idUtilisateur' AND fichefrais.mois = '$mois'";
         Frais::$db->query($req);
     }
 
@@ -116,7 +116,7 @@ class Frais
     * @return array un tableau associatif 
     */
     public function getLesIdFrais(){
-        $req = "SELECT fraisForfait.id AS idfrais FROM fraisForfait ORDER BY fraisForfait.id";
+        $req = "SELECT fraisforfait.id AS idfrais FROM fraisforfait ORDER BY fraisforfait.id";
         $res = Frais::$db->query($req, true);
         return $res;
     }
@@ -129,17 +129,17 @@ class Frais
     * @return array l'id, le libelle et la quantité sous la forme d'un tableau associatif 
     */
     public function getLesFraisForfait($idUtilisateur, $mois){
-        $req = "SELECT fraisForfait.id AS idfrais, fraisForfait.libelle AS libelle, fraisForfait.montant AS montant,
-        ligneFraisForfait.quantite AS quantite FROM ligneFraisForfait INNER JOIN fraisForfait
-        ON fraisForfait.id = ligneFraisForfait.idfraisforfait 
-        WHERE ligneFraisForfait.idUtilisateur ='$idUtilisateur' AND ligneFraisForfait.mois='$mois' 
-        ORDER BY ligneFraisForfait.idfraisforfait"; 
+        $req = "SELECT fraisforfait.id AS idfrais, fraisforfait.libelle AS libelle, fraisforfait.montant AS montant,
+        lignefraisforfait.quantite AS quantite FROM lignefraisforfait INNER JOIN fraisforfait
+        ON fraisforfait.id = lignefraisforfait.idfraisforfait 
+        WHERE lignefraisforfait.idUtilisateur ='$idUtilisateur' AND lignefraisforfait.mois='$mois' 
+        ORDER BY lignefraisforfait.idfraisforfait"; 
         $res = Frais::$db->query($req, true);
         return $res; 
     }
 
     /**
-    * Met à jour la table ligneFraisForfait pour un visiteur et
+    * Met à jour la table lignefraisforfait pour un visiteur et
     * un mois donné en enregistrant les nouveaux montants
     * @param string $idVisiteur Identifiant unique du visiteur
     * @param string $mois sous la forme aaaamm
@@ -149,9 +149,9 @@ class Frais
         $lesCles = array_keys($lesFrais);
         foreach($lesCles as $unIdFrais){
             $qte = $lesFrais[$unIdFrais];
-            $req = "UPDATE ligneFraisForfait SET ligneFraisForfait.quantite = $qte
-            WHERE ligneFraisForfait.idUtilisateur = '$idUtilisateur' and ligneFraisForfait.mois = '$mois'
-            AND ligneFraisForfait.idfraisforfait  = '$unIdFrais'";
+            $req = "UPDATE lignefraisforfait SET lignefraisforfait.quantite = $qte
+            WHERE lignefraisforfait.idUtilisateur = '$idUtilisateur' and lignefraisforfait.mois = '$mois'
+            AND lignefraisforfait.idfraisforfait  = '$unIdFrais'";
             Frais::$db->query($req);
         }
     }
@@ -166,11 +166,11 @@ class Frais
     * @return array tous les champs des lignes de frais hors forfait sous la forme d'un tableau associatif 
     */
     public function getLesFraisHorsForfait($idUtilisateur, $mois){
-        $req = "SELECT situation.libelle As 'etat', ligneFraisHorsForfait.id, ligneFraisHorsForfait.date,
-            ligneFraisHorsForfait.libelle, ligneFraisHorsForfait.montant, ligneFraisHorsForfait.dateModif, ligneFraisHorsForfait.idEtat
-            FROM ligneFraisHorsForfait JOIN situation ON situation.id = ligneFraisHorsForfait.idEtat
-            WHERE ligneFraisHorsForfait.idUtilisateur ='$idUtilisateur' 
-            AND ligneFraisHorsForfait.mois = '$mois' ";
+        $req = "SELECT situation.libelle As 'etat', lignefraishorsforfait.id, lignefraishorsforfait.date,
+            lignefraishorsforfait.libelle, lignefraishorsforfait.montant, lignefraishorsforfait.dateModif, lignefraishorsforfait.idEtat
+            FROM lignefraishorsforfait JOIN situation ON situation.id = lignefraishorsforfait.idEtat
+            WHERE lignefraishorsforfait.idUtilisateur ='$idUtilisateur' 
+            AND lignefraishorsforfait.mois = '$mois' ";
         $res = Frais::$db->query($req, true);
         $nbLignes = count($res);
         for ($i=0; $i<$nbLignes; $i++){
@@ -210,7 +210,7 @@ class Frais
     */
     public function creeNouveauFraisHorsForfait($idUtilisateur, $mois, $libelle, $date, $montant){
         $dateFr = $this->dateFrancaisVersAnglais($date);
-        $req = "INSERT INTO ligneFraisHorsForfait 
+        $req = "INSERT INTO lignefraishorsforfait 
         VALUES('','$idUtilisateur','$mois','$libelle','$dateFr','$montant',now(), 'CR')";
         Frais::$db->query($req);
     }
@@ -230,7 +230,7 @@ class Frais
     * @param integer $idFrais du frais à supprimer
     */
     public function supprimerFraisHorsForfait($idFrais){
-        $req = "DELETE FROM ligneFraisHorsForfait WHERE ligneFraisHorsForfait.id =$idFrais ";
+        $req = "DELETE FROM lignefraishorsforfait WHERE lignefraishorsforfait.id =$idFrais ";
         Frais::$db->query($req);
     }
 
@@ -240,8 +240,8 @@ class Frais
     * @return array un tableau associatif de clé un mois -aaaamm- et de valeurs l'année et le mois correspondant 
     */
     public function getLesMoisDisponibles($idUtilisateur){
-        $req = "SELECT ficheFrais.mois AS mois FROM ficheFrais WHERE ficheFrais.idUtilisateur ='$idUtilisateur' 
-        ORDER BY ficheFrais.mois DESC ";
+        $req = "SELECT fichefrais.mois AS mois FROM fichefrais WHERE fichefrais.idUtilisateur ='$idUtilisateur' 
+        ORDER BY fichefrais.mois DESC ";
         $lesLignes = Frais::$db->query($req, true);
         $lesMois   = array();
         foreach($lesLignes as $Ligne) {

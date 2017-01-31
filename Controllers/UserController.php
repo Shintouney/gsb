@@ -50,7 +50,8 @@ class UserController extends Controller
             $errors = array_merge_recursive($errors, $this->validateBlank(array('mdp', 'mdp_confirmation', 'login', 'email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
             $errors = array_merge_recursive($errors, $this->validateUniques(array('login', 'email')));
-            unset($fields['mdp_confirmation']);
+            unset($fields['mdp_confirmation']);=
+   
             if (!empty($fields['mdp'])) {
                 $mdp = $fields['mdp'];
                 $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
@@ -105,7 +106,9 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
+            var_dump($fields['date_embauche']);
             $fields = $this->convertDate($fields);
+            var_dump($fields['date_embauche']);
 
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;

@@ -40,6 +40,7 @@ class PasswordController extends Controller
             $db->update($user->getId(), 'utilisateur', array('token' => $user->getToken()));
             $this->render('Password/request_sent.php', array('template' => 'login'));
             exit();
+
         }
 
         $this->render('Password/recover.php', array('template' => 'login'));
@@ -50,7 +51,6 @@ class PasswordController extends Controller
         $db   = Database::getInstance();
         $user = Utilisateur::findOneBy(array('token' => $token));
         $errors = array();
-
 
         if (null === $user) {
             $this->redirect('?page=password&action=invalidLink');
@@ -110,7 +110,7 @@ class PasswordController extends Controller
                 $this->redirect('?page=password&action=change');
             }
         }
-        $this->render('Password/reset.php');
+        $this->render('Password/reset.php', array('template' => 'login'));
     }
 
     public function invalidLink()
