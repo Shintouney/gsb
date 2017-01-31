@@ -17,7 +17,7 @@
             </header>
             <ul>
                 <li><a href="index.php?page=incident">Tous les tickets</a></li>
-                <li><a href="index.php">Lien</a></li>
+                <li><a href="index.php?page=incident&action=nouveau_ticket">Lien</a></li>
             </ul>
             <br/>
             <header class="major">

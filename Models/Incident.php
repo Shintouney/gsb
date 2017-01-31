@@ -1,12 +1,11 @@
 <?php
 
+require_once 'Core'.D_S.'Database.php';
 
 class Incident 
 {
 	public static function all()
 	{
-		require_once 'Core'.D_S.'Database.php';
-
 		$db = Database::getInstance();
 
 		$sql = 'SELECT i.`id_incident`, i.`materiel_id`, i.`objet_incident`, i.`date_signalement`, 
@@ -34,10 +33,8 @@ class Incident
 	}
 
 
-	static public function one()
+	static public function one($id)
 	{
-		require_once 'Core'.D_S.'Database.php';
-
 		$db = Database::getInstance();
 
 		$sql ='SELECT i.`id_incident`, /*i.`etat`, i.`materiel_id`,*/ i.`objet_incident`, 
@@ -57,9 +54,24 @@ class Incident
 		ON i.`salle_id` = s.`salle_id`
 		JOIN `technicien` t
 		ON i.`technicien_id` = t.`id_technicien`
-		WHERE id_incident = $ticket_selectionne';//requete variable///////////////////////////////////////////////////////////////////////////////////////////////////////////
+		WHERE id_incident = :id';//requete variable///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		return($db->query($sql, true));
-	
+		$id = array('id' => $id);
+
+		return($db->prepare($sql, $id));
 	}
+
+     public static function salle_options()
+    {
+        $db = Database::getInstance();
+
+        return $db->all('salle');
+    }
+
+    public static function materiel_options()
+    {
+        $db = Database::getInstance();
+
+        return $db->all('materiel');
+    }
 }

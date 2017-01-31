@@ -11,12 +11,34 @@ class IncidentController extends Controller
 	{
 		$auth = Auth::getInstance();
 
-		$data = Incident::all();
+		$tickets = Incident::all();
 		//requete model incident.php
 
-		$this->render('Incident/index.php', array('pageName' => "Gestion d'incidents", 'tickets'=> $data));
+		$this->render('Incident/index.php', array('pageName' => "Gestion d'incidents", 'tickets'=> $tickets));
 		//render = pour afficher la vue
 	}
 
+	public function afficher_ticket($id)
+	{
+		$ticket = Incident::one($id);
 
+
+
+		if (!$ticket)
+		{
+			$this->notFound();
+		}
+		
+		$this->render('Incident/show.php', array('pageName' => "Affichage incident", 'ticket'=> $ticket));
+	}
+
+	public function nouveau_ticket()
+	{
+		$salles = Incident::salle_options();
+
+		$materiels = Incident::materiel_options();
+
+
+		$this->render('Incident/new.php', array('pageName' => "Créer un ticket d'incident", 'salles'=> $salles, 'materiels' => $materiels));
+	}
 }
