@@ -110,7 +110,7 @@ class PasswordController extends Controller
                 $this->redirect('?page=password&action=change');
             }
         }
-        $this->render('Password/reset.php', array('template' => 'login'));
+        $this->render('Password/reset.php');
     }
 
     public function invalidLink()

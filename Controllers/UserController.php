@@ -50,7 +50,7 @@ class UserController extends Controller
             $errors = array_merge_recursive($errors, $this->validateBlank(array('mdp', 'mdp_confirmation', 'login', 'email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
             $errors = array_merge_recursive($errors, $this->validateUniques(array('login', 'email')));
-            unset($fields['mdp_confirmation']);=
+            unset($fields['mdp_confirmation']);
    
             if (!empty($fields['mdp'])) {
                 $mdp = $fields['mdp'];

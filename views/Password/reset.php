@@ -21,12 +21,17 @@
     <?php if(isset($_SESSION['form_errors'])) {?>
         <h2>Une erreur s'est produite</h2>
     <?php
-        foreach($_SESSION['form_errors']['mdp'] as $error){
-            echo  '<p>'.$error.' (mot de passe)</p>';
-        }
-        foreach($_SESSION['form_errors']['mdp_confirmation'] as $error){
-            echo  '<p>'.$error.' (confirmation)</p>';
-        }
+		if(isset($_SESSION['form_errors']['mdp'])) {
+			foreach($_SESSION['form_errors']['mdp'] as $error){
+				echo  '<p>'.$error.' (mot de passe)</p>';
+			}
+		}
+		if(isset($_SESSION['form_errors']['mdp_confirmation'])) {
+			foreach($_SESSION['form_errors']['mdp_confirmation'] as $error){
+			echo  '<p>'.$error.' (confirmation)</p>';
+			}
+		}
+        
     }
     ?>
     <?php unset($_SESSION['form_errors'])?>
