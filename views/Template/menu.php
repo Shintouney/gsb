@@ -53,10 +53,6 @@ $menu_dashboard = array(
             include "_list_menu.php" ?>
             <br/>
             <?php
-            $header = "Administration"; $opener = 'Gérer utilisateurs'; $items = $menu_admin;
-            include "_drop_down_menu.php" ?>
-            <br/>
-            <?php
             $header = "Tableau de bord"; $items = $menu_dashboard;
             include "_list_menu.php" ?>
         <?php endif; ?>
