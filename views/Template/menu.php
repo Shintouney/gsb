@@ -42,7 +42,6 @@ $menu_dashboard = array(
             <?php
             $header = "Tableau de bord"; $items = $menu_dashboard;
             include "_list_menu.php" ?>
-
         <?php else: ?>
             <?php
             $header = "Applifrais"; $items = $menu_frais;

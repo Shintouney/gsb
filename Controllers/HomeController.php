@@ -7,7 +7,7 @@ require_once 'Models'.D_S.'Role.php';
 class HomeController extends Controller
 {
     protected static $errors = array(
-        1 => 'Une erreurs c\'est produite.',
+        1 => 'Une erreur s\'est produite.',
         2 => 'Cette page n\'existe pas.',
         3 => 'Vous êtes déjà connecté.',
         4 => 'Action interdite.',);
