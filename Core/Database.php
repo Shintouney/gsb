@@ -72,9 +72,9 @@ class Database
             }
             $success = $statement->execute();
             if (
-                strpos($statement, 'UPDATE') === 0 ||
-                strpos($statement, 'INSERT') === 0 ||
-                strpos($statement, 'DELETE') === 0
+                strpos(ltrim($sql), 'UPDATE') === 0 ||
+                strpos(ltrim($sql), 'INSERT') === 0 ||
+                strpos(ltrim($sql), 'DELETE') === 0
             ) {
                 return $success;
             }
