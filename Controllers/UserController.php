@@ -14,6 +14,7 @@ class UserController extends Controller
     // action index
     public function index()
     {
+        $this->checkAccessRights('ROLE_ADMIN');
         $users = Utilisateur::all();
 
         $this->render('User/index.php', array('pageName' => 'Liste utilisateurs','template' => 'admin', 'users' => $users));
@@ -22,18 +23,18 @@ class UserController extends Controller
     // action display utilisateur affichage version admin
     public function display($id)
     {
-        $auth = Auth::getInstance();
-        if ($auth->isGranted('ROLE_ADMIN')) {
-            $user = Utilisateur::find($id);
-            $this->render('User/display.php', array('pageName' => 'Page utilisateur', 'template' => 'admin', 'user' => $user));
-        } else {
-            $this->forbidden();
-        }
+        $this->checkAccessRights('ROLE_ADMIN');
+
+        $user = Utilisateur::find($id);
+        $this->render('User/display.php', array('pageName' => 'Page utilisateur', 'template' => 'admin', 'user' => $user));
     }
 
     // action
     public function profile()
     {
+        if (!$this->auth->isGranted()) {
+            $this->forbidden();
+        }
         $user = $this->getUser();
         $this->render('User/display.php', array('pageName' => 'Mes données', 'template' => 'dashboard', 'user' => $user));
     }
@@ -41,6 +42,7 @@ class UserController extends Controller
     // action create utilisateur
     public function create()
     {
+        $this->checkAccessRights('ROLE_ADMIN');
         $db = Database::getInstance();
         $mdp  = '';
         $roles = Role::all();
@@ -89,6 +91,7 @@ class UserController extends Controller
     // action update utilisateur
     public function update($id)
     {
+        $this->checkAccessRights('ROLE_ADMIN');
         $db = Database::getInstance();
         $user = Utilisateur::find($id);
         $roles = Role::all();
@@ -189,10 +192,13 @@ class UserController extends Controller
     // action delete utilisateur
     public function delete()
     {
+        $this->checkAccessRights('ROLE_ADMIN');
         if (!empty($_POST)) {
             $db = Database::getInstance();
             $db->delete($_POST['id'], 'utilisateur');
             $this->redirect('?page=user&action=index');
+        } else {
+            $this->redirect('?action=error&id=4');
         }
     }
 
@@ -206,6 +212,7 @@ class UserController extends Controller
     // action import: importe des utilisateurs a partir de fichiers excel
     public function import()
     {
+        $this->checkAccessRights('ROLE_ADMIN');
         if (!empty($_FILES)) {
             $file = $_FILES['file']['tmp_name'];
             $file_handle = fopen($file, "r");

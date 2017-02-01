@@ -14,7 +14,7 @@ class HomeController extends Controller
 
     public function error($id = 1)
     {
-        $error = isset(self::$errors[$id]) === false ? self::$errors[$id] : self::$errors[1] ;
+        $error = isset(self::$errors[$id]) === true ? self::$errors[$id] : self::$errors[1] ;
         $this->render('Home/error.php', array('error' => $error, 'pageName' => 'Erreur'));
     }
 

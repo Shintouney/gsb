@@ -150,4 +150,16 @@ class Controller
 
         return $errors;
     }
+
+    public function __construct()
+    {
+        $this->auth = Auth::getInstance();
+    }
+
+    public function checkAccessRights($role)
+    {
+        if(!$this->auth->isGranted($role)) {
+            $this->forbidden();
+        }
+    }
 }

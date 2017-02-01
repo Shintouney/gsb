@@ -25,33 +25,27 @@ $menu_dashboard = array(
         <!-- Menu -->
         <nav id="menu">
             <?php if($this->getUser()->is('ROLE_ADMIN')): ?>
-                <br/>
+                
                 <?php
                 $header = "Administration"; $items = $menu_admin;
                 include "_list_menu.php" ?>
-                <br/>
                 <?php
                 $header = "Rapports incidents"; $opener = 'Gérer incidents'; $items = $menu_incidents;
                 include "_drop_down_menu.php" ?>
-                <br/>
                 <?php
-                array_shift($menu_frais);
+                 if ($menu_frais[0]['text'] === 'Accueil') array_shift($menu_frais);
                 $header = "Applifrais"; $opener = 'Gérer frais';  $items = $menu_frais;
                 include "_drop_down_menu.php" ?>
-                <br/>
                 <?php
                 $header = "Tableau de bord"; $items = $menu_dashboard;
                 include "_list_menu.php" ?>
-
             <?php else: ?>
                 <?php
                 $header = "Applifrais"; $items = $menu_frais;
                 include "_list_menu.php" ?>
-                <br/>
                 <?php
                 $header = "Rapports incidents"; $items = $menu_incidents;
                 include "_list_menu.php" ?>
-                <br/>
                 <?php
                 $header = "Tableau de bord"; $items = $menu_dashboard;
                 include "_list_menu.php" ?>
