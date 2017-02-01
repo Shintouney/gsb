@@ -35,7 +35,7 @@ class UserController extends Controller
     public function profile()
     {
         $user = $this->getUser();
-        $this->render('User/display.php', array('pageName' => 'Mon profil', 'template' => 'dashboard', 'user' => $user));
+        $this->render('User/display.php', array('pageName' => 'Mes données', 'template' => 'dashboard', 'user' => $user));
     }
 
     // action create utilisateur
@@ -106,9 +106,7 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
-            var_dump($fields['date_embauche']);
             $fields = $this->convertDate($fields);
-            var_dump($fields['date_embauche']);
 
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
@@ -221,7 +219,7 @@ class UserController extends Controller
 
             $this->redirect('?page=user&action=index');
         }
-        $this->render('User/import.php', array('template' => 'admin'));
+        $this->render('User/import.php', array('template' => 'admin', 'pageName' => 'Import utilisateurs'));
     }
 
     // conversion des données du fichier excel et insertion en base

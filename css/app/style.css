@@ -12,3 +12,6 @@ nav#menu{
     margin: 10px!important;
     padding: 10px!important;
 }
+nav#menu a.current_page{
+    color: #f56a6a;
+}
