@@ -19,7 +19,7 @@
                     <td><?= $user->getEmail(); ?> </td>
                 </tr>
                 <tr>
-                    <th>Rôle:</th>
+                    <th>Fonction :</th>
                     <td><?= $user->getRole()->getLibelle(); ?></td>
                 </tr>
                 <tr>

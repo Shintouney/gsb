@@ -3,21 +3,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Portail GSB</title>
+    <title><?= isset($pageName)? 'GSB : '.$pageName : 'Portail GSB' ?></title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
 
     <?php if ($template === "login") {?><link rel="stylesheet" href="css/login/style.css"><?php
-    }else { ?>
-
+    } else { ?>
     <link rel="stylesheet" href="css/app/main.css" />
     <link rel="stylesheet" href="css/app/style.css" />
     <link rel="stylesheet" href="js/datepicker/css/jquery.datepick.css">
     <link rel="stylesheet" href="js/datepicker/css/fix.css">
     <link rel="stylesheet" href="css/<?= isset($template) && file_exists('css/'.$template.'/style.css') ? $template : 'default' ?>/style.css">
     <?php } ?>
-    
 
     <!-- Optional theme -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->

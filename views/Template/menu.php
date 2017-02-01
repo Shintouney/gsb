@@ -1,11 +1,11 @@
 <?php
 $menu_frais = array(
-    array('text' => 'Accueil',               'url' => 'index.php'),
-    array('text' => 'Saisie fiche de frais', 'url' => 'index.php?page=frais'),
-    array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
+	array('text' => 'Accueil',               'url' => 'index.php'),
+	array('text' => 'Saisie fiche de frais', 'url' => 'index.php?page=frais'),
+	array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
 );
 $menu_incidents = array(
-    array('text' => 'Lien 1', 'url' => 'index.php'),
+	array('text' => 'Lien 1', 'url' => 'index.php'),
     array('text' => 'Lien 2', 'url' => 'index.php'),
 );
 $menu_admin = array(
@@ -65,3 +65,4 @@ $menu_dashboard = array(
         </footer>
     </div>
 </div>
+

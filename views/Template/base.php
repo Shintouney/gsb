@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+<?php $pageName = isset($pageName) ? $pageName : 'Accueil';?>
 <?php include 'header.php'; ?>
 <body>
     <!-- Wrapper -->
