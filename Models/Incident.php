@@ -13,7 +13,7 @@ class Incident
 		i.`niveau_complexite`, i.`duree`, i.`nb_appels`,
 		e.`id_etat`, e.`intitule_etat` AS `etat`,
 		m.`id_materiel`, m.`type` AS `type_materiel`, m.`marque`AS `marque_materiel`, m.`modele`AS `modele_materiel`,
-		s.`salle_id`, s.`salle_nom`,s.`salle_numero`,
+		s.`salle_id`, s.`salle_nom`,
 		t.`id_technicien`, t.`nom` AS technicien, t.`prenom`,
 		u.`id`, u.`nom` AS demandeur
 		FROM `incident` i
@@ -43,7 +43,7 @@ class Incident
 		i.`niveau_complexite`, i.`duree`, i.`nb_appels`,
 		e.`id_etat`, e.`intitule_etat` AS `etat`,
 		m.`id_materiel`, m.`type` AS `type_materiel`, m.`modele`AS `modele_materiel`,m.`marque`AS `marque_materiel`,
-		s.`salle_id`, s.`salle_nom` AS salle,s.`salle_numero`,
+		s.`salle_id`, s.`salle_nom` AS salle,
 		t.`id_technicien`, t.`nom` AS nom_tech, t.`prenom`AS pnom_tech
 		FROM `incident` i
 		JOIN `etat_ticket` e

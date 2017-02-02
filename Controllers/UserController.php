@@ -2,7 +2,7 @@
 
 require_once 'Core'.D_S.'Auth.php';
 require_once 'Core'.D_S.'Database.php';
-require_once 'Core'.D_S.'Mailer.php';
+//require_once 'Core'.D_S.'Mailer.php';
 require_once 'Core'.D_S.'Controller.php';
 require_once 'Core'.D_S.'Date.php';
 require_once 'Models'.D_S.'Utilisateur.php';

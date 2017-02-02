@@ -41,7 +41,7 @@ if ($this->getUser()->is(array('ROLE_VISITEUR', 'ROLE_RESPONSABLE', 'ROLE_ADMIN'
 		?>
 			<tr id='ticket <?php echo $ligne_ticket['id_incident']?>'>
 				
-			<td> <a href='affichage_ticket.php?idTicket=<?php echo $ligne_ticket['id_incident'];?>' >Voir plus</a></td>
+			<td> <a href='index.php?page=incident&action=afficher_ticket&id=<?php echo $ligne_ticket['id_incident'];?>' >Voir plus</a></td>
 			<td> <?php echo $ligne_ticket['id_incident'];?> </td>
 			<td> <?php echo $ligne_ticket['etat'];?> </td>
 			<td> <?php echo $ligne_ticket['type_materiel'] . ' - <br/>'
@@ -52,11 +52,8 @@ if ($this->getUser()->is(array('ROLE_VISITEUR', 'ROLE_RESPONSABLE', 'ROLE_ADMIN'
 				. $ligne_ticket['date_intervention'];?> </td>
 
 			<td> <?php
-				echo $ligne_ticket['salle_numero'] ;
-				if (!empty($ligne_ticket['salle_nom']))
-				{
-					echo ' ('.$ligne_ticket['salle_nom'].')';
-				}
+				echo $ligne_ticket['salle_nom'] ;
+				
 				?>
 				</td>
 			

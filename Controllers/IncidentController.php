@@ -23,13 +23,13 @@ class IncidentController extends Controller
 		$ticket = Incident::one($id);
 
 
-
 		if (!$ticket)
 		{
 			$this->notFound();
 		}
 		
 		$this->render('Incident/show.php', array('pageName' => "Affichage incident", 'ticket'=> $ticket));
+		
 	}
 
 	public function nouveau_ticket()
@@ -40,5 +40,12 @@ class IncidentController extends Controller
 
 
 		$this->render('Incident/new.php', array('pageName' => "Créer un ticket d'incident", 'salles'=> $salles, 'materiels' => $materiels));
+	}
+
+	public function action_nouveau()
+	{
+		var_dump($_POST['new_matos']);
+		
+		$this->render('Incident/confirm_new.php', array('pageName' => "Créer un ticket d'incident", 'new_matos'=>$new_matos));
 	}
 }

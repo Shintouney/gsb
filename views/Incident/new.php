@@ -1,16 +1,14 @@
 
-<form method="POST" action=''>
+<form method="POST" action='index.php?page=incident&action=action_nouveau'>
 	
 	<label>Matériel demandé :</label>
-		<select name='MatosFormIncident' id='ObjetFormIncident'>
+		<select name='new_matos' id='new_matos'>
 			<option></option>
 			<?php 
-
-			foreach ($salles as $salle)
+			foreach ($materiels as $materiel)
 			{
-				echo '<option>' . $salle['salle_numero'] . '</option>';
+				echo '<option>' . $materiel['type'] . ' - ' . $materiel['marque'] . ' - ' . $materiel['modele'] .'</option>';
 			}
-
 			?>
 		</select><br/>
 	
@@ -18,7 +16,12 @@
 	<label>Salle :</label>
 		<select name='SalleFormIncident' id='SalleFormIncident'>
 			<option></option>
-			<?php include('select_salle.php'); ?>
+			<?php 
+			foreach ($salles as $salle)
+			{
+				echo '<option>' . $salle['salle_nom'] . '</option>';
+			}
+			?>
 		</select><br/>
 		
 		
