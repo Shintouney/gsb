@@ -48,6 +48,9 @@ class Auth
     {
         $user        = $this->getUser();
         $currentRole = $user->getRole()->getNom();
+        if ($role === 'ROLE_USER') {
+            return $this->isLogged();
+        }
         $isGranted   = $strict ? $currentRole === $role : $currentRole === $role || $currentRole === 'ROLE_ADMIN';
 
         return ($this->isLogged() && $isGranted);

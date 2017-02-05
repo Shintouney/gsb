@@ -5,8 +5,8 @@ $menu_frais = array(
 	array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
 );
 $menu_incidents = array(
-	array('text' => 'Lien 1', 'url' => 'index.php'),
-    array('text' => 'Lien 2', 'url' => 'index.php'),
+	array('text' => 'Voir incidents', 'url' => 'index.php'),
+    array('text' => 'créer incident', 'url' => 'index.php'),
 );
 $menu_admin = array(
     array('text' => 'Index des utilisateurs', 'url' => 'index.php?page=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
@@ -15,7 +15,7 @@ $menu_admin = array(
 
 $menu_dashboard = array(
     array('text' => 'Accueil',                 'url' => 'index.php', 'icon' => 'home'),
-    array('text' => 'Consulter mes données',   'url' => "?page=user&action=profile", 'icon' => 'user', 'page' => 'Mon profil'),
+    array('text' => 'Consulter mes données',   'url' => "?page=user&action=profile", 'icon' => 'user', 'page' => 'Mes données'),
     array('text' => 'Changer de mot de passe', 'url' => "?page=password&action=change", 'icon' => 'key'),
 )?>
 

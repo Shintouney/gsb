@@ -140,7 +140,6 @@ class Commune extends Model
     {
         $db = Database::getInstance();
         $list = $db->pluck(array('value' => 'id', 'label' => 'nom'), 'commune', array('code_postal' => $code));
-        var_dump($list); die();
 
         return $list;
     }
