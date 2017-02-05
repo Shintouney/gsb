@@ -134,7 +134,7 @@ class Database
         $count = $this->query('SELECT COUNT(id) AS total FROM `'.$table.'`');
         $sql .= ' ORDER BY '.(empty($order) ? 'u.id' : $order);
 
-        $perPage = 6;
+        $perPage = 10;
         $nbPage = ceil($count['total'] / $perPage);
         $page = $page < 1 ? 1 : $page;
         $page = $page > $nbPage ? $nbPage : $page;

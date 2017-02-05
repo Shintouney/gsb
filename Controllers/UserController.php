@@ -234,11 +234,12 @@ class UserController extends Controller
         $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';
         $fields['role'] = $fields['role'] ? : 'visiteur';
         $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
-        $fields['commune_id'] = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
+        $commune = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
+        $fields['commune_id'] = $commune['id'];
         unset($fields['cp']);
         unset($fields['commune']);
         $fields = $this->handleRole($fields, 'libelle');
         $fields = $this->convertDate($fields);
-        $db->create($fields, 'utilisateur');
+        $db->create('utilisateur', $fields);
     }
 }

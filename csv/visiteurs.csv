@@ -1,4 +1,5 @@
 "nom";"prenom";"login";"mdp";"adresse";"cp";"commune";"date_embauche";"email";"role";"telephone"
+"Chabannes";"Kim";"kim";"1234";"52, rue de la guenille";"42100";"St Etienne";01/09/2016;"kim42.gsb@gmail.com";;"0477514257"
 "Villechalane";"Louis";"lvillachane";"jux7g";"8 rue des Charmes";46000;"Cahors";21/12/2005;;;"0127541728"
 "Andre";"David";"dandre";"oppg5";"1 rue Petit";46230;"Lalbenque";23/11/1998;;;"0112345644"
 "Bedos";"Christian";"cbedos";"gmhxd";"1 rue Peranud";46800;"Montcuq";12/01/1995;;;"0723545789"
