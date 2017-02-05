@@ -6,7 +6,7 @@
   	<tr><td>Modèle du materiel</td>			<td><?php echo $ticket['modele_materiel'];?> 		</td></tr>
 	<tr><td>Objet de l'incident</td>		<td><?php echo $ticket['objet_incident'];?> 		</td></tr>
 	<tr><td>Description de l'incident</td>	<td><?php echo $ticket['description_incident'];?> 	</td></tr>
-	<tr><td>Solution de l'incident</td>		<td><?php echo $ticket['solution_incident'];?> 		</td></tr>
+	<tr><td>Solution de lm'incident</td>		<td><?php echo $ticket['solution_incident'];?> 		</td></tr>
 	<tr><td>Date de signalement </td>		<td><?php echo $ticket['date_signalement'];?> 		</td></tr>
 	<tr><td>Date d'intervention</td>		<td><?php echo $ticket['date_intervention'];?> 		</td></tr>
 	<tr><td>Salle</td>						<td><?php echo $ticket['salle_nom'] ;?>				</td></tr>
@@ -22,10 +22,10 @@
 		<tr><td>Durée</td>					<td><?php echo $ticket['duree'];?>					</td></tr>
 		<tr><td>Nombre d'appels</td>		<td><?php echo $ticket['nb_appels'];?>				</td></tr>
 
-		<p>
+		<p><!--modifier et supprimer-->
 			<a href='?page=incident&action=modifier_ticket&id=<?php echo $ticket['id'];?>'>Modifier le ticket</a>
 
-			<!--suppression : utilisation d'un form pour envoyer a supprimer_ticket l'id du ticket a supprimer-->
+			<!--suppression : utilisation d'un form pour envoyer à supprimer_ticket l'id du ticket a supprimer-->
 			<form method="POST" action='?page=incident&action=supprimer_ticket'>
 				<input type='hidden' name='id' value=<?php echo $ticket['id'];?>>
 				<input type='submit' value='Supprimer le ticket'>

@@ -1,4 +1,3 @@
-<?php //var_dump($_SESSION)?>
 <h1>Mes tickets</h1>
 
 <table class='incident'>
@@ -26,7 +25,7 @@
 	
 
 	<tbody>				
-		<?php //seulement les dickets du demandeur if id=getid
+		<?php //seulement les tickets du demandeur if id=getid
 		foreach($tickets as $ligne_ticket)
 		{
 		?>

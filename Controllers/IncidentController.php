@@ -35,7 +35,8 @@ class IncidentController extends Controller
 			}
 		}
 		*/
-		$tickets = Incident::all(); //requete model incident.php
+		$tickets = Incident::all(); //methode statique du model (incident.php), requete tous les tickets
+
 		//render = pour afficher la view, avec dans l'array les paramètres a donner à la view
 		$this->render('Incident/index.php', array('pageName' => "Gestion d'incidents", 'tickets'=> $tickets));
 	}
@@ -43,7 +44,7 @@ class IncidentController extends Controller
 	//?page=incident&action=afficher_ticket&id=3
 	public function afficher_ticket($id)
 	{
-		$ticket = Incident::one($id);//requete model incident.php
+		$ticket = Incident::one($id);//requete d'un ticket selon l'id
 
 		if (!$ticket)
 		{
@@ -63,7 +64,7 @@ class IncidentController extends Controller
 		{
 			//valeurs par défaut :
 			$_POST['etat'] = 2;
-			$_POST['date_signalement'] = date('Y-m-d');
+			$_POST['date_signalement'] = date('d-m-y');
 			$_POST['demandeur_id'] = $this->getUser()->getID() ;
 			$_POST['technicien_id'] = 1;
 			
@@ -104,7 +105,6 @@ class IncidentController extends Controller
 	public function supprimer_ticket()
 	{
 		//on recoit l'id du ticket à supprimer via un form
-
 		if (!empty($_POST))
 		{
 			$db = Database::getInstance();
