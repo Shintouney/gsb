@@ -3,6 +3,7 @@
 require_once 'Core'.D_S.'Controller.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
+require_once 'Models'.D_S.'Departement.php';
 
 class HomeController extends Controller
 {
@@ -36,7 +37,7 @@ class HomeController extends Controller
         if (!empty($_POST)) {
             if (!empty ($_POST['login']) && (!empty($_POST['mdp']))) {
                 $auth  = Auth::getInstance();
-                $user  = Utilisateur::findOneByLogin($_POST['login']);
+                $user  = Utilisateur::findOneByLogin($_POST['login'], true);
 
                 if ($user && $auth->login($user, $_POST['mdp'])) {
                     $this->redirect();

@@ -8,7 +8,7 @@
                     <th>Nom :</th>
                     <th>Rôle :</th>
                     <th>Ville :</th>
-                    <th>Actions :</th>
+                    <th colspan="2">Actions :</th>
                 </tr>
                 <?php foreach ($users as $user): ?>
                     <tr>
@@ -16,18 +16,19 @@
                         <td><?=$user->getPrenom(); ?> </td>
                         <td><?=$user->getNom()?></td>
                         <td><?=$user->getRole()->getLibelle()?></td>
-                        <td><?=$user->getCommune()->getNom()?> (<?=$user->getCommune()->getCodePostal()?>)</td>
+                        <td><?php
+                            $commune = strlen($user->getCommune()->getNom()) > 18 ? substr($user->getCommune()->getNom(), 0, 18).'...':
+                                $user->getCommune()->getNom();
+                            $commune = $commune. ' ('.$user->getCommune()->getCodePostal().')';
+                            echo $commune;
+                            ?></td>
                         <td><a class="special" href="?page=user&action=display&id=<?=$user->getId();?>">voir</a></td>
                         <td><a class="special" href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
-                        <td>
-                            <form action="?page=user&action=delete" method="post" class="inline-form" style="">
-                                <input type="hidden" name="id" value="<?=$user->getId()?>">
-                                <button class="delete" type="submit">Supprimer</button>
-                            </form>
-                        </td>
+
                     </tr>
                 <?php endforeach; ?>
             </table>
+            <?php include 'views'.D_S.'Template'.D_S.'_pagination.php'; ?>
         </div>
     </div>
     <div class="row">

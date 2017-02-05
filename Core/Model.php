@@ -1,9 +1,11 @@
 <?php
 
+require_once 'Core'.D_S.'Database.php';
+
 class Model
 {
     // hydrate un objet a partir d'une table de hachage
-    public function setData($data)
+    protected function setData($data)
     {
         if (is_array($data)) {
             foreach ($data as $field => $value) {
@@ -16,7 +18,7 @@ class Model
     }
 
     // transforme camelCase en snake_case
-    public function decamelize($string)
+    protected function decamelize($string)
     {
         $string = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $string));
 
@@ -24,7 +26,7 @@ class Model
     }
 
     // transforme snake_case et kebab-case en camelCase
-    public function camelize($string, $upper = false)
+    protected function camelize($string, $upper = false)
     {
         $delimiter = strpos($string, '_')? '_' : (strpos($string, '-')? '-' : null);
         if($delimiter) {
@@ -35,5 +37,14 @@ class Model
         }
 
         return $string;
+    }
+
+    // add SQL where clause
+    protected static function addWhere($filters, $alias = '')
+    {
+        $where = array_keys($filters);
+        $where = array_map(function ($filter) use ($alias) {return ($alias ? $alias.'.' : '').$filter.' = :'.$filter;}, $where);
+
+        return ' WHERE '.implode( ' AND ', $where);
     }
 } 

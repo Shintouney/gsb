@@ -48,6 +48,12 @@
                 <ul class="actions">
                     <li><a class="special" href="?page=user">retour à la liste</a></li>
                     <li><a class="special" href="?page=user&action=update&id=<?= $user->getId(); ?>">Modifier</a></li>
+                    <li>
+                        <form action="?page=user&action=delete" method="post" class="inline-form" style="">
+                            <input type="hidden" name="id" value="<?=$user->getId()?>">
+                            <button class="delete" type="submit">Supprimer</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

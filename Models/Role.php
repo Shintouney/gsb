@@ -1,6 +1,8 @@
 <?php
 
-class Role
+require_once 'Core'.D_S.'Model.php';
+
+class Role extends Model
 {
     private $id;
     private $nom;

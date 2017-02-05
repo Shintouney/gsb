@@ -9,7 +9,7 @@ $menu_incidents = array(
     array('text' => 'Lien 2', 'url' => 'index.php'),
 );
 $menu_admin = array(
-    array('text' => 'Index des utilisateurs', 'url' => '?page=user&action=index', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
+    array('text' => 'Index des utilisateurs', 'url' => 'index.php?page=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
     array('text' => 'Créer utilisateur',      'url' => '?page=user&action=create', 'icon' => 'user'),
     array('text' => 'Importer utilisateurs',  'url' => '?page=user&action=import', 'icon' => 'file-text', 'page' => 'Mes données'));
 
@@ -25,11 +25,9 @@ $menu_dashboard = array(
         <!-- Menu -->
         <nav id="menu">
             <?php if($this->getUser()->is('ROLE_ADMIN')): ?>
-                
                 <?php
                 $header = "Administration"; $items = $menu_admin;
-                include "_list_menu.php" ?>
-                <?php
+                include "_list_menu.php" ;
                 $header = "Rapports incidents"; $opener = 'Gérer incidents'; $items = $menu_incidents;
                 include "_drop_down_menu.php" ?>
                 <?php
@@ -51,7 +49,6 @@ $menu_dashboard = array(
                 include "_list_menu.php" ?>
             <?php endif; ?>
         </nav>
-
         <!-- Footer -->
         <footer id="footer">
             <img class="menu-logo" src="img/app/logo-tr.png" alt=""/>

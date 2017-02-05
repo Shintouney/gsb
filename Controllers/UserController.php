@@ -12,12 +12,17 @@ require_once 'Models'.D_S.'Commune.php';
 class UserController extends Controller
 {
     // action index
-    public function index()
+    public function index($page = 1)
     {
         $this->checkAccessRights('ROLE_ADMIN');
-        $users = Utilisateur::all();
+        $pagination = Utilisateur::paginate($page);
 
-        $this->render('User/index.php', array('pageName' => 'Liste utilisateurs','template' => 'admin', 'users' => $users));
+        $this->render('User/index.php', array(
+                'pageName' => 'Liste utilisateurs',
+                'template' => 'admin',
+                'users' => $pagination['list'],
+                'nbPage' => $pagination['nbPage'],
+                'currentPage' => $page));
     }
 
     // action display utilisateur affichage version admin
@@ -94,9 +99,12 @@ class UserController extends Controller
         $this->checkAccessRights('ROLE_ADMIN');
         $db = Database::getInstance();
         $user = Utilisateur::find($id);
+
         $roles = Role::all();
+
         $errors = array();
         if (!empty($_POST)) {
+
             $fields = $_POST;
             $errors = array_merge_recursive($errors,$this->validateBlank(array('email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
@@ -110,9 +118,9 @@ class UserController extends Controller
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
             $fields = $this->convertDate($fields);
-
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
+
                 $db->update($id, 'utilisateur', $fields);
 
                 $this->redirect('?page=user&action=index');
@@ -152,7 +160,6 @@ class UserController extends Controller
             $role = Role::findOneBy(array($col => $fields['role']));
             unset($fields['role']);
             $fields['role_id'] = $role->getId();
-
         }
 
         return $fields;
@@ -169,15 +176,6 @@ class UserController extends Controller
         unset($fields['code_postal']);
 
         return $fields;
-    }
-
-    private function displayErrors($errors)
-    {
-        echo '<pre>';
-        foreach ($errors as $error) {
-            echo $error.BR;
-        }
-        echo '</pre>';
     }
 
     /* send email function */
@@ -242,6 +240,5 @@ class UserController extends Controller
         $fields = $this->handleRole($fields, 'libelle');
         $fields = $this->convertDate($fields);
         $db->create($fields, 'utilisateur');
-
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
-class Region
+require_once 'Core'.D_S.'Model.php';
+
+class Region extends Model
 {
-    private $code;
-    private $nom;
+    protected $code;
+    protected $nom;
 
     /**
      * @param string $code

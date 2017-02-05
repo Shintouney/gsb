@@ -37,3 +37,9 @@ fieldset{
 table#users th{
     text-transform: uppercase;
 }
+.actions li form{
+     margin-bottom: 0;
+}
+table td ul{
+    margin-bottom: 0;
+}
