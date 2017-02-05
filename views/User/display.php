@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <th>Commune :</th>
-                    <td><?= $user->getCommune()->getNom(); ?></td>
+                    <td><?= $user->getCommune()/*->getNom()*/; ?></td>
                 </tr>
                 <tr>
                     <th>Date d'embauche :</th>

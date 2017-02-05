@@ -16,8 +16,8 @@
                 <h2>Rapports incidents</h2>
             </header>
             <ul>
-                <li><a href="index.php?page=incident">Tous les tickets</a></li>
-                <li><a href="index.php?page=incident&action=nouveau_ticket">Nouveau Ticket</a></li>
+                <li><a href="?page=incident">Tous les tickets</a></li>
+                <li><a href="?page=incident&action=nouveau_ticket">Nouveau Ticket</a></li>
             </ul>
             <br/>
             <header class="major">

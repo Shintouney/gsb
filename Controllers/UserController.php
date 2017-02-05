@@ -244,4 +244,28 @@ class UserController extends Controller
         $db->create($fields, 'utilisateur');
 
     }
+
+    public static function findBy($filter)
+    {
+        $db = Database::getInstance();
+        $list = $db->findBy($filter, 'utilisateur');
+
+        foreach ($list as &$model) {
+            $data = $model;
+            $model = new Utilisateur();
+            $model->setData($data);
+            $model->initRole($data);
+            $model->initCommune($data);
+        }
+
+        return $list;
+    }
+
+    public static function findByRole($role)
+    {
+        $role = Role::findOneBy(array('nom' => $role));
+        $filter = array('role_id' => $role->getId());
+
+        return static::findBy($filter);
+    }
 }
