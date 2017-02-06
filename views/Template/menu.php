@@ -5,8 +5,8 @@ $menu_frais = array(
 	array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
 );
 $menu_incidents = array(
-	array('text' => 'Voir incidents', 'url' => 'index.php'),
-    array('text' => 'créer incident', 'url' => 'index.php'),
+	array('text' => 'Tous mes tickets', 'url' => '?page=incident'),
+    array('text' => 'créer ticket', 'url' => '.?page=incident&action=nouveau_ticket'),
 );
 $menu_admin = array(
     array('text' => 'Index des utilisateurs', 'url' => 'index.php?page=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
