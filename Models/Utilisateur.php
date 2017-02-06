@@ -248,7 +248,6 @@ class Utilisateur extends Model
      */
     public function getTelephoneInterne()
     {
-		//var_dump($this->telephoneInterne); die();
         return $this->telephoneInterne;
     }
 
