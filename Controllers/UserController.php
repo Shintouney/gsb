@@ -69,22 +69,29 @@ class UserController extends Controller
             $fields = $this->convertDate($fields);
 
             if (empty($errors)) {
-                if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
-                $db->create('utilisateur', $fields);
-                $nom_complet = $fields['prenom'].' '.$fields['nom'];
-                $to          = array($fields['email'] => $nom_complet);
-                $params      = array(
-                    'nom_complet' => $nom_complet,
-                    'login'       => $fields['login'],
-                    'mdp'         => $mdp,
-                );
-                $this->sendAccountCreationMail($to, $params);
+                if(isset($_SESSION['post']))  unset($_SESSION['form']);
+				if(isset($_FILES)) {
+					$fields['image'] = File::preUpload($_FILES['image']);
+				}
+				
+                if ($db->create('utilisateur', $fields)) {
+					if(isset($_FILES)) {
+						$res = File::upload($_FILES['image'], $fields['image'], 'avatars');
+					}
+					$nom_complet = $fields['prenom'].' '.$fields['nom'];
+					$to          = array($fields['email'] => $nom_complet);
+					$params      = array(
+						'nom_complet' => $nom_complet,
+						'login'       => $fields['login'],
+						'mdp'         => $mdp,
+					);
+					$this->sendAccountCreationMail($to, $params);
+				}
                 $this->redirect('?page=user&action=index');
             }
             $_SESSION['form'] = $_POST;
             $_SESSION['form_errors'] = $errors;
             $this->redirect('?page=user&action=create');
-
         }
         $this->render('User/create.php', array(
                 'template' => 'admin',
@@ -123,22 +130,16 @@ class UserController extends Controller
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
 
 				if(isset($_FILES)) {
-					
-							$fields['image'] = File::preUpload($_FILES['image']);
-						}
-                if($db->update($id, 'utilisateur', $fields)) {
-					
+					$fields['image'] = File::preUpload($_FILES['image']);
+				}
+                if ($db->update($id, 'utilisateur', $fields)) {
 					if ($this->getUser()->getId() == $user->getId()) {
-						$_SESSION['user'] = serialize($user);
-						
-						
-						
+						$_SESSION['user'] = serialize(Utilisateur::find($id));
 					}
+					
 					if(isset($_FILES)) {
-					
-							File::upload($_FILES['image'], $fields['image']);
-						}
-					
+						$res = File::upload($_FILES['image'], $fields['image'], 'avatars');
+					}
 				}
 
                 $this->redirect('?page=user&action=index');

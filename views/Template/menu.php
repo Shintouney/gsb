@@ -11,7 +11,7 @@ $menu_incidents = array(
 $menu_admin = array(
     array('text' => 'Index des utilisateurs', 'url' => 'index.php?page=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
     array('text' => 'Créer utilisateur',      'url' => '?page=user&action=create', 'icon' => 'user'),
-    array('text' => 'Importer utilisateurs',  'url' => '?page=user&action=import', 'icon' => 'file-text', 'page' => 'Mes données'));
+    array('text' => 'Importer utilisateurs',  'url' => '?page=user&action=import', 'icon' => 'file-text', 'page' => 'Import utilisateurs'));
 
 $menu_dashboard = array(
     array('text' => 'Accueil',                 'url' => 'index.php', 'icon' => 'home'),

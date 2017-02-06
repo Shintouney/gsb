@@ -44,6 +44,9 @@
                 </tr>
             </table>
         </div>
+		 <div class="2u">
+			<img style="max-width:100%"}; src="img/avatars/<?=$user->getImage();?>">
+		 </div>
     </div>
     <?php if ($pageName !== "Mon profil" && $this->getUser()->isAdmin()) { ?>
         <hr/>

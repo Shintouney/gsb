@@ -15,8 +15,8 @@ class File
     // télécharge un fichier dans un répertoire défini
     public static function upload($file, $name = '', $dir = null)
     {
-        $dir = $dir? $dir: self::getImagePath();
-        $name = $name? :  $file['name'];
+        $dir = $dir ? self::getImagePath($dir): self::getImagePath();
+        $name = $name ? : $file['name'];
         if(!is_dir($dir)){
             if(!mkdir($dir, '0777', true )){
                 throw new \Exception('repertoire non cree');
@@ -24,21 +24,21 @@ class File
         }
         $name = $dir.D_S.$name;
 		
-        if( $file['error'] == 0 && is_uploaded_file($file['tmp_name'])) {
+       // if( $file['error'] == 0 && is_uploaded_file($file['tmp_name'])) {
             $moved = move_uploaded_file($file['tmp_name'], $name);
 			
             if ($moved) {
                 return $name;
-            } // TODO else throw exception
-        }
+            }
+       // }
 
         return false;
     }
 
     // supprime un fichier présent sur le disque
-    public static function remove ($name, $dir = null)
+    public static function remove($name, $dir = null)
     {
-        $dir = $dir? $dir: self::getImagePath();
+        $dir = $dir ? self::getImagePath($dir): self::getImagePath();
         if(!is_dir($dir)){
             throw new \Exception('repertoire non valide');
         }
@@ -52,9 +52,11 @@ class File
     }
 
     // renvoi chemin ers  répertoire image
-    public static function getImagePath()
+    public static function getImagePath($path ='')
     {
-        return  ROOT.D_S.'img';
+		$path = empty($path) ? $path : D_S.$path;
+		
+        return  ROOT.D_S.'gsb'.D_S.'img'.$path;
     }
 
     // lit un fichier csv
