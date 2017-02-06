@@ -11,31 +11,26 @@ class IncidentController extends Controller
 	public function index()
 	{
 		$auth = Auth::getInstance();
+
 		//affichage des tickets selon l'utilisateur
-		/*
-		if($this->getUser()->is(array('ROLE_VISITEUR','ROLE_USER')))
+		if($this->getUser()->is(array('ROLE_VISITEUR')))
 		{
-			$condition= 'WHERE id_deman = :id';
-			$id = $this->getUser->getId();
-			$tickets = Incident::all($id,$condition);
+			$condition= 'WHERE demandeur_id = :id';
 		}
 		else 
 		{
 			if($this->getUser()->is(array('ROLE_TECHNICIEN')))
 			{
-				$condition= 'WHERE id_tech = :id';
-				$id = $this->getUser->getId();
-				$tickets = Incident::all($id,$condition);
+				$condition= 'WHERE technicien_id = :id';
 			}
 			else //responsable admin ect 
 			{
 				$condition='';
-				$id = $this->getUser->getId();
-				$tickets = Incident::all($id,$condition); //requete model incident.php
+				
 			}
 		}
-		*/
-		$tickets = Incident::all(); //methode statique du model (incident.php), requete tous les tickets
+		$id = $this->getUser()->getId();
+		$tickets = Incident::all($id,$condition); //methode statique du model (incident.php), requete tous les tickets
 
 		//render = pour afficher la view, avec dans l'array les paramètres a donner à la view
 		$this->render('Incident/index.php', array('pageName' => "Gestion d'incidents", 'tickets'=> $tickets));

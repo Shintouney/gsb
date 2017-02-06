@@ -4,7 +4,7 @@ require_once 'Core'.D_S.'Database.php';
 
 class Incident 
 {
-	public static function all()
+	public static function all($id,$condition)
 	{
 		$db = Database::getInstance();
 
@@ -27,15 +27,13 @@ class Incident
 			JOIN `utilisateur` d
 			ON i.`demandeur_id`= d.`id`
 			';
-			$sql = $select;//construction de la requete
-			return($db->query($sql, true));
-			/*
+
 		if ($condition!='')
 		{
 			$sql = $select.$condition; //construction de la requete
 			
 			$id = array('id' => $id);
-			return($db->prepare($sql, $id));
+			return($db->prepare($sql, $id, true));
 		}
 
 		else
@@ -43,7 +41,7 @@ class Incident
 			$sql = $select;//construction de la requete
 			return($db->query($sql, true));
 		}
-		*/
+		
 	}
 
 

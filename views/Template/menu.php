@@ -16,7 +16,7 @@
                 <h2>Rapports incidents</h2>
             </header>
             <ul>
-                <li><a href="?page=incident">Tous les tickets</a></li>
+                <li><a href="?page=incident">Tous mes tickets</a></li>
                 <li><a href="?page=incident&action=nouveau_ticket">Nouveau Ticket</a></li>
             </ul>
             <br/>

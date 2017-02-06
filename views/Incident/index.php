@@ -29,8 +29,8 @@
 		foreach($tickets as $ligne_ticket)
 		{
 		?>
-			<tr id='ticket <?php echo $ligne_ticket['id']?>'>
-			<td> <a href='?page=incident&action=afficher_ticket&id=<?php echo $ligne_ticket['id'];?>' >Voir plus</a></td>
+			<tr >
+			<td> <a href='?page=incident&action=afficher_ticket&id=<?=$ligne_ticket['id'];?>' >Voir plus</a></td>
 			<td> <?php echo $ligne_ticket['id'];?> </td>
 			<td> <?php echo $ligne_ticket['intitule_etat'];?> </td>
 			<td> <?php echo $ligne_ticket['type_materiel'] . ' - <br/>'
