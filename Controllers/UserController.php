@@ -146,7 +146,7 @@ class UserController extends Controller
     public function convertDate($fields)
     {
         if(!empty($fields['date_embauche'])) {
-            $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
+            $date = Date::createFromFormat('d/m/Y', $fields['date_embauche']);
             $fields['date_embauche'] = $date->format('Y-m-d');
         }
 

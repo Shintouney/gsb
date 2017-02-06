@@ -44,8 +44,11 @@
                                 (isset($form['email']) ? ' value="' .$form['email']. '"' : ''); ?>/>
                         <?php $field = 'email';  if(isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
                     </div>
+					<br/>
                     <div>
-                        <label for="role">Fonction :</label>
+                        <label for="role">Fonction :</label><br/>
+						<div class="12u align-center uniform">
+						<div class="select-wrapper">
                         <select name="role" id="role" required>
                             <?php foreach ($roles as $role): ?>
                                 <option value="<?= $role->getNom(); ?>"
@@ -59,6 +62,8 @@
                                     <?= $role->getLibelle(); ?></option>
                             <?php endforeach; ?>
                         </select>
+						</div>
+						</div>
                         <?php $field = 'role';
                         if(isset($errors[$field])) {$fieldErrors = $errors[$field];
                             include "views/Template/form_errors.php";} ?>
@@ -107,8 +112,9 @@
                                name="code_postal" <?= isset($user) ? ' value="' . $user->getCommune()->getCodePostal() . '"' :
                             (isset($form['code_postal'])? ' value="' .$form['code_postal']. '"' : ''); ?>/>
                     </div>
-                    <div>
-                        <label for="commune">Commune :</label>
+					<label for="commune">Commune :</label><br/>
+					<div class="12u align-center uniform">
+                    <div class="select-wrapper">
                         <span id="commune_message"
                             <?= isset($communes)|| isset($form['commune']) ? 'style="display:none"'  : 'style="display:inline"'; ?>>
                             choisir un code postal...</span>
@@ -124,6 +130,7 @@
                                 <?php endforeach; endif; ?>
                         </select>
                     </div>
+					</div>
                 </fieldset>
             </div>
         </div>

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Core'.D_S.'Model.php';
+require_once 'Core'.D_S.'Date.php';
 require_once 'Role.php';
 require_once 'Commune.php';
 
@@ -213,7 +214,7 @@ class Utilisateur extends Model
      */
     public function getDateEmbauche($format = 'd/m/Y')
     {
-        $date = new DateTime($this->dateEmbauche);
+        $date = new Date($this->dateEmbauche);
         return $date->format($format);
     }
 
