@@ -74,6 +74,13 @@
                                type="text" <?= isset($user) ? ' value="' . $user->getDateEmbauche() . '"' :
                             (isset($form['date_embauche'])? ' value="' .$form['date_embauche']. '"' : ''); ?>/>
                     </div>
+					<div>
+                        <label for="telephone_interne">téléphone interne:</label>
+                        <input type="text" id="telephone_interne" maxlength="3"
+                               name="telephone_interne"
+                            <?= isset($user) ? ' value="' . $user->getTelephoneInterne() . '"' :
+                                (isset($form['telephone_interne'])? ' value="' .$form['telephone_interne']. '"' : ''); ?>/>
+                    </div>
                 </fieldset>
             </div>
             <div class="6u">

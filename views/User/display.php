@@ -23,7 +23,11 @@
                     <td><?= $user->getRole()->getLibelle(); ?></td>
                 </tr>
                 <tr>
-                    <th>Téléphone :</th>
+                    <th>Téléphone interne:</th>
+                    <td><?= $user->getTelephoneInterne(); ?></td>
+                </tr>
+				<tr>
+                    <th>Téléphone</th>
                     <td><?= $user->getTelephone(); ?></td>
                 </tr>
                 <tr>

@@ -16,6 +16,7 @@ class Utilisateur extends Model
     protected $nom;
     protected $prenom;
     protected $telephone;
+	protected $telephoneInterne;
     protected $adresse;
     protected $commune;
     protected $dateEmbauche;
@@ -233,6 +234,23 @@ class Utilisateur extends Model
     {
         return $this->telephone;
     }
+	
+	/**
+     * @param string $telephone
+     */
+    public function setTelephoneInterne($telephone)
+    {
+        $this->telephoneInterne = $telephone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTelephoneInterne()
+    {
+		//var_dump($this->telephoneInterne); die();
+        return $this->telephoneInterne;
+    }
 
     public function isAdmin()
     {
@@ -291,7 +309,7 @@ class Utilisateur extends Model
 
     private static function selectSafeFields()
     {
-        return 'u.id, u.login, u.email, u.role_id, u.nom, u.prenom, u.telephone, u.adresse, u.commune_id, u.date_embauche';
+        return 'u.id, u.login, u.email, u.role_id, u.nom, u.prenom, u.telephone, u.adresse, u.commune_id, u.date_embauche, u.telephone_interne, u.image';
     }
 
     private static function selectRoleFields()

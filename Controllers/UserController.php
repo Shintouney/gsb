@@ -121,7 +121,12 @@ class UserController extends Controller
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
 
-                $db->update($id, 'utilisateur', $fields);
+                if($db->update($id, 'utilisateur', $fields)) {
+					
+					if ($this->getUser()->getId() == $user->getId()) {
+						$_SESSION['user'] = serialize($user);
+					}
+				}
 
                 $this->redirect('?page=user&action=index');
             }
