@@ -124,7 +124,6 @@ class UserController extends Controller
                 if($db->update($id, 'utilisateur', $fields)) {
 					
 					if ($this->getUser()->getId() == $user->getId()) {
-						var_dump($this->getUser(); die();
 						$_SESSION['user'] = serialize($user);
 					}
 				}
