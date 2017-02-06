@@ -11,8 +11,8 @@ class Incident
 		$select='SELECT 
 			i.`id`, i.`objet_incident`, i.`date_signalement`, i.`date_intervention`, i.`niveau_urgence`, i.`niveau_complexite`,
 			e.`intitule_etat`,
-			m.`type` AS `type_materiel`, m.`marque`AS `marque_materiel`, m.`modele`AS `modele_materiel`,
-			s.`salle_nom`,
+			m.`type` AS `type_materiel`, m.`marque` AS `marque_materiel`, m.`modele` AS `modele_materiel`,
+			s.`salle_nom`,m.`num_inventaire`,
 			t.`id` AS id_tech, t.`prenom`AS pnom_tech, UPPER (t.`nom`) AS nom_tech, 
 			d.`id` AS id_demand, d.`prenom` AS pnom_demand, UPPER (d.`nom`) AS nom_demand
 			FROM `incident` i

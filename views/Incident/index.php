@@ -33,7 +33,8 @@
 			<td> <a href='?page=incident&action=afficher_ticket&id=<?=$ligne_ticket['id'];?>' >Voir plus</a></td>
 			<td> <?php echo $ligne_ticket['id'];?> </td>
 			<td> <?php echo $ligne_ticket['intitule_etat'];?> </td>
-			<td> <?php echo $ligne_ticket['type_materiel'] . ' - <br/>'
+			<td> <?php echo $ligne_ticket['num_inventaire'] . ' - <br/>'
+					. $ligne_ticket['type_materiel'] . ' - <br/>'
 			 		. $ligne_ticket['marque_materiel'] . ' - <br/>'
 			  		. $ligne_ticket['modele_materiel'];?> </td>
 			<td> <?php echo $ligne_ticket['objet_incident'];?> </td>
