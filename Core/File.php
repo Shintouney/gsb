@@ -23,8 +23,10 @@ class File
             }
         }
         $name = $dir.D_S.$name;
-        if( $file['file']['error'] === UPLOAD_ERR_OK && is_uploaded_file($file['tmp_name'])) {
+		
+        if( $file['error'] == 0 && is_uploaded_file($file['tmp_name'])) {
             $moved = move_uploaded_file($file['tmp_name'], $name);
+			
             if ($moved) {
                 return $name;
             } // TODO else throw exception
@@ -52,7 +54,7 @@ class File
     // renvoi chemin ers  répertoire image
     public static function getImagePath()
     {
-        return  ROOT.D_S.'img'.D_S;
+        return  ROOT.D_S.'img';
     }
 
     // lit un fichier csv

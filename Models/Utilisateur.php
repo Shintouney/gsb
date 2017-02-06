@@ -20,6 +20,7 @@ class Utilisateur extends Model
     protected $adresse;
     protected $commune;
     protected $dateEmbauche;
+	protected $image;
 
     /**
      * @return string
@@ -250,6 +251,17 @@ class Utilisateur extends Model
     {
         return $this->telephoneInterne;
     }
+	
+	
+	public function getImage()
+	{
+		return $this->image;
+	}
+	
+	public function setImage($image)
+	{
+		$this->image = $image;
+	}
 
     public function isAdmin()
     {

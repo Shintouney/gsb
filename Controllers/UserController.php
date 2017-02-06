@@ -5,6 +5,7 @@ require_once 'Core'.D_S.'Database.php';
 require_once 'Core'.D_S.'Mailer.php';
 require_once 'Core'.D_S.'Controller.php';
 require_once 'Core'.D_S.'Date.php';
+require_once 'Core'.D_S.'File.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
 require_once 'Models'.D_S.'Commune.php';
@@ -121,11 +122,23 @@ class UserController extends Controller
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
 
+				if(isset($_FILES)) {
+					
+							$fields['image'] = File::preUpload($_FILES['image']);
+						}
                 if($db->update($id, 'utilisateur', $fields)) {
 					
 					if ($this->getUser()->getId() == $user->getId()) {
 						$_SESSION['user'] = serialize($user);
+						
+						
+						
 					}
+					if(isset($_FILES)) {
+					
+							File::upload($_FILES['image'], $fields['image']);
+						}
+					
 				}
 
                 $this->redirect('?page=user&action=index');

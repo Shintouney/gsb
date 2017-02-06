@@ -1,5 +1,5 @@
 <div class="box">
-    <form action="" method="post">
+    <form action="" method="post" enctype='multipart/form-data'>
         <div class="row">
             <div class="6u">
                 <?php  $form = isset($_SESSION['form']) ? $_SESSION['form'] : array();
@@ -86,6 +86,13 @@
             <div class="6u">
                 <fieldset class='align-fieldset fieldset-auto-width'>
                     <legend><span class='icon fa-pencil-square-o'>données personnelles</span></legend>
+					<div>
+                        <label for="nom">Image :</label>
+                        <input type="file" id="image"
+                               name="image"
+                            <?= false ? ' value="' . $user->getImage() . '"' :
+                                (isset($form['nom'])? ' value="' .$form['nom']. '"' :''); ?>/>
+                    </div>
                     <div>
                         <label for="nom">Nom :</label>
                         <input type="text" id="nom"
