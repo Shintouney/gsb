@@ -48,4 +48,21 @@ $(function(){
         }
     });
 });
+$(function(){
+	function readFile(input) {
+		var files = input.files ? input.files : input.currentTarget.files
+		if (files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$("img#preview").attr('src', e.target.result);
+				$("img#preview").show();
+			}
+			if (reader.readAsDataURL) {reader.readAsDataURL(files[0]);}
+			else if (reader.readAsDataurl) {reader.readAsDataurl(files[0]);}
+		}
+	}
+	$("#image").change(function(){
+		readFile(this);
+	});
+});
 

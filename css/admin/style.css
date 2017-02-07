@@ -43,3 +43,13 @@ table#users th{
 table td ul{
     margin-bottom: 0;
 }
+img#preview, img.profile{
+	max-width: 100%;
+}
+img.small{
+	height:50px;
+	vertical-align: middle;
+}
+td.center{
+	text-align: center;
+}

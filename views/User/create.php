@@ -90,9 +90,10 @@
                         <label for="nom">Image :</label>
                         <input type="file" id="image"
                                name="image"
-                            <?= false ? ' value="' . $user->getImage() . '"' :
-                                (isset($form['nom'])? ' value="' .$form['nom']. '"' :''); ?>/>
+                            ' value="' . $user->getImage() . '"' : '' ; ?>/>
                     </div>
+					<?php $display = isset($user) && $user->getImage()?>
+					<div><img <?= $display ? ' ' : 'style="display:hidden" '?>id="preview" src="<?= $display ? 'img/avatars/'.$user->getImage(): ''?>"/></div>
                     <div>
                         <label for="nom">Nom :</label>
                         <input type="text" id="nom"

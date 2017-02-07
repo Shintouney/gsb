@@ -45,13 +45,15 @@
             </table>
         </div>
 		 <div class="2u">
-			<img style="max-width:100%"}; src="img/avatars/<?=$user->getImage();?>">
+			<?php if ($user->getImage()) { ?>
+				<img class="profile" src="img/avatars/<?=$user->getImage();?>">
+			<?php } ?>
 		 </div>
     </div>
-    <?php if ($pageName !== "Mon profil" && $this->getUser()->isAdmin()) { ?>
+    <?php if ($pageName !== "Mes données" && $this->getUser()->isAdmin()) { ?>
         <hr/>
         <div class="row">
-            <div class="6u -3u">
+            <div class="9u -3u">
                 <ul class="actions">
                     <li><a class="special" href="?page=user">retour à la liste</a></li>
                     <li><a class="special" href="?page=user&action=update&id=<?= $user->getId(); ?>">Modifier</a></li>

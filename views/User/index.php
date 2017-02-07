@@ -3,6 +3,7 @@
         <div class="12u">
             <table class="table table-responsive" id="users">
                 <tr>
+					<th></th>
                     <th>Login :</th>
                     <th>Prénom :</th>
                     <th>Nom :</th>
@@ -12,6 +13,8 @@
                 </tr>
                 <?php foreach ($users as $user): ?>
                     <tr>
+						<td class= "center"><img class="small" src="img/avatars/<?= $user->getImage() ? : 'user.png' ?>"/></td>
+						<td><?=$user->getLogin()?></td>
                         <td><?=$user->getLogin()?></td>
                         <td><?=$user->getPrenom(); ?> </td>
                         <td><?=$user->getNom()?></td>

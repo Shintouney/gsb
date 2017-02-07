@@ -42,7 +42,7 @@ class UserController extends Controller
             $this->forbidden();
         }
         $user = $this->getUser();
-        $this->render('User/display.php', array('pageName' => 'Mes données', 'template' => 'dashboard', 'user' => $user));
+        $this->render('User/display.php', array('pageName' => 'Mes données', 'template' => 'admin', 'user' => $user));
     }
 
     // action create utilisateur
@@ -107,7 +107,6 @@ class UserController extends Controller
         $this->checkAccessRights('ROLE_ADMIN');
         $db = Database::getInstance();
         $user = Utilisateur::find($id);
-
         $roles = Role::all();
 
         $errors = array();
@@ -126,6 +125,7 @@ class UserController extends Controller
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
             $fields = $this->convertDate($fields);
+			$oldImage = $user->getImage();
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
 
@@ -139,6 +139,9 @@ class UserController extends Controller
 					
 					if(isset($_FILES)) {
 						$res = File::upload($_FILES['image'], $fields['image'], 'avatars');
+						if ($oldImage & file_exists(File::getImagePath('avatars').D_S.$oldImage)) {
+							File::remove($oldImage, 'avatars');
+						}
 					}
 				}
 
@@ -210,9 +213,14 @@ class UserController extends Controller
     public function delete()
     {
         $this->checkAccessRights('ROLE_ADMIN');
+		$user = Utilisateur::find($_POST['id']);
         if (!empty($_POST)) {
             $db = Database::getInstance();
-            $db->delete($_POST['id'], 'utilisateur');
+            if($db->delete($_POST['id'], 'utilisateur')) {
+				if ($user->getImage() & file_exists(File::getImagePath('avatars').D_S.$oldImage)) {
+					File::remove($user->getImage(), 'avatars');
+				}
+			}
             $this->redirect('?page=user&action=index');
         } else {
             $this->redirect('?action=error&id=4');
