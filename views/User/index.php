@@ -25,8 +25,8 @@
                             $commune = $commune. ' ('.$user->getCommune()->getCodePostal().')';
                             echo $commune;
                             ?></td>
-                        <td><a class="special" href="?page=user&action=display&id=<?=$user->getId();?>">voir</a></td>
-                        <td><a class="special" href="?page=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
+                        <td><a class="special" href="?app=user&action=display&id=<?=$user->getId();?>">voir</a></td>
+                        <td><a class="special" href="?app=user&action=update&id=<?=$user->getId();?>">modifier</a></td>
 
                     </tr>
                 <?php endforeach; ?>
@@ -37,8 +37,8 @@
     <div class="row">
         <div class="12u">
             <ul class="actions">
-                <li><a class="special" href="?page=user&action=create">nouvel utilisateur</a></li>
-                <li><a class="special" href="?page=user&action=import">importer liste utilisateurs</a></li>
+                <li><a class="special" href="?app=user&action=create">nouvel utilisateur</a></li>
+                <li><a class="special" href="?app=user&action=import">importer liste utilisateurs</a></li>
             </ul>
         </div>
     </div>

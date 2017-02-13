@@ -2,17 +2,17 @@
 
 require_once 'Core'.D_S.'Database.php';
 
-class Incident 
+class Incident
 {
-	public static function all($id,$condition)
-	{
-		$db = Database::getInstance();
+    public static function all($id,$condition)
+    {
+        $db = Database::getInstance();
 
-		$select='SELECT 
+        $select='SELECT
 			i.`id`, i.`objet_incident`, i.`date_signalement`, i.`date_intervention`, i.`niveau_urgence`, i.`niveau_complexite`,
 			e.`intitule_etat`,
-			m.`type` AS `type_materiel`, m.`marque`AS `marque_materiel`, m.`modele`AS `modele_materiel`,
-			s.`salle_nom`,
+			m.`type` AS `type_materiel`, m.`marque` AS `marque_materiel`, m.`modele` AS `modele_materiel`,
+			s.`salle_nom`,m.`num_inventaire`,
 			t.`id` AS id_tech, t.`prenom`AS pnom_tech, UPPER (t.`nom`) AS nom_tech, 
 			d.`id` AS id_demand, d.`prenom` AS pnom_demand, UPPER (d.`nom`) AS nom_demand
 			FROM `incident` i
@@ -28,28 +28,28 @@ class Incident
 			ON i.`demandeur_id`= d.`id`
 			';
 
-		if ($condition!='')
-		{
-			$sql = $select.$condition; //construction de la requete
-			
-			$id = array('id' => $id);
-			return($db->prepare($sql, $id, true));
-		}
+        if ($condition!='')
+        {
+            $sql = $select.$condition; //construction de la requete
 
-		else
-		{
-			$sql = $select;//construction de la requete
-			return($db->query($sql, true));
-		}
-		
-	}
+            $id = array('id' => $id);
+            return($db->prepare($sql, $id, true));
+        }
+
+        else
+        {
+            $sql = $select;//construction de la requete
+            return($db->query($sql, true));
+        }
+
+    }
 
 
-	static public function one($id)
-	{
-		$db = Database::getInstance();
+    static public function one($id)
+    {
+        $db = Database::getInstance();
 
-		$sql ='SELECT 
+        $sql ='SELECT
 		i.`id`, i.`objet_incident`, i.`etat`, i.`description_incident`,i.`solution_incident`, i.`date_signalement`, 
 		i.`date_intervention`, i.`niveau_urgence`, i.`niveau_complexite`, i.`duree`, i.`nb_appels`,
 		e.`intitule_etat`,
@@ -70,11 +70,11 @@ class Incident
 		ON i.`demandeur_id`= d.`id`
 		WHERE i.`id` = :id';
 
-		$id = array('id' => $id);
-		return($db->prepare($sql, $id));
-	}
+        $id = array('id' => $id);
+        return($db->prepare($sql, $id));
+    }
 
-     public static function select_salle()
+    public static function select_salle()
     {
         $db = Database::getInstance();
         return $db->all('salle');
@@ -88,14 +88,14 @@ class Incident
 
     public static function select_etat()
     {
-    	$db = Database::getInstance();
-    	return $db->all('etat_ticket') ;
+        $db = Database::getInstance();
+        return $db->all('etat_ticket') ;
     }
-    
+
     public static function select_utilisateur()
     {
-    	$db = Database::getInstance();
-    	return $db->all('utilisateur') ;
+        $db = Database::getInstance();
+        return $db->all('utilisateur') ;
     }
-    
+
 }

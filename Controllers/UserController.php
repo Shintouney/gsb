@@ -87,11 +87,11 @@ class UserController extends Controller
 					);
 					$this->sendAccountCreationMail($to, $params);
 				}
-                $this->redirect('?page=user&action=index');
+                $this->redirect('?app=user&action=index');
             }
             $_SESSION['form'] = $_POST;
             $_SESSION['form_errors'] = $errors;
-            $this->redirect('?page=user&action=create');
+            $this->redirect('?app=user&action=create');
         }
         $this->render('User/create.php', array(
                 'template' => 'admin',
@@ -145,11 +145,11 @@ class UserController extends Controller
 					}
 				}
 
-                $this->redirect('?page=user&action=index');
+                $this->redirect('?app=user&action=index');
             }
             $_SESSION['form'] = $_POST;
             $_SESSION['form_errors'] = $errors;
-            $this->redirect('?page=user&action=update&id='.$id);
+            $this->redirect('?app=user&action=update&id='.$id);
         }
 
 
@@ -221,7 +221,7 @@ class UserController extends Controller
 					File::remove($user->getImage(), 'avatars');
 				}
 			}
-            $this->redirect('?page=user&action=index');
+            $this->redirect('?app=user&action=index');
         } else {
             $this->redirect('?action=error&id=4');
         }
@@ -249,7 +249,7 @@ class UserController extends Controller
             }
             fclose($file_handle);
 
-            $this->redirect('?page=user&action=index');
+            $this->redirect('?app=user&action=index');
         }
         $this->render('User/import.php', array('template' => 'admin', 'pageName' => 'Import utilisateurs'));
     }

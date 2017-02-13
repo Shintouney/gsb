@@ -11,8 +11,8 @@
 		<?php } ?>
 		</div>
         <ul class="actions">
-            <li><a href="?page=frais" class="button big">Saisir fiche de frais</a></li>
-			<li><a href="?page=incident" class="button big">Mes tickets</a></li>
+            <li><a href="?app=frais" class="button big">Saisir fiche de frais</a></li>
+			<li><a href="?app=incident" class="button big">Mes tickets</a></li>
         </ul>
     </div>
 	<span class="image object">

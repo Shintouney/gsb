@@ -1,22 +1,22 @@
 <?php
 $menu_frais = array(
 	array('text' => 'Accueil',               'url' => 'index.php'),
-	array('text' => 'Saisie fiche de frais', 'url' => 'index.php?page=frais'),
-	array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
+	array('text' => 'Saisie fiche de frais', 'url' => 'index.php?app=frais'),
+	array('text' => 'Mes fiches de frais',   'url' => 'index.php?app=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
 );
 $menu_incidents = array(
-	array('text' => 'Tous mes tickets', 'url' => '?page=incident'),
-    array('text' => 'créer ticket', 'url' => '.?page=incident&action=nouveau_ticket'),
+	array('text' => 'Tous mes tickets', 'url' => '?app=incident'),
+    array('text' => 'créer ticket', 'url' => '.?app=incident&action=nouveau_ticket'),
 );
 $menu_admin = array(
-    array('text' => 'Index des utilisateurs', 'url' => 'index.php?page=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
-    array('text' => 'Créer utilisateur',      'url' => '?page=user&action=create', 'icon' => 'user'),
-    array('text' => 'Importer utilisateurs',  'url' => '?page=user&action=import', 'icon' => 'file-text', 'page' => 'Import utilisateurs'));
+    array('text' => 'Index des utilisateurs', 'url' => 'index.php?app=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
+    array('text' => 'Créer utilisateur',      'url' => '?app=user&action=create', 'icon' => 'user'),
+    array('text' => 'Importer utilisateurs',  'url' => '?app=user&action=import', 'icon' => 'file-text', 'page' => 'Import utilisateurs'));
 
 $menu_dashboard = array(
     array('text' => 'Accueil',                 'url' => 'index.php', 'icon' => 'home'),
-    array('text' => 'Consulter mes données',   'url' => "?page=user&action=profile", 'icon' => 'user', 'page' => 'Mes données'),
-    array('text' => 'Changer de mot de passe', 'url' => "?page=password&action=change", 'icon' => 'key'),
+    array('text' => 'Consulter mes données',   'url' => "?app=user&action=profile", 'icon' => 'user', 'page' => 'Mes données'),
+    array('text' => 'Changer de mot de passe', 'url' => "?app=password&action=change", 'icon' => 'key'),
 )?>
 
 <!-- Sidebar -->

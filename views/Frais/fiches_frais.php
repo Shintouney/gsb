@@ -1,7 +1,7 @@
 <!-- Banner -->
 <br/>
 <header>
-<form  action="?page=frais&action=voirEtatFrais" method="post">
+<form  action="?app=frais&action=voirEtatFrais" method="post">
 	<fieldset class='align-fieldset fieldset-auto-width'>
 	<legend>&nbsp;<a class='icon fa-calendar'> Selectionner le mois</a>&nbsp;</legend>
 	<?php

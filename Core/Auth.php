@@ -41,7 +41,7 @@ class Auth
     public function logout()
     {
         session_destroy();
-        header('Location: ' . $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].'?page=login');
+        header('Location: ' . $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].'?app=login');
     }
 
     public function isGranted($role = 'ROLE_USER', $strict = false)

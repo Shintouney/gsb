@@ -11,7 +11,7 @@ $(function(){
 
     function generate_communes_selector(value, $target)
     {
-        var url = 'index.php?page=user&action=displayCommuneByCodePostal&id=';
+        var url = 'index.php?app=user&action=displayCommuneByCodePostal&id=';
         var errormsg = 'Code postal non valide';
         generate_selector(url, value, $target, errormsg);
     }

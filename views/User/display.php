@@ -55,10 +55,10 @@
         <div class="row">
             <div class="9u -3u">
                 <ul class="actions">
-                    <li><a class="special" href="?page=user">retour à la liste</a></li>
-                    <li><a class="special" href="?page=user&action=update&id=<?= $user->getId(); ?>">Modifier</a></li>
+                    <li><a class="special" href="?app=user">retour à la liste</a></li>
+                    <li><a class="special" href="?app=user&action=update&id=<?= $user->getId(); ?>">Modifier</a></li>
                     <li>
-                        <form action="?page=user&action=delete" method="post" class="inline-form" style="">
+                        <form action="?app=user&action=delete" method="post" class="inline-form" style="">
                             <input type="hidden" name="id" value="<?=$user->getId()?>">
                             <button class="delete" type="submit">Supprimer</button>
                         </form>
