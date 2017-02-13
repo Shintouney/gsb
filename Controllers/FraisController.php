@@ -95,7 +95,7 @@ class FraisController extends Controller
     	if ($this->lesQteFraisValides($lesFrais))
         {
     		self::$frais->majFraisForfait(self::$user->getId(), self::$date['mois'], $lesFrais);
-            $this->redirect('?page=frais');
+            $this->redirect('?app=frais');
         }
     	else
         {
@@ -107,7 +107,7 @@ class FraisController extends Controller
     public function validerCreationFrais()
     {
         if (empty($_POST))
-            $this->redirect('?page=frais');
+            $this->redirect('?app=frais');
         $this->valideInfosFrais($_REQUEST['dateFrais'], $_REQUEST['libelle'], $_REQUEST['montant']);
         $libelle = $this->replacequote($_REQUEST['libelle']);
         if (count(self::$errorshorsforfait) != 0)
@@ -124,10 +124,10 @@ class FraisController extends Controller
         $lesFraisHorsForfait = self::$frais->getLesFraisHorsForfait(self::$user->getId(), self::$date['mois']);
         if (isset($id) && $this->checkBeforeDelete($lesFraisHorsForfait, $id)) {
             self::$frais->supprimerFraisHorsForfait($id);
-            $this->redirect('?page=frais#element-horsforfait');
+            $this->redirect('?app=frais#element-horsforfait');
         }
         else
-            $this->redirect('?page=frais');
+            $this->redirect('?app=frais');
     }
 
     private function checkBeforeDelete($lesFraisHorsForfait, $id)

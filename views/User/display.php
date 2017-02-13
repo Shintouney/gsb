@@ -23,7 +23,11 @@
                     <td><?= $user->getRole()->getLibelle(); ?></td>
                 </tr>
                 <tr>
-                    <th>Téléphone :</th>
+                    <th>Téléphone interne:</th>
+                    <td><?= $user->getTelephoneInterne(); ?></td>
+                </tr>
+				<tr>
+                    <th>Téléphone</th>
                     <td><?= $user->getTelephone(); ?></td>
                 </tr>
                 <tr>
@@ -40,14 +44,25 @@
                 </tr>
             </table>
         </div>
+		 <div class="2u">
+			<?php if ($user->getImage()) { ?>
+				<img class="profile" src="img/avatars/<?=$user->getImage();?>">
+			<?php } ?>
+		 </div>
     </div>
-    <?php if ($pageName !== "Mon profil" && $this->getUser()->isAdmin()) { ?>
+    <?php if ($pageName !== "Mes données" && $this->getUser()->isAdmin()) { ?>
         <hr/>
         <div class="row">
-            <div class="6u -3u">
+            <div class="9u -3u">
                 <ul class="actions">
-                    <li><a class="special" href="?page=user">retour à la liste</a></li>
-                    <li><a class="special" href="?page=user&action=update&id=<?= $user->getId(); ?>">Modifier</a></li>
+                    <li><a class="special" href="?app=user">retour à la liste</a></li>
+                    <li><a class="special" href="?app=user&action=update&id=<?= $user->getId(); ?>">Modifier</a></li>
+                    <li>
+                        <form action="?app=user&action=delete" method="post" class="inline-form" style="">
+                            <input type="hidden" name="id" value="<?=$user->getId()?>">
+                            <button class="delete" type="submit">Supprimer</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <?php
 
-require_once 'Core'.D_S.'Database.php';
 require_once 'Core'.D_S.'Model.php';
+require_once 'Core'.D_S.'Date.php';
 require_once 'Role.php';
 require_once 'Commune.php';
 
@@ -16,9 +16,11 @@ class Utilisateur extends Model
     protected $nom;
     protected $prenom;
     protected $telephone;
+	protected $telephoneInterne;
     protected $adresse;
     protected $commune;
     protected $dateEmbauche;
+	protected $image;
 
     /**
      * @return string
@@ -84,7 +86,6 @@ class Utilisateur extends Model
     {
         return $this->mdp;
     }
-
 
     /**
     * @return string
@@ -215,7 +216,7 @@ class Utilisateur extends Model
      */
     public function getDateEmbauche($format = 'd/m/Y')
     {
-        $date = new DateTime($this->dateEmbauche);
+        $date = new Date($this->dateEmbauche);
         return $date->format($format);
     }
 
@@ -234,6 +235,33 @@ class Utilisateur extends Model
     {
         return $this->telephone;
     }
+	
+	/**
+     * @param string $telephone
+     */
+    public function setTelephoneInterne($telephone)
+    {
+        $this->telephoneInterne = $telephone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTelephoneInterne()
+    {
+        return $this->telephoneInterne;
+    }
+	
+	
+	public function getImage()
+	{
+		return $this->image;
+	}
+	
+	public function setImage($image)
+	{
+		$this->image = $image;
+	}
 
     public function isAdmin()
     {
@@ -259,88 +287,179 @@ class Utilisateur extends Model
         return $this->getRole()->getNom() === $role;
     }
 
-    // ----------------------------------------------------------------------------------------------
-
-
-
     /*--------------------------Active record methods-----------------------------------*/
-
 
     private function initRole($data)
     {
-        $roleId = isset($data['role_id']) && $data['role_id'] ? $data['role_id'] : 1;
-        $role = Role::find($roleId);
+        $fields = array('id' => $data['role_id'], 'nom' => $data['role_nom'], 'libelle' => $data['role_libelle']);
+        unset($data['role_nom']);
+        unset($data['role_libelle']);
+        $role = new Role();
+        $role->setData($fields);
         $this->role = $role;
+
+        return $data;
     }
 
     private function initCommune($data)
     {
-        if (isset($data['commune_id']) && $data['commune_id']) {
-            $communeId = $data['commune_id'] ;
-            $commune = Commune::find($communeId);
-            $this->setCommune($commune);
-        }
+        $fields = array('id' => $data['commune_id'], 'nom' => $data['commune_nom'], 'code_postal' => $data['code_postal']);
+        unset($data['commune_nom']);
+        unset($data['code_postal']);
+        $commune = new Commune();
+        $commune->setData($fields);
+        $this->commune = $commune;
+
+        return $data;
     }
 
-    // recupere ligne sql et genere/ retourne un objet a partir de l'id
-    public static function find($id)
+    private static function selectUnsafeFields()
+    {
+        return 'u.mdp, u.token';
+    }
+
+    private static function selectSafeFields()
+    {
+        return 'u.id, u.login, u.email, u.role_id, u.nom, u.prenom, u.telephone, u.adresse, u.commune_id, u.date_embauche, u.telephone_interne, u.image';
+    }
+
+    private static function selectRoleFields()
+    {
+        return 'r.nom AS role_nom, r.libelle AS role_libelle';
+    }
+
+    private static function selectCommuneFields()
+    {
+        return 'c.nom AS commune_nom, c.code_postal AS code_postal';
+    }
+
+    private static function addJoins()
+    {
+        return  ' JOIN role r ON u.role_id = r.id
+         JOIN commune c ON u.commune_id = c.id';
+    }
+
+    private static function manageFields($unsafe = false)
+    {
+        $fields = $unsafe? implode(', ', array(static::selectSafeFields(), static::selectUnsafeFields())): static::selectSafeFields();
+        $fields = implode(', ', array($fields, static::selectRoleFields(), static::selectCommuneFields()));
+
+        return $fields;
+    }
+
+    // recupere ligne sql et retourne un objet a partir de l'id;
+    public static function find($id, $unsafe = false)
     {
         $db = Database::getInstance();
-        $data = $db->find($id, 'utilisateur');
+
+        $id = array('id' => $id);
+        $sql = 'SELECT '.static::manageFields($unsafe).' FROM utilisateur u'.static::addJoins().
+        self::addWhere($id, 'u');
+
+        $data = $db->prepare($sql, $id);
+
+        //$data = $db->find($id, 'utilisateur');
         if (!$data) {
             return null;
         }
         $model = new Utilisateur();
+        $data = $model->initRole($data);
+        $data = $model->initCommune($data);
         $model->setData($data);
-        $model->initRole($data);
-        $model->initCommune($data);
 
     return $model;
     }
 
     // recupere ligne sql et genere/ retourne un objet champs de recherche a specifier
-    public static function findOneBy($filter)
+    public static function findOneBy($filter, $unsafe = false)
     {
         $db = Database::getInstance();
-        $data = $db->findOneBy($filter, 'utilisateur');
+
+        $sql = 'SELECT '.static::manageFields($unsafe).' FROM utilisateur u'.static::addJoins().
+            self::addWhere($filter, 'u');
+
+        $data = $db->prepare($sql, $filter);
         if (!$data) {
             return null;
         }
         $model = new Utilisateur();
+        $data = $model->initRole($data);
+        $data = $model->initCommune($data);
         $model->setData($data);
-        $model->initRole($data);
-        $model->initCommune($data);
 
         return $model;
+    }
+
+    public static function findBy($filter)
+    {
+        $db = Database::getInstance();
+        $sql = 'SELECT '.static::manageFields().' FROM utilisateur u'.static::addJoins().
+            self::addWhere($filter, 'u');
+
+        $list = $db->prepare($sql, $filter, true);
+
+        foreach ($list as &$model) {
+            $data = $model;
+            $model = new Utilisateur();
+            $data = $model->initRole($data);
+            $data = $model->initCommune($data);
+            $model->setData($data);
+        }
+
+        return $list;
     }
 
     // genere tous les utilisateurs a partir de la db
     public static function all()
     {
         $db = Database::getInstance();
-        $list = $db->all('utilisateur');
+        $sql = 'SELECT '.static::manageFields().' FROM utilisateur u'.static::addJoins();
+
+        $list = $db->query($sql, true);
 
         foreach ($list as &$model) {
             $data = $model;
             $model = new Utilisateur();
+            $data = $model->initRole($data);
+            $data = $model->initCommune($data);
             $model->setData($data);
-            $model->initRole($data);
-            $model->initCommune($data);
         }
 
         return $list;
     }
 
-    // wrapper pour findBy 'login'
-    public static function findOneByLogin($login)
+    public static function paginate($page = 1, $filter = array())
     {
-        return self::findOneBy(array('login' => $login), 'utilisateur');
+        $db = Database::getInstance();
+        $sql = 'SELECT DISTINCT '.static::manageFields().' FROM utilisateur u'.static::addJoins();
+        if (empty($filter)) {
+            $pagination = $db->paginate('utilisateur', $sql, $page);
+        } else {
+            $sql .= self::addWhere($filter, 'u');
+            $pagination = $db->paginate('utilisateur', $sql, $page, $filter);
+        }
+
+        foreach ($pagination['list'] as &$model) {
+            $data = $model;
+            $model = new Utilisateur();
+            $data = $model->initRole($data);
+            $data = $model->initCommune($data);
+            $model->setData($data);
+        }
+
+        return $pagination;
+    }
+
+    // wrapper pour findBy 'login'
+    public static function findOneByLogin($login, $unsafe = false)
+    {
+        return self::findOneBy(array('login' => $login), $unsafe);
     }
 
     // wrapper pour findBy 'email'
-    public static function findOneByEmail($email)
+    public static function findOneByEmail($email, $unsafe = false)
     {
-        return self::findOneBy(array('email' => $email), 'utilisateur');
+        return self::findOneBy(array('email' => $email), $unsafe);
     }
 
     public static function findOneByLoginOrEmail($username)
@@ -350,5 +469,13 @@ class Utilisateur extends Model
         }
 
         return static::findOneByLogin($username);
+    }
+
+    public static function findByRole($role)
+    {
+        $role = Role::findOneBy(array('nom' => $role));
+        $filter = array('role_id' => $role->getId());
+
+        return static::findBy($filter);
     }
 }

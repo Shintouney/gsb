@@ -1,10 +1,13 @@
 <?php
 
-class Commune
+require_once 'Core'.D_S.'Model.php';
+require_once 'Departement.php';
+
+class Commune extends Model
 {
-    private $id;
-    private $nom;
-    private $codePostal;
+    protected $id;
+    protected $nom;
+    protected $codePostal;
 
     public function getId()
     {
@@ -82,7 +85,7 @@ class Commune
 
     public function getDepartement()
     {
-         return Departement::findbyCodePostal($this->codePostal);
+         return Departement::findOnebyCodePostal($this->codePostal);
     }
 
     public static function find($id)

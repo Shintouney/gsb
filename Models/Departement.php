@@ -1,10 +1,13 @@
 <?php
 
-class Departement
+require_once 'Core'.D_S.'Model.php';
+require_once 'Region.php';
+
+class Departement extends Model
 {
-    private $id;
-    private $nom;
-    private $regionCode;
+    protected $id;
+    protected $nom;
+    protected $regionCode;
 
     /**
      * @param string $nom
@@ -53,10 +56,10 @@ class Departement
         return Region::findOneByCode($this->regionCode);
     }
 
-    public static function findByCodePostal($code)
+    public static function findOneByCodePostal($code)
     {
         $db = Database::getInstance();
-        $data = $db->find(substr($code, 0, 1), 'departement');
+        $data = $db->find(substr($code, 0, 2), 'departement');
         if (!$data) {
             return null;
         }

@@ -103,7 +103,6 @@
 
 			// Toggle.
 				if (skel.vars.IEVersion > 9) {
-
 					$('<a href="#sidebar" class="toggle">Toggle</a>')
 						.appendTo($sidebar)
 						.on('click', function(event) {
@@ -125,8 +124,9 @@
 					$sidebar.on('click', 'a', function(event) {
 
 						// >large? Bail.
-							if (!skel.breakpoint('large').active)
-								return;
+							if (!skel.breakpoint('large').active) {
+                                return;
+                            }
 
 						// Vars.
 							var $a = $(this),
@@ -142,7 +142,8 @@
 								return;
 
 						// Hide sidebar.
-							$sidebar.addClass('inactive');
+
+							//$sidebar.addClass('inactive');
 
 						// Redirect to href.
 							setTimeout(function() {

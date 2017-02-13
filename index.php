@@ -9,9 +9,10 @@ define('ROOT', dirname(__DIR__));
 require_once 'vendor/autoload.php'; // for plugins (mailer etc.)
 
 $path 	= 'Controllers'.D_S;
-$page 	= isset($_GET['page']) 	 ? $_GET['page']     : 'home';
+$page 	= isset($_GET['app']) 	 ? $_GET['app']     : 'home';
 $action = isset($_GET['action']) ? $_GET['action'] 	 : 'index';
 $id 	= isset($_GET['id'])	 ? $_GET['id']       : null;
+$p      = isset($_GET['page'])	 ? $_GET['page']       : null;
 
 // conditions pour rediriger vers login sinon on lance les actions standards sinon homepage
 if ($page != 'password' && $action != 'login' && notLogged()) {
@@ -30,7 +31,11 @@ if (file_exists($path.$controller.'.php'))
     // On verifie si la méthode existe
     if (method_exists($controller, $action)) {
         // execution de la méthode
-        $id ? $controller->$action($id) : $controller->$action();
+        $id && $p ? $controller->$action($id, $p) :
+        ( $id ? $controller->$action($id) :
+            ($p ? $controller->$action($p) :
+                $controller->$action()
+        ));
     } else {
         $error = 404;
     }

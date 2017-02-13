@@ -13,7 +13,7 @@ class PasswordController extends Controller
         $to = array($user->getEmail() => $user->getNomComplet());
         $params =  array(
             'uti'  => $user->getNomComplet(),
-            'link' => $this->url('?page=password&action=reset&id='.$user->getToken())
+            'link' => $this->url('?app=password&action=reset&id='.$user->getToken())
         );
         $subject = "Demande de réinitialisation de mot de passe";
         $body    = $this->renderView('views'.D_S.'emails'.D_S.'password_reset.php', $params);
@@ -53,7 +53,7 @@ class PasswordController extends Controller
         $errors = array();
 
         if (null === $user) {
-            $this->redirect('?page=password&action=invalidLink');
+            $this->redirect('?app=password&action=invalidLink');
         }
 
         if (!empty($_POST)) {
@@ -77,7 +77,7 @@ class PasswordController extends Controller
                 $this->redirect();
             } else {
                 $_SESSION['form_errors'] = $errors;
-                $this->redirect('?page=password&action=reset&id='.$token);
+                $this->redirect('?app=password&action=reset&id='.$token);
             }
         }
         $this->render('Password/reset.php', array('template' => 'login'));
@@ -104,10 +104,10 @@ class PasswordController extends Controller
             if (empty($errors)) {
                 $db->update($user->getId(), 'utilisateur', $fields);
 
-                $this->redirect('?page=password&action=change');
+                $this->redirect('?app=password&action=change');
             } else {
                 $_SESSION['form_errors'] = $errors;
-                $this->redirect('?page=password&action=change');
+                $this->redirect('?app=password&action=change');
             }
         }
         $this->render('Password/reset.php');

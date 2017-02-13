@@ -4,7 +4,7 @@
 <div class="box">
 <p>Renseigner ma fiche de frais du mois de <?=$date['numMois'];?> <?=$date['numAnnee']?> :</p>
 </div>
-<form action="?page=frais&action=validerForfait" method="post">
+<form action="?app=frais&action=validerForfait" method="post">
 	<fieldset class='align-fieldset fieldset-auto-width'>
 		<legend>&nbsp;<a class='icon fa-pencil-square-o'> Eléments forfaitisés</a>&nbsp;</legend>
 		<div class="align-center 4u">
@@ -77,7 +77,7 @@ else
 				<td><?=$frais['date'];?></td>
 				<td><?=$frais['libelle'];?></td>
 				<td><?=$frais['montant'];?></td>
-				<td><a class='icon fa-trash-o' href="?page=frais&action=deleteFraisHf&id=<?=$frais['id'];?>"></a></td>
+				<td><a class='icon fa-trash-o' href="?app=frais&action=deleteFraisHf&id=<?=$frais['id'];?>"></a></td>
 			</tr>
 		<?php
 		}
@@ -91,7 +91,7 @@ if (!empty($fraishf)){
 <?php
 }
 ?>
-<form id="element-horsforfaitform" action="?page=frais&action=validerCreationFrais#element-horsforfaitform" method="post">
+<form id="element-horsforfaitform" action="?app=frais&action=validerCreationFrais#element-horsforfaitform" method="post">
 	<fieldset class='align-fieldset fieldset-auto-width'>
 		<legend>&nbsp;<a class='icon fa-plus'> Nouvel élément hors forfait</a>&nbsp;	</legend>
 		<div class="align-center 4u">

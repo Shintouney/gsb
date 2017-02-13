@@ -1,5 +1,5 @@
 <div class="box">
-    <form action="" method="post">
+    <form action="" method="post" enctype='multipart/form-data'>
         <div class="row">
             <div class="6u">
                 <?php  $form = isset($_SESSION['form']) ? $_SESSION['form'] : array();
@@ -44,8 +44,11 @@
                                 (isset($form['email']) ? ' value="' .$form['email']. '"' : ''); ?>/>
                         <?php $field = 'email';  if(isset($errors[$field])) {$fieldErrors = $errors[$field]; include "views/Template/form_errors.php";} ?>
                     </div>
+					<br/>
                     <div>
-                        <label for="role">Fonction :</label>
+                        <label for="role">Fonction :</label><br/>
+						<div class="12u align-center uniform">
+						<div class="select-wrapper">
                         <select name="role" id="role" required>
                             <?php foreach ($roles as $role): ?>
                                 <option value="<?= $role->getNom(); ?>"
@@ -59,6 +62,8 @@
                                     <?= $role->getLibelle(); ?></option>
                             <?php endforeach; ?>
                         </select>
+						</div>
+						</div>
                         <?php $field = 'role';
                         if(isset($errors[$field])) {$fieldErrors = $errors[$field];
                             include "views/Template/form_errors.php";} ?>
@@ -69,11 +74,26 @@
                                type="text" <?= isset($user) ? ' value="' . $user->getDateEmbauche() . '"' :
                             (isset($form['date_embauche'])? ' value="' .$form['date_embauche']. '"' : ''); ?>/>
                     </div>
+					<div>
+                        <label for="telephone_interne">téléphone interne:</label>
+                        <input type="text" id="telephone_interne" maxlength="3"
+                               name="telephone_interne"
+                            <?= isset($user) ? ' value="' . $user->getTelephoneInterne() . '"' :
+                                (isset($form['telephone_interne'])? ' value="' .$form['telephone_interne']. '"' : ''); ?>/>
+                    </div>
                 </fieldset>
             </div>
             <div class="6u">
                 <fieldset class='align-fieldset fieldset-auto-width'>
                     <legend><span class='icon fa-pencil-square-o'>données personnelles</span></legend>
+					<div>
+                        <label for="nom">Image :</label>
+                        <input type="file" id="image"
+                               name="image"
+                            ' value="' . $user->getImage() . '"' : '' ; ?>/>
+                    </div>
+					<?php $display = isset($user) && $user->getImage()?>
+					<div><img <?= $display ? ' ' : 'style="display:hidden" '?>id="preview" src="<?= $display ? 'img/avatars/'.$user->getImage(): ''?>"/></div>
                     <div>
                         <label for="nom">Nom :</label>
                         <input type="text" id="nom"
@@ -107,8 +127,9 @@
                                name="code_postal" <?= isset($user) ? ' value="' . $user->getCommune()->getCodePostal() . '"' :
                             (isset($form['code_postal'])? ' value="' .$form['code_postal']. '"' : ''); ?>/>
                     </div>
-                    <div>
-                        <label for="commune">Commune :</label>
+					<label for="commune">Commune :</label><br/>
+					<div class="12u align-center uniform">
+                    <div class="select-wrapper">
                         <span id="commune_message"
                             <?= isset($communes)|| isset($form['commune']) ? 'style="display:none"'  : 'style="display:inline"'; ?>>
                             choisir un code postal...</span>
@@ -124,6 +145,7 @@
                                 <?php endforeach; endif; ?>
                         </select>
                     </div>
+					</div>
                 </fieldset>
             </div>
         </div>

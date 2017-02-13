@@ -122,8 +122,8 @@ class Controller
         foreach ($list as $field) {
             $method = 'findOneBy'.ucfirst($field);
             $userExists = Utilisateur::$method($fields[$field]);
-            if($userExists && !$user || $userExists != $user) {
-                $errors[$field] = array();
+            if(($userExists && !$user) || ($userExists && $userExists != $user)) {
+                $errors[$field]   = array();
                 $errors[$field][] = $this->humanize($field). " déja utilisé : veuillez en choisir un autre";
             };
         }

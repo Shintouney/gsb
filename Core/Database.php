@@ -78,7 +78,7 @@ class Database
             ) {
                 return $success;
             }
-            if($multiple)
+            if ($multiple)
                 $result = $statement->fetchAll(PDO::FETCH_NAMED);
             else
                 $result = $statement->fetch(PDO::FETCH_NAMED);
@@ -120,6 +120,34 @@ class Database
         return $this->prepare($sql, $filters, true);
     }
 
+    // requete pour recuperer toutes les lignes d'une table
+    public function all($table, $order = null)
+    {
+        $order = $order ? ' ORDER BY '.$order : '';
+        $sql = 'SELECT * FROM '.$table.$order;
+
+        return $this->query($sql, true);
+    }
+
+    public function paginate($table, $sql, $page = 1, $filter = array(), $order = '')
+    {
+        $count = $this->query('SELECT COUNT(id) AS total FROM `'.$table.'`');
+        $sql .= ' ORDER BY '.(empty($order) ? 'u.id' : $order);
+
+        $perPage = 10;
+        $nbPage = ceil($count['total'] / $perPage);
+        $page = $page < 1 ? 1 : $page;
+        $page = $page > $nbPage ? $nbPage : $page;
+        if (empty($filter)) {
+            $query = $this->query($sql.' LIMIT '.($page-1)*$perPage.', '.$perPage, true);
+        } else {
+            $sql .= ''.$this->addWhere($filter);
+            $query = $this->query($sql.' LIMIT '.($page-1)*$perPage.', '.$perPage, true);
+        }
+
+
+        return array('nbPage' => $nbPage, 'list' => $query);
+    }
     // requete insert
     public function create($table, $fields)
     {
@@ -147,15 +175,6 @@ class Database
         return $this->prepare($sql, $fields);
     }
 
-    // requete pour recuperer toutes les lignes d'une table
-    public function all($table, $order = null)
-    {
-        $order = $order ? ' ORDER BY '.$order : '';
-        $sql = 'SELECT * FROM '.$table.$order;
-
-        return $this->query($sql, true);
-    }
-
     public function pluck($fields, $table, $filters = null, $order = null)
     {
         $value = isset($fields['value']) ? $fields['value'].' AS value' : '';
@@ -176,10 +195,10 @@ class Database
     }
 
     // add SQL where clause
-    public function addWhere($filters)
+    public function addWhere($filters, $alias = '')
     {
         $where = array_keys($filters);
-        $where = array_map(function ($filter) {return $filter.' = :'.$filter;}, $where);
+        $where = array_map(function ($filter) use ($alias) {return ($alias ? $alias.'.' : '').$filter.' = :'.$filter;}, $where);
 
         return ' WHERE '.implode( ' AND ', $where);
     }

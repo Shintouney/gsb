@@ -10,7 +10,7 @@
 			<input placeholder="password" type="password" name ="mdp" id="mdp" required/>
 			<input type="submit" value="connexion"/>
 			</form>
-            <p><a href="?page=password&action=recover">mot de passe oublié ?</a></p>
+            <p><a href="?app=password&action=recover">mot de passe oublié ?</a></p>
             <?= isset($_SESSION['login_error']) ?  '<h2>Une erreur c\'est produite  </h2><p>'.$_SESSION['login_error'].'</p>' : '';  ?>
             <?php unset($_SESSION['login_error'])?>
 		</div>

@@ -11,7 +11,7 @@ $(function(){
 
     function generate_communes_selector(value, $target)
     {
-        var url = 'index.php?page=user&action=displayCommuneByCodePostal&id=';
+        var url = 'index.php?app=user&action=displayCommuneByCodePostal&id=';
         var errormsg = 'Code postal non valide';
         generate_selector(url, value, $target, errormsg);
     }
@@ -47,5 +47,22 @@ $(function(){
             e.preventDefault();
         }
     });
+});
+$(function(){
+	function readFile(input) {
+		var files = input.files ? input.files : input.currentTarget.files
+		if (files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$("img#preview").attr('src', e.target.result);
+				$("img#preview").show();
+			}
+			if (reader.readAsDataURL) {reader.readAsDataURL(files[0]);}
+			else if (reader.readAsDataurl) {reader.readAsDataurl(files[0]);}
+		}
+	}
+	$("#image").change(function(){
+		readFile(this);
+	});
 });
 

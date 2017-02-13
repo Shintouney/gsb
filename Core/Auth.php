@@ -41,13 +41,16 @@ class Auth
     public function logout()
     {
         session_destroy();
-        header('Location: ' . $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].'?page=login');
+        header('Location: ' . $_SERVER['HTTP_ORIGIN'].$_SERVER['SCRIPT_NAME'].'?app=login');
     }
 
     public function isGranted($role = 'ROLE_USER', $strict = false)
     {
         $user        = $this->getUser();
         $currentRole = $user->getRole()->getNom();
+        if ($role === 'ROLE_USER') {
+            return $this->isLogged();
+        }
         $isGranted   = $strict ? $currentRole === $role : $currentRole === $role || $currentRole === 'ROLE_ADMIN';
 
         return ($this->isLogged() && $isGranted);

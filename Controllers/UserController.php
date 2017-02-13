@@ -5,6 +5,7 @@ require_once 'Core'.D_S.'Database.php';
 require_once 'Core'.D_S.'Mailer.php';
 require_once 'Core'.D_S.'Controller.php';
 require_once 'Core'.D_S.'Date.php';
+require_once 'Core'.D_S.'File.php';
 require_once 'Models'.D_S.'Utilisateur.php';
 require_once 'Models'.D_S.'Role.php';
 require_once 'Models'.D_S.'Commune.php';
@@ -12,12 +13,17 @@ require_once 'Models'.D_S.'Commune.php';
 class UserController extends Controller
 {
     // action index
-    public function index()
+    public function index($page = 1)
     {
         $this->checkAccessRights('ROLE_ADMIN');
-        $users = Utilisateur::all();
+        $pagination = Utilisateur::paginate($page);
 
-        $this->render('User/index.php', array('pageName' => 'Liste utilisateurs','template' => 'admin', 'users' => $users));
+        $this->render('User/index.php', array(
+                'pageName' => 'Liste utilisateurs',
+                'template' => 'admin',
+                'users' => $pagination['list'],
+                'nbPage' => $pagination['nbPage'],
+                'currentPage' => $page));
     }
 
     // action display utilisateur affichage version admin
@@ -36,7 +42,7 @@ class UserController extends Controller
             $this->forbidden();
         }
         $user = $this->getUser();
-        $this->render('User/display.php', array('pageName' => 'Mes données', 'template' => 'dashboard', 'user' => $user));
+        $this->render('User/display.php', array('pageName' => 'Mes données', 'template' => 'admin', 'user' => $user));
     }
 
     // action create utilisateur
@@ -63,22 +69,29 @@ class UserController extends Controller
             $fields = $this->convertDate($fields);
 
             if (empty($errors)) {
-                if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
-                $db->create('utilisateur', $fields);
-                $nom_complet = $fields['prenom'].' '.$fields['nom'];
-                $to          = array($fields['email'] => $nom_complet);
-                $params      = array(
-                    'nom_complet' => $nom_complet,
-                    'login'       => $fields['login'],
-                    'mdp'         => $mdp,
-                );
-                $this->sendAccountCreationMail($to, $params);
-                $this->redirect('?page=user&action=index');
+                if(isset($_SESSION['post']))  unset($_SESSION['form']);
+				if(isset($_FILES)) {
+					$fields['image'] = File::preUpload($_FILES['image']);
+				}
+				
+                if ($db->create('utilisateur', $fields)) {
+					if(isset($_FILES)) {
+						$res = File::upload($_FILES['image'], $fields['image'], 'avatars');
+					}
+					$nom_complet = $fields['prenom'].' '.$fields['nom'];
+					$to          = array($fields['email'] => $nom_complet);
+					$params      = array(
+						'nom_complet' => $nom_complet,
+						'login'       => $fields['login'],
+						'mdp'         => $mdp,
+					);
+					$this->sendAccountCreationMail($to, $params);
+				}
+                $this->redirect('?app=user&action=index');
             }
             $_SESSION['form'] = $_POST;
             $_SESSION['form_errors'] = $errors;
-            $this->redirect('?page=user&action=create');
-
+            $this->redirect('?app=user&action=create');
         }
         $this->render('User/create.php', array(
                 'template' => 'admin',
@@ -95,8 +108,10 @@ class UserController extends Controller
         $db = Database::getInstance();
         $user = Utilisateur::find($id);
         $roles = Role::all();
+
         $errors = array();
         if (!empty($_POST)) {
+
             $fields = $_POST;
             $errors = array_merge_recursive($errors,$this->validateBlank(array('email', 'role')));
             $errors = array_merge_recursive($errors, $this->validatePasswordConfirmation());
@@ -110,16 +125,31 @@ class UserController extends Controller
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
             $fields = $this->convertDate($fields);
-
+			$oldImage = $user->getImage();
             if (empty($errors)) {
                 if(isset($_SESSION['post']))  unset($_SESSION['form']) ;
-                $db->update($id, 'utilisateur', $fields);
 
-                $this->redirect('?page=user&action=index');
+				if(isset($_FILES)) {
+					$fields['image'] = File::preUpload($_FILES['image']);
+				}
+                if ($db->update($id, 'utilisateur', $fields)) {
+					if ($this->getUser()->getId() == $user->getId()) {
+						$_SESSION['user'] = serialize(Utilisateur::find($id));
+					}
+					
+					if(isset($_FILES)) {
+						$res = File::upload($_FILES['image'], $fields['image'], 'avatars');
+						if ($oldImage & file_exists(File::getImagePath('avatars').D_S.$oldImage)) {
+							File::remove($oldImage, 'avatars');
+						}
+					}
+				}
+
+                $this->redirect('?app=user&action=index');
             }
             $_SESSION['form'] = $_POST;
             $_SESSION['form_errors'] = $errors;
-            $this->redirect('?page=user&action=update&id='.$id);
+            $this->redirect('?app=user&action=update&id='.$id);
         }
 
 
@@ -138,7 +168,7 @@ class UserController extends Controller
     public function convertDate($fields)
     {
         if(!empty($fields['date_embauche'])) {
-            $date = DateTime::createFromFormat('d/m/Y', $fields['date_embauche']);
+            $date = Date::createFromFormat('d/m/Y', $fields['date_embauche']);
             $fields['date_embauche'] = $date->format('Y-m-d');
         }
 
@@ -152,7 +182,6 @@ class UserController extends Controller
             $role = Role::findOneBy(array($col => $fields['role']));
             unset($fields['role']);
             $fields['role_id'] = $role->getId();
-
         }
 
         return $fields;
@@ -171,15 +200,6 @@ class UserController extends Controller
         return $fields;
     }
 
-    private function displayErrors($errors)
-    {
-        echo '<pre>';
-        foreach ($errors as $error) {
-            echo $error.BR;
-        }
-        echo '</pre>';
-    }
-
     /* send email function */
     private function sendAccountCreationMail($to, $params)
     {
@@ -193,10 +213,15 @@ class UserController extends Controller
     public function delete()
     {
         $this->checkAccessRights('ROLE_ADMIN');
+		$user = Utilisateur::find($_POST['id']);
         if (!empty($_POST)) {
             $db = Database::getInstance();
-            $db->delete($_POST['id'], 'utilisateur');
-            $this->redirect('?page=user&action=index');
+            if($db->delete($_POST['id'], 'utilisateur')) {
+				if ($user->getImage() & file_exists(File::getImagePath('avatars').D_S.$oldImage)) {
+					File::remove($user->getImage(), 'avatars');
+				}
+			}
+            $this->redirect('?app=user&action=index');
         } else {
             $this->redirect('?action=error&id=4');
         }
@@ -224,7 +249,7 @@ class UserController extends Controller
             }
             fclose($file_handle);
 
-            $this->redirect('?page=user&action=index');
+            $this->redirect('?app=user&action=index');
         }
         $this->render('User/import.php', array('template' => 'admin', 'pageName' => 'Import utilisateurs'));
     }
@@ -236,12 +261,12 @@ class UserController extends Controller
         $fields['email'] = $fields['email'] ? : $fields['login'].'@gsb.fr';
         $fields['role'] = $fields['role'] ? : 'visiteur';
         $fields['mdp'] = Utilisateur::encrypt($fields['mdp']);
-        $fields['commune_id'] = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
+        $commune = Commune::findIdFromData($fields['cp'], strtoupper($fields['commune']));
+        $fields['commune_id'] = $commune['id'];
         unset($fields['cp']);
         unset($fields['commune']);
         $fields = $this->handleRole($fields, 'libelle');
         $fields = $this->convertDate($fields);
-        $db->create($fields, 'utilisateur');
-
+        $db->create('utilisateur', $fields);
     }
 }

@@ -1,22 +1,22 @@
 <?php
 $menu_frais = array(
 	array('text' => 'Accueil',               'url' => 'index.php'),
-	array('text' => 'Saisie fiche de frais', 'url' => 'index.php?page=frais'),
-	array('text' => 'Mes fiches de frais',   'url' => 'index.php?page=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
+	array('text' => 'Saisie fiche de frais', 'url' => 'index.php?app=frais'),
+	array('text' => 'Mes fiches de frais',   'url' => 'index.php?app=frais&action=mesfiches', 'page' => 'Mes fiches frais'),
 );
 $menu_incidents = array(
-	array('text' => 'Lien 1', 'url' => 'index.php'),
-    array('text' => 'Lien 2', 'url' => 'index.php'),
+	array('text' => 'Tous mes tickets', 'url' => '?app=incident'),
+    array('text' => 'créer ticket', 'url' => '.?app=incident&action=nouveau_ticket'),
 );
 $menu_admin = array(
-    array('text' => 'Index des utilisateurs', 'url' => '?page=user&action=index', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
-    array('text' => 'Créer utilisateur',      'url' => '?page=user&action=create', 'icon' => 'user'),
-    array('text' => 'Importer utilisateurs',  'url' => '?page=user&action=import', 'icon' => 'file-text', 'page' => 'Mes données'));
+    array('text' => 'Index des utilisateurs', 'url' => 'index.php?app=user', 'icon' => 'group', 'page' => 'Liste utilisateurs'),
+    array('text' => 'Créer utilisateur',      'url' => '?app=user&action=create', 'icon' => 'user'),
+    array('text' => 'Importer utilisateurs',  'url' => '?app=user&action=import', 'icon' => 'file-text', 'page' => 'Import utilisateurs'));
 
 $menu_dashboard = array(
     array('text' => 'Accueil',                 'url' => 'index.php', 'icon' => 'home'),
-    array('text' => 'Consulter mes données',   'url' => "?page=user&action=profile", 'icon' => 'user', 'page' => 'Mon profil'),
-    array('text' => 'Changer de mot de passe', 'url' => "?page=password&action=change", 'icon' => 'key'),
+    array('text' => 'Consulter mes données',   'url' => "?app=user&action=profile", 'icon' => 'user', 'page' => 'Mes données'),
+    array('text' => 'Changer de mot de passe', 'url' => "?app=password&action=change", 'icon' => 'key'),
 )?>
 
 <!-- Sidebar -->
@@ -25,11 +25,9 @@ $menu_dashboard = array(
         <!-- Menu -->
         <nav id="menu">
             <?php if($this->getUser()->is('ROLE_ADMIN')): ?>
-                
                 <?php
                 $header = "Administration"; $items = $menu_admin;
-                include "_list_menu.php" ?>
-                <?php
+                include "_list_menu.php" ;
                 $header = "Rapports incidents"; $opener = 'Gérer incidents'; $items = $menu_incidents;
                 include "_drop_down_menu.php" ?>
                 <?php
@@ -51,7 +49,6 @@ $menu_dashboard = array(
                 include "_list_menu.php" ?>
             <?php endif; ?>
         </nav>
-
         <!-- Footer -->
         <footer id="footer">
             <img class="menu-logo" src="img/app/logo-tr.png" alt=""/>

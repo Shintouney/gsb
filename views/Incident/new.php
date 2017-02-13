@@ -1,38 +1,49 @@
+<form method="POST" action=""><!--on retourne sur la même page, mais l'action est dans le controller-->
 
-<form method="POST" action=''>
-	
-	<label>Matériel demandé :</label>
-		<select name='MatosFormIncident' id='ObjetFormIncident'>
-			<option></option>
-			<?php 
+    <label>Matériel demandé :</label>
+    <br/>
+    <div class="9u$ align-center uniform">
+        <div class="select-wrapper">
+            <select name='materiel_id' id='materiel_id'>
+                <option></option>
+                <?php
+                foreach ($materiels as $materiel)
+                {
+                    echo '<option value='.$materiel['id_materiel'].'>' .
+                        $materiel['num_inventaire']. ' - ' . $materiel['type'] . ' - ' .$materiel['marque'] .
+                        '</option>';
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+    <br/>
 
-			foreach ($salles as $salle)
-			{
-				echo '<option>' . $salle['salle_numero'] . '</option>';
-			}
+    <label>Salle :</label>
+    <div class="9u$ align-center uniform">
+        <div class="select-wrapper">
+            <select name='salle_id' id='salle_id'>
+                <option></option>
+                <?php
+                foreach ($salles as $salle)
+                {
+                    echo '<option value='.$salle['salle_id'].'>' .
+                        $salle['salle_nom'] .
+                        '</option>';
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+    <br/>
 
-			?>
-		</select><br/>
-	
-	
-	<label>Salle :</label>
-		<select name='SalleFormIncident' id='SalleFormIncident'>
-			<option></option>
-			<?php include('select_salle.php'); ?>
-		</select><br/>
-		
-		
-	<label>Objet de la demande :</label>
-	<input type='text' name='ObjetFormIncident'/><br/>
-	
-	
-	<label>Description :</label><br/>
-	<textarea name='DescFormIncident' rows='4' cols='50' ></textarea><br/>
-	
-	
-	<input type='submit'/>
-	
+    <label>Objet de la demande :</label>
+    <input type='text' name='objet_incident'/><br/>
+
+
+    <label>Description :</label><br/>
+    <textarea name='description_incident' rows='4' cols='50' ></textarea><br/>
+
+
+    <input type='submit'/>
 </form>
-
-<a href='index.php'>Revenir à l'accueil</a>
-
