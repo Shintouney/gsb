@@ -1,8 +1,8 @@
 <?php
 
 return array(
-    'host'     => 'localhost',
-    'user'     => 'root',
-    'password' => '',
-    'db_name'  => 'gsb',
+    'host'     => '172.16.0.5',
+    'user'     => 'tduport',
+    'password' => 'riveton9182',
+    'db_name'  => 'tduport',
 );
