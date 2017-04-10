@@ -17,7 +17,6 @@
         ?>
     </select><br/>
 
-
     <label>Matériel demandé :</label>
     <select name='materiel_id' id='materiel_id'>
         <option></option>

@@ -5,7 +5,7 @@
         <ul class="pagination">
             <?php
             if ($currentPage != 1) {
-                echo '<li><a class="page" href="?app=user$page=1">&#10094;&#10094;</a></li>   ';
+                echo '<li><a class="page" href="?app=user&page=1">&#10094;&#10094;</a></li>   ';
             } else {
                 echo '<li><a class="page active">&#10094;&#10094;</a></li>   ';
             }
@@ -13,11 +13,11 @@
                 if($currentPage == $i) {
                     echo '<li><a class="page active">'.$i.'</a></li>';
                 } else {
-                    echo '<li><a class="page" href="?app=user$page='.$i.'">'.$i.'</a></li>  ';
+                    echo '<li><a class="page" href="?app=user&page='.$i.'">'.$i.'</a></li>  ';
                 }
             }
             if ($currentPage != $nbPage) {
-                echo '<li><a class="page" href="?app=user$page='.$nbPage.'">&#10095;&#10095;</a></li>';
+                echo '<li><a class="page" href="?app=user&page='.$nbPage.'">&#10095;&#10095;</a></li>';
             } else {
                 echo '<li><a class="page active">&#10095;&#10095;</a>   ';
             }

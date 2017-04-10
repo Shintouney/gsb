@@ -76,6 +76,8 @@ class Utilisateur extends Model
      */
     public static function encrypt($mdp)
     {
+        /*$salt = "$2a$10$" . bin2hex( openssl_random_pseudo_bytes( 22, $strongCheck ) );
+        return crypt ($mdp, $salt);*/
         return password_hash ($mdp, PASSWORD_BCRYPT);
     }
 
@@ -270,7 +272,7 @@ class Utilisateur extends Model
 
     public function isVisiteur()
     {
-        return $this->is ('ROLE_VISITEUR');
+        return $this->is('ROLE_VISITEUR');
     }
 
     public function is($role)
