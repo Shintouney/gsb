@@ -12,7 +12,7 @@
                     $_SESSION['ajax_selected'] = $user->getCommune()->getId();
                 }
                 ?>
-                <?php  $errors = isset($_SESSION['form_errors']) ? $_SESSION['form_errors'] : array();
+                <?php $errors = isset($_SESSION['form_errors']) ? $_SESSION['form_errors'] : array();
                 if(isset($_SESSION['form_errors'])) unset($_SESSION['form_errors']);
                 ?>
 
@@ -74,13 +74,14 @@
                                type="text" <?= isset($user) ? ' value="' . $user->getDateEmbauche() . '"' :
                             (isset($form['date_embauche'])? ' value="' .$form['date_embauche']. '"' : ''); ?>/>
                     </div>
+					<?php/*
 					<div>
                         <label for="telephone_interne">téléphone interne:</label>
                         <input type="text" id="telephone_interne" maxlength="3"
                                name="telephone_interne"
                             <?= isset($user) ? ' value="' . $user->getTelephoneInterne() . '"' :
                                 (isset($form['telephone_interne'])? ' value="' .$form['telephone_interne']. '"' : ''); ?>/>
-                    </div>
+                    </div> */?>
                 </fieldset>
             </div>
             <div class="6u">

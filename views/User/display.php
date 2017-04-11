@@ -22,11 +22,12 @@
                     <th>Fonction :</th>
                     <td><?= $user->getRole()->getLibelle(); ?></td>
                 </tr>
-                <tr>
+                <?php/*
+				<tr>
                     <th>Téléphone interne:</th>
                     <td><?= $user->getTelephoneInterne(); ?></td>
                 </tr>
-				<tr>
+				<tr>*/?>
                     <th>Téléphone</th>
                     <td><?= $user->getTelephone(); ?></td>
                 </tr>
