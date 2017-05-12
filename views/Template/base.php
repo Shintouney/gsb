@@ -25,6 +25,7 @@
     <script src="js/datepicker/js/jquery.plugin.js"></script>
     <script src="js/datepicker/js/jquery.datepick.min.js"></script>
     <script src="js/datepicker/js/jquery-datepick-fr.js"></script>
+    <script src="js/verif_form.js"></script>
     <?php $js = "js/". $template .".js";
     if (file_exists($js)):?><script src="<?=$js?>"></script><?php endif; ?>
 
