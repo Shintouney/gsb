@@ -6,7 +6,7 @@
   	<tr><td>Modèle du materiel</td>			<td><?php echo $ticket['modele_materiel'];?> 		</td></tr>
 	<tr><td>Objet de l'incident</td>		<td><?php echo $ticket['objet_incident'];?> 		</td></tr>
 	<tr><td>Description de l'incident</td>	<td><?php echo $ticket['description_incident'];?> 	</td></tr>
-	<tr><td>Solution de lm'incident</td>		<td><?php echo $ticket['solution_incident'];?> 		</td></tr>
+	<tr><td>Solution de l'incident</td>		<td><?php echo $ticket['solution_incident'];?> 		</td></tr>
 	<tr><td>Date de signalement </td>		<td><?php echo $ticket['date_signalement'];?> 		</td></tr>
 	<tr><td>Date d'intervention</td>		<td><?php echo $ticket['date_intervention'];?> 		</td></tr>
 	<tr><td>Salle</td>						<td><?php echo $ticket['salle_nom'] ;?>				</td></tr>

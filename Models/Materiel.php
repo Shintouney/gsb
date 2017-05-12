@@ -4,11 +4,13 @@ require_once 'Core'.D_S.'Database.php';
 
 class Materiel 
 {
-	public static function all($id)
+	public static function all()
 	{
 		$db = Database::getInstance();
 
 		$select= 'SELECT * FROM `materiel` ';
+
+		return($db->query($select, true));
 	}
 
 
@@ -21,7 +23,7 @@ class Materiel
 		$id = array('id' => $id);
 		return($db->prepare($sql, $id));
 	}
-
+	/*
      public static function select_salle()
     {
         $db = Database::getInstance();
@@ -45,5 +47,5 @@ class Materiel
     	$db = Database::getInstance();
     	return $db->all('utilisateur') ;
     }
-    
+    */
 }

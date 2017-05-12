@@ -17,11 +17,22 @@ class MaterielController extends Controller
         }
 
 		$id = $this->getUser()->getId();
-		$materiel_tout = Materiel::all($id); //methode statique du model (materiel.php), requete tous les materiel
+		$materiel = Materiel::all(); //methode statique du model (materiel.php), requete tous les materiel
 
 		//render = pour afficher la view, avec dans l'array les paramètres a donner à la view
-		$this->render('Materiel/index.php', array('pageName' => "Gestionnaire de matériel", 'materiel'=> $materiel_tout));
+		$this->render('Materiel/index.php', array('pageName' => "Gestionnaire de matériel", 'materiel'=> $materiel));
 
 	}
 	
+	public function afficher_materiel($id)
+	{
+		$un_materiel = Materiel::one($id);//requete d'un materiel selon l'id
+
+		if (!$un_materiel)
+		{
+			$this->notFound();
+		}
+		
+		$this->render('Materiel/show.php', array('pageName' => "Afficher un matériel", 'un_materiel'=> $un_materiel));
+	}
 }

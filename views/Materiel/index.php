@@ -1,6 +1,8 @@
-<h1>Le matériel</h1>
 
-<table class='incident'>
+
+<h1>Liste du matériel</h1>
+
+<table>
 	<thead>
 		<td> </td>
 		<td>Id materiel</td>
@@ -20,26 +22,15 @@
 		{
 		?>
 			<tr >
-				<td> <a href='?page=incident&action=afficher_ticket&id=<?=$un_materiel['id'];?>' >Voir plus</a></td>
+				<td> <a href='?page=materiel&action=afficher_materiel&id=<?=$un_materiel['id_materiel'];?>' >Voir plus</a></td>
 				<td> <?php echo $un_materiel['id_materiel'];?> </td>
-				<!--
-				<td> <?php echo $un_materiel['intitule_etat'];?> </td>
-				<td> <?php echo $un_materiel['num_inventaire'] . ' - <br/>'
-						. $un_materiel['type_materiel'] . ' - <br/>'
-				 		. $un_materiel['marque_materiel'] . ' - <br/>'
-				  		. $un_materiel['modele_materiel'];?> </td>
-				<td> <?php echo $un_materiel['objet_incident'];?> </td>
-				<td> <?php echo $un_materiel['date_signalement']. ' / <br/>' 
-						. $un_materiel['date_intervention'];?> </td>
-				<td> <?php echo $un_materiel['salle_nom'] ;?></td>
-
-				
-				<td><?php echo $un_materiel['pnom_tech'] . ' ' . $un_materiel['nom_tech'];?></td>
-				<td><?php echo $un_materiel['pnom_demand'] . ' ' . $un_materiel['nom_demand'];?></td>
-				<td><?php echo $un_materiel['niveau_urgence'] . ' / '
-				 . $un_materiel['niveau_complexite'];?></td>
-	-->
-					
+				<td> <?php echo $un_materiel['type'];?> </td>
+				<td> <?php echo $un_materiel['marque'];?> </td>
+				<td> <?php echo $un_materiel['modele'];?> </td>
+				<td> <?php echo $un_materiel['logiciels_installes'];?> </td>
+				<td> <?php echo $un_materiel['date_achat'];?> </td>
+				<td> <?php echo $un_materiel['date_fin_garantie'];?> </td>
+				<td> <?php echo $un_materiel['num_inventaire'];?> </td>
 			</tr>
 		<?php
 		}

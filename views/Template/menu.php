@@ -12,12 +12,21 @@
                 <li><a href="index.php?page=frais&action=mesfiches">Mes fiches de frais</a></li>
             </ul>
             <br/>
+
             <header class="major">
                 <h2>Rapports incidents</h2>
             </header>
             <ul>
                 <li><a href="?page=incident">Tous mes tickets</a></li>
                 <li><a href="?page=incident&action=nouveau_ticket">Nouveau Ticket</a></li>
+            </ul>
+            <br/>
+            <header class="major">
+                <h2>Gestion de materiel</h2>
+            </header>
+            <ul>
+                <li><a href="?page=materiel">Tous mes materiels</a></li>
+                <li><a href="?page=materiel&action=nouveau_materiel">Nouveau matériel</a></li>
             </ul>
             <br/>
             <header class="major">
