@@ -35,4 +35,16 @@ class MaterielController extends Controller
 		
 		$this->render('Materiel/show.php', array('pageName' => "Afficher un matériel", 'un_materiel'=> $un_materiel));
 	}
+
+
+	public function supprimer_materiel()
+	{
+		//on recoit l'id du ticket à supprimer via un form
+		if (!empty($_POST))
+		{
+			$db = Database::getInstance();
+			$db->delete($_POST['id'],'incident');
+			$this->redirect('?page=incident');
+		}
+	}
 }

@@ -9,12 +9,12 @@
 	<tr><td>num_inventaire</td>			<td><?php echo $un_materiel['num_inventaire'];?> 		</td></tr>
 	
 		<p><!--modifier et supprimer-->
-			<a href='?page=incident&action=modifier_ticket&id=<?php echo $ticket['id'];?>'>Modifier le ticket</a>
+			<a href='?page=materiel&action=modifier_materiel&id=<?php echo $un_materiel['id_materiel'];?>'>Modifier le matériel</a>
 
 			<!--suppression : utilisation d'un form pour envoyer à supprimer_ticket l'id du ticket a supprimer-->
-			<form method="POST" action='?page=incident&action=supprimer_ticket'>
-				<input type='hidden' name='id' value=<?php echo $ticket['id'];?>>
-				<input type='submit' value='Supprimer le ticket'>
+			<form method="POST" action='?page=materiel&action=supprimer_materiel'>
+				<input type='hidden' name='id' value=<?php echo $un_materiel['id_materiel'];?>>
+				<input type='submit' value='Supprimer le materiel'>
 			</form>
 		</p>
 	
