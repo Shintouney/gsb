@@ -60,7 +60,7 @@ class IncidentController extends Controller
 			$_POST['etat'] = 2;
 			$_POST['date_signalement'] = date('d-m-y');
 			$_POST['demandeur_id'] = $this->getUser()->getID() ;
-			$_POST['technicien_id'] = 1;
+			$_POST['technicien_id'] = 4;
 			
 			$db->create('incident', $_POST); //ecriture dans la bdd
 			
