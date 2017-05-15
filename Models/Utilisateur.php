@@ -4,6 +4,7 @@ require_once 'Core'.D_S.'Model.php';
 require_once 'Core'.D_S.'Date.php';
 require_once 'Role.php';
 require_once 'Commune.php';
+require_once 'Secteur.php';
 
 class Utilisateur extends Model
 {
@@ -21,6 +22,8 @@ class Utilisateur extends Model
     protected $commune;
     protected $dateEmbauche;
 	protected $image;
+	protected $twitter;
+	protected $secteur;
 
     /**
      * @return string
@@ -254,6 +257,37 @@ class Utilisateur extends Model
         return $this->telephoneInterne;
     }
 	
+	/**
+     * @param string $twitter
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+	
+	/**
+     * @param string $secteur
+     */
+    public function setSecteur(Secteur $secteur)
+    {
+        $this->secteur = $secteur;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecteur()
+    {
+        return $this->secteur;
+    }
 	
 	public function getImage()
 	{
@@ -302,6 +336,18 @@ class Utilisateur extends Model
 
         return $data;
     }
+	
+	private function initSecteur($data)
+    {
+        $fields = array('id' => $data['secteur_id'],  'secteur' => $data['secteur_libelle']);
+       
+        unset($data['secteur_libelle']);
+        $secteur = new Secteur();
+        $secteur->setData($fields);
+        $this->secteur = $secteur;
+
+        return $data;
+    }
 
     private function initCommune($data)
     {
@@ -322,7 +368,8 @@ class Utilisateur extends Model
 
     private static function selectSafeFields()
     {
-        return 'u.id, u.login, u.email, u.role_id, u.nom, u.prenom, u.telephone, u.adresse, u.commune_id, u.date_embauche, u.telephone_interne, u.image';
+        return 'u.id, u.login, u.email, u.role_id, u.nom, u.prenom, u.telephone, u.adresse, 
+		u.commune_id, u.date_embauche, u.telephone_interne, u.image, u.twitter, u.secteur_id';
     }
 
     private static function selectRoleFields()
@@ -356,8 +403,9 @@ class Utilisateur extends Model
 
         $id = array('id' => $id);
         $sql = 'SELECT '.static::manageFields($unsafe).' FROM utilisateur u'.static::addJoins().
+		
         self::addWhere($id, 'u');
-
+		
         $data = $db->prepare($sql, $id);
 
         //$data = $db->find($id, 'utilisateur');
@@ -367,6 +415,7 @@ class Utilisateur extends Model
         $model = new Utilisateur();
         $data = $model->initRole($data);
         $data = $model->initCommune($data);
+		$data = $model->initSecteur($data);
         $model->setData($data);
 
     return $model;

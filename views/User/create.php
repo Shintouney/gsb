@@ -147,6 +147,43 @@
                         </select>
                     </div>
 					</div>
+					<div>
+                        <label for="adresse">Twitter :</label>
+                        <input type="text" id="twitter" 
+                               name="twitter" <?= isset($user) ? ' value="' . $user->getTwitter() . '"' :
+                            (isset($form['twitter'])? ' value="' .$form['twitter']. '"' : ''); ?>/>
+                    </div>
+					<!--<div>
+                        <label for="secteur">Secteur :</label>
+                        <input type="text" id="secteur" 
+                               name="secteur" <?php // isset($user) && !is_null($user->getSecteur()) ? ' value="' . $user->getSecteur()->getId() . '"' :
+                           // (isset($form['secteur'])? ' value="' .$form['secteur']. '"' : ''); ?>/>
+                    </div>
+					-->
+					
+					<div>
+                        <label for="secteur">Secteur :</label><br/>
+						<div class="12u align-center uniform">
+						<div class="select-wrapper">
+                        <select name="secteur" id="secteur">
+                            <?php foreach ($secteurs as $secteur): ?>
+                                <option value="<?= $secteur->getLibelle(); ?>"
+                                    <?php if(isset($user) &&  $secteur->getLibelle() === $user->getSecteur()->getLibelle())
+                                        {$selected = $secteur->getLibelle();}
+                                         else if (isset($form['secteur']) &&   $secteur->getLibelle() === $form['secteur'])
+                                         {$selected = $secteur->getLibelle();}
+                                    if (isset($selected) && $selected === $secteur->getlibelle()) {echo 'selected';}
+                                    
+                                    ?>>
+                                    <?= $secteur->getLibelle(); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+						</div>
+						</div>
+                        <?php $field = 'role';
+                        if(isset($errors[$field])) {$fieldErrors = $errors[$field];
+                            include "views/Template/form_errors.php";} ?>
+                    </div>
                 </fieldset>
             </div>
         </div>

@@ -66,6 +66,7 @@ class UserController extends Controller
             }
             $fields = $this->handleRole($fields);
             $fields = $this->handleCommune($fields);
+			$fields = $this->handleSecteur($fields);
             $fields = $this->convertDate($fields);
 
             if (empty($errors)) {
@@ -197,6 +198,20 @@ class UserController extends Controller
         }
         unset($fields['code_postal']);
 
+        return $fields;
+    }
+	
+	private function handleSecteur($fields)
+    {
+       	
+		if (!empty($fields['secteur'])) {
+            $secteur = Secteur::findOneBy(array($col => $fields['secteur']));
+            unset($fields['secteur']);
+            $fields['secteur_id'] = $secteur->getId();
+			$fields['secteur_libelle'] = $secteur->getLibelle();
+        }
+
+       
         return $fields;
     }
 

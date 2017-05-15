@@ -43,6 +43,14 @@
                     <th>Date d'embauche :</th>
                     <td><?= $user->getDateEmbauche('d M Y'); ?> </td>
                 </tr>
+				<tr>
+                    <th>Twitter :</th>
+                    <td><?= $user->getTwitter(); ?> </td>
+                </tr>
+				<tr>
+                    <th>Secteur :</th>
+                    <td><?= $user->getSecteur(); ?> </td>
+                </tr>
             </table>
         </div>
 		 <div class="2u">
