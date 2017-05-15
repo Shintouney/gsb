@@ -8,44 +8,18 @@ class Materiel
 	{
 		$db = Database::getInstance();
 
-		$select= 'SELECT * FROM `materiel` ';
+		$select= 'SELECT * FROM `materiel` ORDER BY num_inventaire';
 
 		return($db->query($select, true));
 	}
 
-
-	static public function one($id)
+	public static function one($id)
 	{
 		$db = Database::getInstance();
 
-		$sql= 'SELECT * FROM `materiel` ';
+		$sql= 'SELECT * FROM `materiel` WHERE id = :id ORDER BY num_inventaire';
 
 		$id = array('id' => $id);
 		return($db->prepare($sql, $id));
 	}
-	/*
-     public static function select_salle()
-    {
-        $db = Database::getInstance();
-        return $db->all('salle');
-    }
-
-    public static function select_materiel()
-    {
-        $db = Database::getInstance();
-        return $db->all('materiel');
-    }
-
-    public static function select_etat()
-    {
-    	$db = Database::getInstance();
-    	return $db->all('etat_ticket') ;
-    }
-    
-    public static function select_utilisateur()
-    {
-    	$db = Database::getInstance();
-    	return $db->all('utilisateur') ;
-    }
-    */
 }

@@ -3,6 +3,7 @@
 	<div class="inner">
 		<!-- Menu -->
         <nav id="menu">
+        
             <header class="major">
                 <h2>Applifrais</h2>
             </header>
@@ -21,6 +22,10 @@
                 <li><a href="?page=incident&action=nouveau_ticket">Nouveau Ticket</a></li>
             </ul>
             <br/>
+
+            <?php 
+            if ($this->auth->isGranted("ROLE_RESPONSABLE") || $this->auth->isGranted("ROLE_TECHNICIEN")) {
+                ?>
             <header class="major">
                 <h2>Gestion de materiel</h2>
             </header>
@@ -29,6 +34,10 @@
                 <li><a href="?page=materiel&action=nouveau_materiel">Nouveau matériel</a></li>
             </ul>
             <br/>
+            <?php
+            }
+            ?>
+            
             <header class="major">
                 <h2>Administration</h2>
             </header>

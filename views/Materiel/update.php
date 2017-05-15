@@ -1,117 +1,40 @@
-<form method="POST" action='' id="incident">
-
-	<label>Etat :</label>
-	<select name='etat' id='etat'>
-		<option></option><!--select options de la base de donnees-->
-		<?php
-		foreach ($etats as $etat)
-		{
-			echo '<option value='.$etat['id_etat'].' ' ;
-
-			if ($etat['id_etat'] == $prechargement['etat'])
-			{
-				echo 'selected'; //donne l'attribut 'selected' à l'option préchargée
-			}
-			echo '>' . $etat['intitule_etat'] . '</option>';
-		}
-		?>
-	</select><br/>
+<form method="POST" action="" id="incident"><!--on retourne sur la même page, mais l'action est dans le controller-->
 	
-	
-	<label>Matériel demandé :</label>
-	<select name='materiel_id' id='materiel_id'>
-		<option></option>
-		<?php 
-		foreach ($materiels as $materiel)
-		{
-			echo '<option value='.$materiel['id_materiel'].' ' ;
+	<label>Numéro d'inventaire :</label>
+	<input type='text' name='num_inventaire' required value="<?php echo $prechargement['num_inventaire'];?>"/><br/>
 
-			if ($materiel['id_materiel'] == $prechargement['id_materiel'])
-			{
-				echo 'selected';
-			}
-			echo '>' . $materiel['type'].' - '.$materiel['marque'].' - '.$materiel['modele'] . '</option>';
-		}
-		?>
-	</select><br/>
+	<label>Type :</label>
+	<input type='text' name='type' required value="<?php echo $prechargement['type'];?>"/><br/>
 	
-	
-	<label>Date de signalement :</label><input type='text' name='date_signalement' value="<?php echo $prechargement['date_signalement'];?>" /><br/>
-	<label>Date d'intervention :</label><input type='text' name='date_intervention' value="<?php echo $prechargement['date_intervention'];?>" /><br/>	
-	<label>Objet de l'incident :</label><input type='text' name='objet_incident' value="<?php echo htmlspecialchars($prechargement['objet_incident']);?>" /><br/>
-	<label>Description de l'incident :</label><br/>
-		<textarea name='description_incident' rows="4" cols="50"><?php echo $prechargement['description_incident'];?></textarea><br/>
-	<label>Solution à l'incident :</label><br/>
-		<textarea name='solution_incident' rows="4" cols="50"><?php echo $prechargement['solution_incident'];?></textarea><br/>
-	
-	<label>Salle :</label>
-	<select name='salle_id' id='salle_id'>
-		<option></option>
-		<?php 
-		foreach ($salles as $salle)
-		{
-			echo '<option value='.$salle['salle_id'] . ' ';
+	<label>Marque :</label>
+	<input type='text' name='marque' required value="<?php echo $prechargement['marque'];?>"/><br/>
 
-			if ($salle['salle_id'] == $prechargement['salle_id'])
-			{
-				echo 'selected';
-			}
-
-			echo '>' . $salle['salle_nom'] . '</option>';
-		}
-		?>
-	</select><br/>
+	<label>Modele :</label>
+	<input type='text' name='modele' required value="<?php echo $prechargement['modele'];?>"/><br/>
 	
-	<label>Demandeur :</label>
-	<select name='demandeur_id' id='demandeur_id'>
-		<option></option>
-		<?php 
-		foreach ($utilisateurs as $demandeur)
-		{
-			echo '<option value=' . $demandeur['id'] . ' ';
+	<label>Date d'achat :</label>
+	<input type='text' name='date_achat' value="<?php echo $prechargement['date_achat'];?>"/><br/>
 
-			if ($demandeur['id'] == $prechargement['id_demand'])
-			{
-				echo 'selected';
-			}
-			echo '>' .$demandeur['prenom'].' '. strtoupper ($demandeur['nom']) . '</option>';
-		}
-		?>
-	</select><br/>
+	<label>Date de fin de garantie :</label>
+	<input type='text' name='date_fin_garantie' value="<?php echo $prechargement['date_fin_garantie'];?>"/><br/>
 
-	<label>Niveau d'urgence :</label>		<input type='text' name='niveau_urgence' value=<?php echo $prechargement['niveau_urgence'];?> /><br/>
-	<label>Niveau de complexité :</label>	<input type='text' name='niveau_complexite' value=<?php echo $prechargement['niveau_complexite'];?> /><br/>
-	<label>Durée (en minutes) :</label>		<input type='text' name='duree' value=<?php echo $prechargement['duree'];?> /><br/>
-	<label>Nombre d'appels :</label>		<input type='text' name='nb_appels' value=<?php echo $prechargement['nb_appels'];?> /><br/>
-	
-	<?php
-	//attribuer un ticket a un technicien
-	if ($this->getUser()->is(array('ROLE_RESPONSABLE', 'ROLE_ADMIN')))
-	{
-	?>
-		<p>
-		<label>Technicien (OBLIGATOIRE) :</label>
-		<select name='technicien_id' id='technicien_id'>
-			<option></option>
-			<?php
-			foreach ($utilisateurs as $technicien)
-			{
-				if ($technicien['role_id']==4)
-				{
-					echo '<option value=' . $technicien['id'] . ' ';
-					
-					if ($technicien['id'] == $prechargement['id_tech'])
-					{
-						echo 'selected';
-					}
-					echo '>' .$technicien['prenom'].' '.strtoupper($technicien['nom']).'</option>';
-				}
-			}
-			?>
-		</select><br/>
-		</p>
-	<?php
-	}
-	?>
+	<label>Logiciels installés :</label>
+	<input type='text' name='logiciels_installes' value="<?php echo $prechargement['logiciels_installes'];?>"/><br/>
+
+	<label>Processeur :</label>
+	<input type='text' name='processeur' value="<?php echo $prechargement['processeur'];?>"/><br/>
+
+	<label>RAM :</label>
+	<input type='text' name='RAM' value="<?php echo $prechargement['RAM'];?>"/><br/>
+
+	<label>Disque dur :</label>
+	<input type='text' name='disque_dur' value="<?php echo $prechargement['disque_dur'];?>"/><br/>
+
+	<label>Carte mère :</label>
+	<input type='text' name='carte_mere' value="<?php echo $prechargement['carte_mere'];?>"/><br/>
+
+	<label>Autre :</label>
+	<textarea name='autre' rows="4" cols="50"><?php echo $prechargement['autre'];?></textarea><br/>
+
 	<input type='submit'/>
 </form>

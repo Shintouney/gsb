@@ -59,6 +59,14 @@ class Controller
 
         return false;
     }
+    public function getMail()
+    {
+        if (isset($_SESSION['user'])) {
+            return unserialize($_SESSION['user']);
+        }
+
+        return false;
+    }
 
     protected function partial($view, $vars)
     {

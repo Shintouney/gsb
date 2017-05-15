@@ -24,13 +24,13 @@
 		<?php 
 		foreach ($materiels as $materiel)
 		{
-			echo '<option value='.$materiel['id_materiel'].' ' ;
+			echo '<option value='.$materiel['id'].' ' ;
 
-			if ($materiel['id_materiel'] == $prechargement['id_materiel'])
+			if ($materiel['id'] == $prechargement['id_materiel'])
 			{
 				echo 'selected';
 			}
-			echo '>' . $materiel['type'].' - '.$materiel['marque'].' - '.$materiel['modele'] . '</option>';
+			echo '>' . $materiel['type'].' - '.$materiel['marque'].' - '. $materiel['modele'] . '</option>';
 		}
 		?>
 	</select><br/>

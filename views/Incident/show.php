@@ -1,3 +1,4 @@
+<?php var_dump($ticket); ?>
 <table>
 	<tr><td>Id</td>							<td><?php echo $ticket['id'];?> 					</td></tr>
 	<tr><td>Etat</td>						<td><?php echo $ticket['intitule_etat'];?> 			</td></tr>
@@ -27,8 +28,8 @@
 
 			<!--suppression : utilisation d'un form pour envoyer à supprimer_ticket l'id du ticket a supprimer-->
 			<form method="POST" action='?page=incident&action=supprimer_ticket'>
-				<input type='hidden' name='id' value=<?php echo $ticket['id'];?>>
-				<input type='submit' value='Supprimer le ticket'>
+				<input type='hidden' name='id' value=<?php echo $ticket['id'];?> />
+				<input type='submit' value='Supprimer le ticket'/>
 			</form>
 		</p>
 	<?php

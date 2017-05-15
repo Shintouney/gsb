@@ -7,7 +7,6 @@ require_once 'Models'.D_S.'Incident.php';
 //en tapant index.php?page=incident on arrive sur ce controller
 class IncidentController extends Controller 
 {
-	//?page=incident on arrive sur cet index
 	public function index()
 	{
 		$auth = Auth::getInstance();
@@ -86,7 +85,7 @@ class IncidentController extends Controller
 			
 			$this->redirect('?page=incident');
 		}
-
+		
 		$prechargement = Incident::one($id);
 		$etats = Incident::select_etat();
 		$salles = Incident::select_salle();

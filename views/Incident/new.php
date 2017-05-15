@@ -1,7 +1,6 @@
+<!--on retourne sur la même page, mais l'action est dans le controller-->
+<form method="POST" action="" id="obligatoire">
 
-
-<form method="POST" action="" id="incident"><!--on retourne sur la même page, mais l'action est dans le controller-->
-	
 	<label>Matériel demandé :</label>
 	<br/>
 	<div class="9u$ align-center uniform">
@@ -11,7 +10,7 @@
 		<?php 
 		foreach ($materiels as $materiel)
 		{
-			echo '<option value='.$materiel['id_materiel'].'>' . 
+			echo '<option value='.$materiel['id'].'>' . 
 				 $materiel['num_inventaire']. ' - ' . $materiel['type'] . ' - ' .$materiel['marque'] .
 				'</option>';
 		}
