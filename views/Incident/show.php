@@ -1,4 +1,4 @@
-<?php var_dump($ticket); ?>
+
 <table>
 	<tr><td>Id</td>							<td><?php echo $ticket['id'];?> 					</td></tr>
 	<tr><td>Etat</td>						<td><?php echo $ticket['intitule_etat'];?> 			</td></tr>
